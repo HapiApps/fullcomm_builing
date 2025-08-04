@@ -5,7 +5,6 @@ import 'package:oktoast/oktoast.dart';
 import '../res/colors.dart';
 
 class Toasts {
-
   static void showToastBar({
     required BuildContext context,
     required String text,
@@ -111,6 +110,4 @@ class Toasts {
       if (entry.mounted) entry.remove();
     });
   }
-
-
 }

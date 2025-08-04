@@ -60,10 +60,10 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/logo/app_in_logo.jpeg"
+  image_path: "assets/logo/app_in_logo.png"
   web:
     generate: true
-    image_path: "assets/logo/app_in_logo.jpeg"
+    image_path: "assets/logo/app_in_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

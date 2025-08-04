@@ -4,17 +4,17 @@ import 'package:http/http.dart' as http;
 
 import '../api/api_urls.dart';
 import '../data/local_data.dart';
+import '../models/bill_obj.dart';
 import '../models/products_response.dart';
+import '../services/api_services.dart';
 
-
-class ProductsRepository{
-
+class ProductsRepository {
   /// Get All Products and Stock
   Future<ProductsResponse> getProducts() async {
     try {
       final Map<String, dynamic> requestBody = {
         "action": "b_select_products",
-        "cos_id":localData.cosId
+        "cos_id": localData.cosId
       };
 
       final response = await http.post(
@@ -22,7 +22,6 @@ class ProductsRepository{
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(requestBody),
       );
-
 
       if (response.statusCode == 200) {
         return ProductsResponse.fromJson(jsonDecode(response.body));
@@ -34,7 +33,14 @@ class ProductsRepository{
     }
   }
 
+  Future<PreviousBillObj> getBill() async {
+    final Map<String, dynamic> requestBody = {
+      'action': "fetch_bill",
+    };
+    return await ApiService.postRequest1(
+      ApiUrl.script, // API endpoint
+      requestBody, // Request body (if needed)
+      PreviousBillObj.fromJson, // Parsing function for ProductsResponse
+    );
   }
-
-
-
+}

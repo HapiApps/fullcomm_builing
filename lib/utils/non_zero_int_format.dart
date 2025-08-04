@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 class StrictNonZeroIntFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final text = newValue.text;
 
     if (text.isEmpty) return newValue;

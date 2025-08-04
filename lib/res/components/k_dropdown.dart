@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fullcomm_billing/res/colors.dart';
 
-
 class MyDropDown<T> extends StatelessWidget {
-  const MyDropDown({super.key, required this.labelText, this.value, this.validator, this.items, this.onChanged, this.height, this.width, this.focusNode});
+  const MyDropDown(
+      {super.key,
+      required this.labelText,
+      this.value,
+      this.validator,
+      this.items,
+      this.onChanged,
+      this.height,
+      this.width,
+      this.focusNode});
 
   final String labelText;
   final double? height;
@@ -18,20 +26,21 @@ class MyDropDown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? MediaQuery.of(context).size.height*0.05,
-      width: width ?? MediaQuery.of(context).size.width*0.057,
+      height: height ?? MediaQuery.of(context).size.height * 0.05,
+      width: width ?? MediaQuery.of(context).size.width * 0.057,
       child: DropdownButtonFormField(
         items: items,
-          onChanged: onChanged,
-          value: value,
+        onChanged: onChanged,
+        value: value,
         iconEnabledColor: AppColors.grey,
         focusColor: AppColors.transparent,
         focusNode: focusNode,
         autofocus: false,
         decoration: InputDecoration(
-          labelStyle: GoogleFonts.lato(fontSize: 14,color:Colors.black45),
+          labelStyle: GoogleFonts.lato(fontSize: 14, color: Colors.black45),
           labelText: labelText,
-          floatingLabelStyle: GoogleFonts.lato(fontSize: 14,color:AppColors.black),
+          floatingLabelStyle:
+              GoogleFonts.lato(fontSize: 14, color: AppColors.black),
           border: const OutlineInputBorder(
             borderSide: BorderSide(),
           ),
@@ -50,8 +59,10 @@ class MyDropDown<T> extends StatelessWidget {
           hintStyle: GoogleFonts.lato(),
         ),
         isExpanded: true,
-        iconSize: MediaQuery.of(context).size.width*0.009,
-        style: GoogleFonts.lato(color: AppColors.black, fontSize: MediaQuery.of(context).size.width*0.008),
+        iconSize: MediaQuery.of(context).size.width * 0.009,
+        style: GoogleFonts.lato(
+            color: AppColors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.008),
         validator: validator,
       ),
     );

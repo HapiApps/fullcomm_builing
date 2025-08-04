@@ -2,7 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyText extends StatelessWidget {
-  const MyText({super.key, required this.text, this.fontSize, this.fontWeight, this.textAlign, this.color, this.letterSpacing, this.maxLines, this.overflow, this.textDecoration, this.fontStyle, this.softWrap, this.shadows});
+  const MyText(
+      {super.key,
+      required this.text,
+      this.fontSize,
+      this.fontWeight,
+      this.textAlign,
+      this.color,
+      this.letterSpacing,
+      this.maxLines,
+      this.overflow,
+      this.textDecoration,
+      this.fontStyle,
+      this.softWrap,
+      this.shadows});
 
   final String text;
   final double? fontSize;
@@ -28,8 +41,7 @@ class MyText extends StatelessWidget {
           color: color,
           fontStyle: fontStyle,
           decoration: textDecoration,
-        shadows: shadows
-      ),
+          shadows: shadows),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

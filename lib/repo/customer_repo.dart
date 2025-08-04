@@ -13,10 +13,10 @@ class CustomersRepository {
   Future<CustomersResponse> getCustomers() async {
     final body = jsonEncode({
       'action': 'b_select_customers', // Fix
-      "cos_id":localData.cosId
+      "cos_id": localData.cosId
     });
     try {
-      final response = await http.post(Uri.parse(ApiUrl.script),body: body);
+      final response = await http.post(Uri.parse(ApiUrl.script), body: body);
       return CustomersResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
       throw Exception("getCustomers Error : $e");
@@ -40,24 +40,22 @@ class CustomersRepository {
       "created_by": localData.userName,
       "address_line_1": addressLine1,
       "area": area,
-      "cos_id":localData.cosId,
+      "cos_id": localData.cosId,
       'pincode': pincode,
       'city': city,
       'state': state,
       'country': 'India',
-      'action': 'b_add_customer', /// Fix
+      'action': 'b_add_customer',
+
+      /// Fix
     });
 
     try {
-      final response = await http.post(
-          Uri.parse(ApiUrl.script),
-          body: body
-      );
+      final response = await http.post(Uri.parse(ApiUrl.script), body: body);
 
       return CommonResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
       throw Exception("addCustomer Error : $e");
     }
   }
-
 }

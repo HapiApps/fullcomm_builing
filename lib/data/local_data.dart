@@ -1,12 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 
 final LocalData localData = LocalData();
 
 class LocalData {
-
   // User Details (Cashier) :
-  String userId   = '0';
+  String userId = '0';
   String userName = '';
   String userMobile = '';
   String cosId = '';
@@ -19,8 +17,9 @@ class LocalData {
   // Platform Key :
   static String platformKey = kIsWeb
       ? '3'
-      : (defaultTargetPlatform == TargetPlatform.android ? '1'
-      : defaultTargetPlatform == TargetPlatform.iOS ? '2'
-      : '0');
-
+      : (defaultTargetPlatform == TargetPlatform.android
+          ? '1'
+          : defaultTargetPlatform == TargetPlatform.iOS
+              ? '2'
+              : '0');
 }

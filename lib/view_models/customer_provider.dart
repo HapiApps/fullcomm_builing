@@ -25,10 +25,12 @@ class CustomersProvider with ChangeNotifier {
   TextEditingController customerArea = TextEditingController();
   TextEditingController customerCity = TextEditingController();
   TextEditingController customerPincode = TextEditingController();
-  TextEditingController customerState = TextEditingController(text: 'TamilNadu');
+  TextEditingController customerState =
+      TextEditingController(text: 'TamilNadu');
 
   // Loading Button Controller:
-  RoundedLoadingButtonController loadingButtonController = RoundedLoadingButtonController();
+  RoundedLoadingButtonController loadingButtonController =
+      RoundedLoadingButtonController();
 
   /// ----------- Add Customer ----------------------
   Future<void> addCustomer({
@@ -55,7 +57,8 @@ class CustomersProvider with ChangeNotifier {
         // Store Customer Details:
         localData.customerName = name;
         localData.customerMobile = mobile;
-        localData.customerAddress = "$addressLine1,$area,$city,$pincode".replaceAll(',,', ',');   // Fix
+        localData.customerAddress =
+            "$addressLine1,$area,$city,$pincode".replaceAll(',,', ','); // Fix
 
         // Clear Fields:
         customerName.clear();
@@ -72,7 +75,6 @@ class CustomersProvider with ChangeNotifier {
         Navigator.pop(context);
 
         Toasts.showToastBar(context: context, text: 'Customer is added.');
-
       } else if (response.responseCode == 409) {
         // Existing Customer :
         if (!context.mounted) return;
@@ -168,19 +170,31 @@ class CustomersProvider with ChangeNotifier {
                       context: context,
                       loadingButtonController: loadingButtonController,
                       onPressed: () {
-                        if(customerName.text.isEmpty){
+                        if (customerName.text.isEmpty) {
                           loadingButtonController.reset();
-                          Toasts.showToastBar(context: context, text: "Please enter customer name",color: Colors.red);
-                        }else if(customerMobile.text.isEmpty){
+                          Toasts.showToastBar(
+                              context: context,
+                              text: "Please enter customer name",
+                              color: Colors.red);
+                        } else if (customerMobile.text.isEmpty) {
                           loadingButtonController.reset();
-                          Toasts.showToastBar(context: context, text: "Please enter customer mobile",color: Colors.red);
-                        }else if(customerCity.text.isEmpty){
+                          Toasts.showToastBar(
+                              context: context,
+                              text: "Please enter customer mobile",
+                              color: Colors.red);
+                        } else if (customerCity.text.isEmpty) {
                           loadingButtonController.reset();
-                          Toasts.showToastBar(context: context, text: "Please enter customer city",color: Colors.red);
-                        }else if(customerPincode.text.isEmpty){
+                          Toasts.showToastBar(
+                              context: context,
+                              text: "Please enter customer city",
+                              color: Colors.red);
+                        } else if (customerPincode.text.isEmpty) {
                           loadingButtonController.reset();
-                          Toasts.showToastBar(context: context, text: "Please enter customer pincode",color: Colors.red);
-                        }else{
+                          Toasts.showToastBar(
+                              context: context,
+                              text: "Please enter customer pincode",
+                              color: Colors.red);
+                        } else {
                           addCustomer(
                             context: context,
                             name: customerName.text,
@@ -219,25 +233,21 @@ class CustomersProvider with ChangeNotifier {
   List<CustomerData> _allCustomers = [];
   List<CustomerData> get allCustomersList => _allCustomers;
 
-
   // Fetch all Customers Api :
   Future<void> getAllCustomers(context) async {
     try {
       final response = await _customerRepo.getCustomers();
 
-      if(response.responseCode == '200'){
-
-
+      if (response.responseCode == '200') {
         _allCustomers = response.customersList ?? [];
-
-      }else {
+      } else {
         _allCustomers = [];
       }
-
     } catch (e) {
-      Toasts.showToastBar(context: context, text: 'Failed to receive Customers List');
+      Toasts.showToastBar(
+          context: context, text: 'Failed to receive Customers List');
       throw Exception(e);
-    }finally{
+    } finally {
       notifyListeners();
     }
   }
@@ -246,7 +256,11 @@ class CustomersProvider with ChangeNotifier {
   TextEditingController customerAddressController = TextEditingController();
 
   /// Set Customer Details :
-  void setCustomerDetails({required String customerId,required String customerName,required String customerMobile,required String customerAddress}){
+  void setCustomerDetails(
+      {required String customerId,
+      required String customerName,
+      required String customerMobile,
+      required String customerAddress}) {
     _selectedCustomerId = customerId;
     _selectedCustomerName = customerName;
     _selectedCustomerMobile = customerMobile;
@@ -255,12 +269,11 @@ class CustomersProvider with ChangeNotifier {
   }
 
   /// Reset Customer Details (Emptying)
-  void resetCustomerDetails(){
+  void resetCustomerDetails() {
     _selectedCustomerId = '';
     _selectedCustomerName = '';
     _selectedCustomerMobile = '';
     customerAddressController.clear();
     notifyListeners();
   }
-
 }

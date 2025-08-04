@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fullcomm_billing/res/colors.dart';
 import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:fullcomm_billing/utils/toast_messages.dart';
@@ -33,8 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
           image: 'assets/vectors/splash_vec.jpg',
           child: Center(
             child: FractionallySizedBox(
-              widthFactor: screenWidth > 1200 ? 0.4 : (screenWidth > 800 ? 0.6 : 0.8),
-             heightFactor: 0.75,
+              widthFactor:
+                  screenWidth > 1200 ? 0.4 : (screenWidth > 800 ? 0.6 : 0.8),
+              heightFactor: 0.75,
               child: Card(
                 color: Colors.white,
                 elevation: 3,
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/logo/app_logo.jpeg',
+                        'assets/logo/app_logo.png',
                         // width: screenWidth > 800 ? screenWidth * 0.15 : screenWidth * 0.25,
                         // height: screenWidth > 800 ? screenWidth * 0.15 : screenWidth * 0.25,
                         fit: BoxFit.contain,
@@ -64,10 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontWeight: FontWeight.w500,
                         color: AppColors.darkBlue,
                       ),
-                      10.height,
+                      15.height,
                       MyTextField(
-                        labelText: 'Mobile No.',
-                        width: screenWidth > 800 ? screenWidth * 0.20 : screenWidth * 0.35,
+                        labelText: 'Mobile Number',
+                        width: screenWidth > 800
+                            ? screenWidth * 0.20
+                            : screenWidth * 0.35,
                         controller: userProvider.mobileController,
                         keyboardType: TextInputType.number,
                         autofocus: true,
@@ -77,38 +79,67 @@ class _LoginScreenState extends State<LoginScreen> {
                       8.height,
                       MyTextField(
                         labelText: 'Password',
-                        width: screenWidth > 800 ? screenWidth * 0.20 : screenWidth * 0.35,
+                        width: screenWidth > 800
+                            ? screenWidth * 0.20
+                            : screenWidth * 0.35,
                         controller: userProvider.passwordController,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value){
+                        onFieldSubmitted: (value) {
+                          userProvider.loginButtonController
+                              .start(); // Start Loading
 
-                          userProvider.loginButtonController.start(); // Start Loading
-
-                          if (userProvider.mobileController.text.trim().length == 10 &&
-                              userProvider.passwordController.text.trim().isNotEmpty) {
+                          if (userProvider.mobileController.text
+                                      .trim()
+                                      .length ==
+                                  10 &&
+                              userProvider.passwordController.text
+                                  .trim()
+                                  .isNotEmpty) {
                             userProvider.login(
                               context: context,
                               mobile: userProvider.mobileController.text.trim(),
-                              password: userProvider.passwordController.text.trim(),
+                              password:
+                                  userProvider.passwordController.text.trim(),
                             );
-                          }
-                          else if (userProvider.mobileController.text.trim().length != 10) {
+                          } else if (userProvider.mobileController.text
+                              .trim()
+                              .isEmpty) {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
-                              text: 'Enter a valid Mobile No.',
+                              text: 'Please enter your mobile number.',
                               color: AppColors.errorMessage,
                             );
-                          }
-                          else if (userProvider.passwordController.text.trim().isEmpty) {
+                          } else if (userProvider.mobileController.text
+                                  .trim()
+                                  .length !=
+                              10) {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
-                              text: 'Enter Valid Password',
+                              text: 'Please enter correct mobile number.',
                               color: AppColors.errorMessage,
                             );
-                          }
-                          else {
+                          } else if (userProvider.passwordController.text
+                              .trim()
+                              .isEmpty) {
+                            userProvider.loginButtonController.reset();
+                            Toasts.showToastBar(
+                              context: context,
+                              text: 'Please enter your password.',
+                              color: AppColors.errorMessage,
+                            );
+                          } else if (userProvider.passwordController.text
+                                  .trim()
+                                  .length <
+                              8) {
+                            userProvider.loginButtonController.reset();
+                            Toasts.showToastBar(
+                              context: context,
+                              text: 'Password must be at least 8 characters.',
+                              color: AppColors.errorMessage,
+                            );
+                          } else {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
@@ -121,35 +152,65 @@ class _LoginScreenState extends State<LoginScreen> {
                       8.height,
                       Buttons.loginButton(
                         context: context,
-                        loadingButtonController: userProvider.loginButtonController,
+                        loadingButtonController:
+                            userProvider.loginButtonController,
                         height: 50,
-                        width: screenWidth > 800 ? screenWidth * 0.20 : screenWidth * 0.35,
+                        width: screenWidth > 800
+                            ? screenWidth * 0.20
+                            : screenWidth * 0.35,
                         onPressed: () {
-                          if (userProvider.mobileController.text.trim().length == 10 &&
-                              userProvider.passwordController.text.trim().isNotEmpty) {
+                          if (userProvider.mobileController.text
+                                      .trim()
+                                      .length ==
+                                  10 &&
+                              userProvider.passwordController.text
+                                  .trim()
+                                  .isNotEmpty) {
                             userProvider.login(
                               context: context,
                               mobile: userProvider.mobileController.text.trim(),
-                              password: userProvider.passwordController.text.trim(),
+                              password:
+                                  userProvider.passwordController.text.trim(),
                             );
-                          }
-                          else if (userProvider.mobileController.text.trim().length != 10) {
+                          } else if (userProvider.mobileController.text
+                              .trim()
+                              .isEmpty) {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
-                              text: 'Enter a valid Mobile No.',
+                              text: 'Please enter your mobile number.',
                               color: AppColors.errorMessage,
                             );
-                          }
-                          else if (userProvider.passwordController.text.trim().isEmpty) {
+                          } else if (userProvider.mobileController.text
+                                  .trim()
+                                  .length !=
+                              10) {
+                            userProvider.loginButtonController.reset();
+                            Toasts.showToastBar(
+                              context: context,
+                              text: 'Please enter your correct mobile number.',
+                              color: AppColors.errorMessage,
+                            );
+                          } else if (userProvider.passwordController.text
+                              .trim()
+                              .isEmpty) {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
                               text: 'Enter Valid Password',
                               color: AppColors.errorMessage,
                             );
-                          } 
-                          else {
+                          } else if (userProvider.passwordController.text
+                                  .trim()
+                                  .length <
+                              8) {
+                            userProvider.loginButtonController.reset();
+                            Toasts.showToastBar(
+                              context: context,
+                              text: 'Password must be at least 8 characters.',
+                              color: AppColors.errorMessage,
+                            );
+                          } else {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,

@@ -4,10 +4,30 @@ import 'package:google_fonts/google_fonts.dart';
 import '../colors.dart';
 
 class MyTextField extends StatelessWidget {
-  const MyTextField({super.key, required this.controller, this.focusNode, this.inputFormatters,
-    this.suffixIcon, this.onChanged, this.onFieldSubmitted, this.onEditingComplete,
-    this.height, this.labelText, this.width, this.prefixIcon, this.hintText, this.keyboardType,
-    this.textInputAction, this.textCapitalization, this.enabled, this.autofocus, this.obscureText, this.autofillHints, this.textAlign, this.maxLines, this.minLines});
+  const MyTextField(
+      {super.key,
+      required this.controller,
+      this.focusNode,
+      this.inputFormatters,
+      this.suffixIcon,
+      this.onChanged,
+      this.onFieldSubmitted,
+      this.onEditingComplete,
+      this.height,
+      this.labelText,
+      this.width,
+      this.prefixIcon,
+      this.hintText,
+      this.keyboardType,
+      this.textInputAction,
+      this.textCapitalization,
+      this.enabled,
+      this.autofocus,
+      this.obscureText,
+      this.autofillHints,
+      this.textAlign,
+      this.maxLines,
+      this.minLines});
 
   final TextEditingController controller;
   final FocusNode? focusNode;
@@ -20,7 +40,7 @@ class MyTextField extends StatelessWidget {
   final int? minLines;
   final bool? autofocus;
   final bool? obscureText;
-  final List<TextInputFormatter>?  inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final TextCapitalization? textCapitalization;

@@ -6,7 +6,6 @@ import '../colors.dart';
 import 'k_text.dart';
 
 class Buttons {
-
   /// Rounded Loading Button :
   static Widget loginButton({
     required BuildContext context,
@@ -22,34 +21,31 @@ class Buttons {
     Color? color,
     Color? textColor,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Tooltip(
-        message: toolTip ?? '',
-        child: SizedBox(
-          height: height ?? 55,
-          width: width ?? MediaQuery.of(context).size.width*0.35,
-          child: RoundedLoadingButton(
-              onPressed: onPressed,
-              controller: loadingButtonController,
-              color: color ?? AppColors.primary,
-              elevation: 3,
-              borderRadius: borderRadius ?? 10,
-              child: MyText(
-                  text: text,
-                  color: textColor ?? AppColors.secondary,
-                  fontSize: fontSize ?? 18,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.bold
-              )
-          ),
-        ),
+    return Tooltip(
+      message: toolTip ?? '',
+      child: SizedBox(
+        height: height ?? 55,
+        width: width ?? MediaQuery.of(context).size.width * 0.35,
+        child: RoundedLoadingButton(
+            width: width ?? MediaQuery.of(context).size.width * 0.35,
+            onPressed: onPressed,
+            controller: loadingButtonController,
+            color: color ?? AppColors.primary,
+            elevation: 3,
+            borderRadius: borderRadius ?? 10,
+            child: MyText(
+                text: text,
+                color: textColor ?? AppColors.secondary,
+                fontSize: fontSize ?? 18,
+                letterSpacing: 1,
+                fontWeight: FontWeight.bold)),
       ),
     );
   }
 
   /// Footer Buttons :
-  static Widget footerButton(context,{
+  static Widget footerButton(
+    context, {
     required String text,
     required RoundedLoadingButtonController loadingButtonController,
     required void Function() onPressed,
@@ -78,12 +74,11 @@ class Buttons {
               elevation: 3,
               borderRadius: borderRadius ?? 55,
               child: MyText(
-                  text : text,
-                  color: textColor ?? AppColors.secondary,
-                  fontSize: TextFormat.responsiveFontSize(context, 16),
-                  letterSpacing: 1,
-              )
-          ),
+                text: text,
+                color: textColor ?? AppColors.secondary,
+                fontSize: TextFormat.responsiveFontSize(context, 16),
+                letterSpacing: 1,
+              )),
         ),
       ),
     );

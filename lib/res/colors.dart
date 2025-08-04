@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-
-  static const Color primary = Color(0xFF580B77);
+  static const Color primary = Color(0xFF0078D7);
   static const Color secondary = Colors.white;
-  static const Color introTitleTxtColor = Color(0xFF3C0751);
-  static const Color introSubTitleColor = Color(0xFF883AA6);
+  static const Color introTitleTxtColor = Color(0xFF0078D7);
+  static const Color introSubTitleColor = Color(0xFFD9EEFF);
   static const Color textFieldBackground = Color(0xFFF3F6FA);
   static const Color shimmerHighlight = Color(0xFFFCFCFC);
   static const Color shimmerBase = Color(0xFFF4F3F3);
-  static const Color appAccentColor = Color(0xFF490962);
+  static const Color appAccentColor = Color(0xFF0078D7);
   static Color discountBadge = primary.withValues(alpha: 0.3);
 
   static const Color white = Colors.white;
@@ -21,24 +20,16 @@ class AppColors {
   static const Color grey = Colors.grey;
   static const Color darkBlue = Color(0xFF161D6F);
   static const Color addButtonColor = Color(0xFFF1F4EB);
-  static const Color transparent          = Colors.transparent;
-  static const Color selectedCoupon       = Color(0xffE6F4EA);
-  static const  Color darkPrimary         = Color(0xFF42035C);
+  static const Color transparent = Colors.transparent;
+  static const Color selectedCoupon = Color(0xffE6F4EA);
+  static const Color darkPrimary = Color(0xFF42035C);
 
-  static const  Color successMessage         = Color(0xFF28A745);
-  static const  Color errorMessage         = Color(0xFFDC3545);
-  static const  Color warningMessage         = Color(0xFFFFC107);
-  static const  Color infoMessage         = Color(0xFF17A2B8);
-  static const  Color generalMessage         = Color(0xFF333333);
-  static const  Color whiteMessage         = Color(0xFFFFFFFF);
-
-
-
-
-
-
-
-
+  static const Color successMessage = Color(0xFF28A745);
+  static const Color errorMessage = Color(0xFFDC3545);
+  static const Color warningMessage = Color(0xFFFFC107);
+  static const Color infoMessage = Color(0xFF17A2B8);
+  static const Color generalMessage = Color(0xFF333333);
+  static const Color whiteMessage = Color(0xFFFFFFFF);
 }
 // import 'package:flutter/material.dart';
 //

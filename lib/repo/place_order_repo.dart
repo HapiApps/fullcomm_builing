@@ -16,7 +16,6 @@ import 'package:http/http.dart' as http;
 import '../utils/toast_messages.dart';
 
 class PlaceOrderRepository {
-
   /// Place Order :
   // Future<PlacedOrderResponse> placeOrder({required Order order}) async {
   //   try {
@@ -42,13 +41,13 @@ class PlaceOrderRepository {
   //     throw Exception("placeOrder Catch Error : $e");
   //   }
   // }
-  Future<PlacedOrderResponse> placeOrder({required Order order,required BuildContext context}) async {
+  Future<PlacedOrderResponse> placeOrder(
+      {required Order order, required BuildContext context}) async {
     try {
       final Map<String, dynamic> requestBody = {
         ...order.toJson(),
         'action': 'b_insert_bill_products',
-        "cos_id":localData.cosId
-
+        "cos_id": localData.cosId
       };
 
       final response = await http.post(
@@ -71,43 +70,51 @@ class PlaceOrderRepository {
       }
     } on TimeoutException {
       log("Request timed out!");
-      Toasts.showToastBar(context: context, text: 'Request timed out!. Please try again',color: Colors.red);
+      Toasts.showToastBar(
+          context: context,
+          text: 'Request timed out!. Please try again',
+          color: Colors.red);
       throw Exception("Request timed out!");
     } on SocketException {
       log("Network issue!");
-      Toasts.showToastBar(context: context, text: 'Network issue!. Please try again',color: Colors.red);
+      Toasts.showToastBar(
+          context: context,
+          text: 'Network issue!. Please try again',
+          color: Colors.red);
       throw Exception("Network issue!. Please try again");
     } catch (e) {
       log("placeOrder Catch Error: $e");
       throw Exception("placeOrder Catch Error: $e");
     }
   }
-  Future<OrdersResponse> getOrderDetails({required String stDate,required String enDate}) async {
+
+  Future<OrdersResponse> getOrderDetails(
+      {required String stDate, required String enDate}) async {
     final body = jsonEncode({
-      'action'  : 'b_select_order_details',
-      'st_date' : stDate,
-      'en_date' : enDate,
-      "cos_id":localData.cosId
+      'action': 'b_select_order_details',
+      'st_date': stDate,
+      'en_date': enDate,
+      "cos_id": localData.cosId
     });
     try {
-      final response = await http.post(Uri.parse(ApiUrl.script),body: body);
-      return OrdersResponse.fromJson(jsonDecode(response.body));
-    } catch (e) {
-      throw Exception("getCustomers Error : $e");
-    }
-  }
-  Future<OrdersResponse> getLastOrderDetails() async {
-    final body = jsonEncode({
-      'action': 'b_select_last_order',
-      'user_id': localData.userName,
-      "cos_id":localData.cosId
-    });
-    try {
-      final response = await http.post(Uri.parse(ApiUrl.script),body: body);
+      final response = await http.post(Uri.parse(ApiUrl.script), body: body);
       return OrdersResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
       throw Exception("getCustomers Error : $e");
     }
   }
 
+  Future<OrdersResponse> getLastOrderDetails() async {
+    final body = jsonEncode({
+      'action': 'b_select_last_order',
+      'user_id': localData.userName,
+      "cos_id": localData.cosId
+    });
+    try {
+      final response = await http.post(Uri.parse(ApiUrl.script), body: body);
+      return OrdersResponse.fromJson(jsonDecode(response.body));
+    } catch (e) {
+      throw Exception("getCustomers Error : $e");
+    }
+  }
 }

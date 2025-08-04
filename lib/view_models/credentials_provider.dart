@@ -15,10 +15,10 @@ import '../views/credentials/login_screen.dart';
 import '../views/orders/order_detail_page.dart';
 
 class UserDataProvider with ChangeNotifier {
-
   final CredentialsRepository _credentialsRepo = CredentialsRepository();
 
-  RoundedLoadingButtonController loginButtonController = RoundedLoadingButtonController();
+  RoundedLoadingButtonController loginButtonController =
+      RoundedLoadingButtonController();
 
   // Input Fields :
   TextEditingController mobileController = TextEditingController();
@@ -39,11 +39,12 @@ class UserDataProvider with ChangeNotifier {
       required String mobile,
       required String password}) async {
     try {
-      final response = await _credentialsRepo.loginApi(mobile: mobile, password: password); // Call the Repo
+      final response = await _credentialsRepo.loginApi(
+          mobile: mobile, password: password); // Call the Repo
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-log("response.responseCode:${response.responseCode}");
-log("response$response");
+      log("response.responseCode:${response.responseCode}");
+      log("response$response");
       if (response.responseCode == 200) {
         prefs.setString('userId', response.userData!.id!);
         prefs.setString('userName', response.userData!.sName!);
@@ -53,11 +54,16 @@ log("response$response");
         prefs.setBool('seen', true); // Set User Logged In
 
         await initializeUserData();
-
         if (!context.mounted) return;
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const NewBillingScreen()));
-      }
-      else {
+        Toasts.showToastBar(
+          context: context,
+          text: 'Login Successful',
+          color: AppColors.successMessage,
+        );
+        if (!context.mounted) return;
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const NewBillingScreen()));
+      } else {
         if (!context.mounted) return;
         Toasts.showToastBar(
           context: context,
@@ -86,16 +92,16 @@ log("response$response");
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (prefs.getBool('seen') ?? false) {
-
       await initializeUserData();
 
       if (!context.mounted) return;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const NewBillingScreen()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const NewBillingScreen()));
       //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const OrderDetailPage()));
-
     } else {
       if (!context.mounted) return;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
     }
   }
 
@@ -103,7 +109,7 @@ log("response$response");
   void logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear(); // Clear Local Storage
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
-
 }

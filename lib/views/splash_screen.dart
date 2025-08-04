@@ -16,17 +16,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   Timer? timer;
 
   @override
   void initState() {
     super.initState();
     timer = Timer(const Duration(milliseconds: 1200), () {
-      Provider.of<UserDataProvider>(context,listen: false).checkUserExistence(context); // Check for logged in user
+      Provider.of<UserDataProvider>(context, listen: false)
+          .checkUserExistence(context); // Check for logged in user
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +33,14 @@ class _SplashScreenState extends State<SplashScreen> {
       body: BackContainer(
         image: 'assets/vectors/splash_vec.jpg',
         colorFilter: ColorFilter.mode(
-          AppColors.black.withValues(alpha:0.1),
+          AppColors.black.withValues(alpha: 0.1),
           BlendMode.dstATop,
         ),
         child: Center(
           child: LayoutBuilder(
             builder: (context, constraints) {
-
-              double logoSize = constraints.maxWidth * 0.3; // 20% of screen width
+              double logoSize =
+                  constraints.maxWidth * 0.3; // 20% of screen width
 
               // Minimum and Maximum size
               logoSize = logoSize.clamp(50.0, 300.0); // Min: 50, Max: 300
@@ -50,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/logo/app_logo.jpeg',
+                    'assets/logo/app_logo.png',
                     width: logoSize,
                     height: logoSize,
                     fit: BoxFit.contain,

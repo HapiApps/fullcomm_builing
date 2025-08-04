@@ -11,21 +11,22 @@ class BillingItem {
   int quantity;
   String? outPrice;
 
-  BillingItem({
-    required this.id,
-    required this.product,
-    required this.productTitle,
-    required this.variation,
-    required this.variationUnit,
-    required this.quantity,
-    this.outPrice
-  });
+  BillingItem(
+      {required this.id,
+      required this.product,
+      required this.productTitle,
+      required this.variation,
+      required this.variationUnit,
+      required this.quantity,
+      this.outPrice});
 
   /// Calculate Mrp per product (for one product) :
   double mrpPerProduct() {
     if (product.isLoose == '1') {
       // Loose product:
-      return (double.parse(product.mrp.toString())/(double.parse(product.stockQty.toString()))) * variation;
+      return (double.parse(product.mrp.toString()) /
+              (double.parse(product.stockQty.toString()))) *
+          variation;
     } else {
       // Regular product:
       return (double.parse(product.mrp.toString()));
@@ -48,7 +49,7 @@ class BillingItem {
   double calculateOutPrice() {
     if (product.isLoose == '1') {
       // Loose product:
-      return (double.parse(product.pricePerG)*1000);
+      return (double.parse(product.pricePerG) * 1000);
       // return (double.parse(product.outPrice.toString())/(double.parse(product.stockQty.toString())/1000));
     } else {
       // Regular product:
@@ -73,7 +74,6 @@ class BillingItem {
   double calculateMrpSubtotal() {
     print("product.pricePerG ${product.pricePerG}");
     if (product.isLoose == '1') {
-
       // Loose product: variation * pricePerGram (Variation is in gram)
       return (variation * double.parse(product.pricePerG));
     } else {
@@ -86,8 +86,10 @@ class BillingItem {
   double calculateDiscount() {
     if (product.isLoose == '1') {
       // For Loose Products:
-      double mrpPerG = double.parse(product.mrp.toString()) / (double.parse(product.stockQty.toString()));
-      double outPricePerG = double.parse(product.outPrice.toString()) / (double.parse(product.stockQty.toString()));
+      double mrpPerG = double.parse(product.mrp.toString()) /
+          (double.parse(product.stockQty.toString()));
+      double outPricePerG = double.parse(product.outPrice.toString()) /
+          (double.parse(product.stockQty.toString()));
       log("calculateDiscount ${(variation * (mrpPerG - outPricePerG))}");
       return (variation * (mrpPerG - outPricePerG));
     } else {
@@ -105,16 +107,16 @@ class BillingItem {
       'is_loose': product.isLoose.toString(),
       'batch_no': product.batchNo.toString(),
       'p_title': productTitle,
-      'qty': product.isLoose == '0' ? quantity : int.parse(variation.toString()),
+      'qty':
+          product.isLoose == '0' ? quantity : int.parse(variation.toString()),
       'p_discount': (calculateMrpSubtotal() - calculateSubtotal()).toString(),
       'product_img': product.pImg.toString(),
       'out_price': calculateSubtotal().toString(),
       'unit': variationUnit.toString(),
-
       'product': product.toJson(),
       'productTitle': productTitle,
       'variation': variation,
-      'variationUnit':  product.isLoose == '0' ? variationUnit : variation,
+      'variationUnit': product.isLoose == '0' ? variationUnit : variation,
       'quantity': quantity,
     };
   }
@@ -177,7 +179,6 @@ class BillingItem {
 //     };
 //   }
 // }
-
 
 ///$product_id = $item['id'];
 //         $qty = $item['is_loose']=='0' ? $item['qty'] : 0;

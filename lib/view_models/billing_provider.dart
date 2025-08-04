@@ -11,7 +11,7 @@ import 'package:fullcomm_billing/repo/products_repo.dart';
 import 'package:fullcomm_billing/utils/toast_messages.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
+import '../models/bill_obj.dart';
 import '../models/billing_product.dart';
 import '../models/place_order.dart';
 import '../models/products_response.dart';
@@ -23,8 +23,7 @@ import '../utils/text_formats.dart';
 import '../views/billing_view/new_billing_screen.dart';
 import '../views/pdf/bill_pdf.dart';
 
-class BillingProvider with ChangeNotifier{
-
+class BillingProvider with ChangeNotifier {
   final ProductsRepository _productsRepo = ProductsRepository();
   final PlaceOrderRepository _placeOrderRepo = PlaceOrderRepository();
 
@@ -69,8 +68,9 @@ class BillingProvider with ChangeNotifier{
   }
 
   /// --------------- Cashier Tab ---------------------
-  TextEditingController cashierNameController = TextEditingController(text: localData.userName);
-  TextEditingController cashierCounter        = TextEditingController();
+  TextEditingController cashierNameController =
+      TextEditingController(text: localData.userName);
+  TextEditingController cashierCounter = TextEditingController();
 
   /// ------------- Fetch Products -------------------
 
@@ -81,28 +81,26 @@ class BillingProvider with ChangeNotifier{
   Future<void> getProducts() async {
     _isLoading = true;
     notifyListeners();
-    try{
+    try {
       final response = await _productsRepo.getProducts();
 
-      if(response.responseCode==200){
+      if (response.responseCode == 200) {
         _productsList = response.productList ?? [];
         //print("products ${_productsList.length}");
-        for(int i = 0; i<_productsList.length;i++){
+        for (int i = 0; i < _productsList.length; i++) {
           //print("barcode ${_productsList[i].barcode} ${_productsList[i].pTitle} ${_productsList[i].pVariation}${_productsList[i].unit}");
         }
-      }else{
-        _productsList=[];
+      } else {
+        _productsList = [];
       }
 
       log("Products List : ${_productsList.length}");
-
-    }catch(e){
+    } catch (e) {
       Exception("getProducts Error : $e");
-    }finally{
+    } finally {
       _isLoading = false;
       notifyListeners();
     }
-
   }
 
   /// ----------- Billing Calculations ---------------
@@ -118,11 +116,11 @@ class BillingProvider with ChangeNotifier{
   void initializeControllers(List<BillingItem> items) {
     variationControllers = List.generate(
       items.length,
-          (_) => TextEditingController(),
+      (_) => TextEditingController(),
     );
     quantityControllers = List.generate(
       items.length,
-          (_) => TextEditingController(),
+      (_) => TextEditingController(),
     );
   }
 
@@ -134,7 +132,8 @@ class BillingProvider with ChangeNotifier{
   // Add Billing Items : (Add Billing Item From the Header)
   void addBillingItem(BillingItem newItem) {
     // Check if the product already exists in the list
-    final existingIndex = _billingItems.indexWhere((item) => item.product.id == newItem.product.id);
+    final existingIndex = _billingItems
+        .indexWhere((item) => item.product.id == newItem.product.id);
 
     if (existingIndex != -1) {
       // Update the existing item
@@ -154,16 +153,19 @@ class BillingProvider with ChangeNotifier{
       );
 
       _billingItems[existingIndex] = updatedItem; // Replace the old item
-      variationControllers[existingIndex]?.text = updatedItem.variation.toString();
-      quantityControllers[existingIndex]?.text = updatedItem.quantity.toString();
-    }
-    else {
+      variationControllers[existingIndex]?.text =
+          updatedItem.variation.toString();
+      quantityControllers[existingIndex]?.text =
+          updatedItem.quantity.toString();
+    } else {
       // Add the new item if it doesn't exist
       _billingItems.add(newItem);
 
       // Initialize controllers for the new item
-      variationControllers.add(TextEditingController(text: newItem.variation.toString()));
-      quantityControllers.add(TextEditingController(text: newItem.quantity.toString()));
+      variationControllers
+          .add(TextEditingController(text: newItem.variation.toString()));
+      quantityControllers
+          .add(TextEditingController(text: newItem.quantity.toString()));
     }
 
     notifyListeners(); // Notify listeners about the change
@@ -180,16 +182,16 @@ class BillingProvider with ChangeNotifier{
     notifyListeners();
   }
 
-
   String _variation = "";
   String get variation => _variation;
-  void changeVariation(String value){
+  void changeVariation(String value) {
     _variation = value;
     notifyListeners();
   }
 
   // Update Billing Items : (For Edit Option)
-  void updateBillingItem(int index, {required String isLoose, double? variation, int? quantity}) {
+  void updateBillingItem(int index,
+      {required String isLoose, double? variation, int? quantity}) {
     if (index < 0 || index >= billingItems.length) {
       log("Invalid index: $index");
       return; // Exit if index is invalid
@@ -202,7 +204,8 @@ class BillingProvider with ChangeNotifier{
       if (variationControllers[index] != null) {
         variationControllers[index]!.value = TextEditingValue(
           text: variation.toString(),
-          selection: TextSelection.collapsed(offset: variation.toString().length),
+          selection:
+              TextSelection.collapsed(offset: variation.toString().length),
         );
       } else {
         log("Variation controller for index $index is null");
@@ -210,14 +213,14 @@ class BillingProvider with ChangeNotifier{
     }
 
     if (quantity != null && isLoose == '0') {
-
       billingItems[index].quantity = quantity;
 
       // Ensure the controller exists
       if (quantityControllers[index] != null) {
         quantityControllers[index]!.value = TextEditingValue(
           text: quantity.toString(),
-          selection: TextSelection.collapsed(offset: quantity.toString().length),
+          selection:
+              TextSelection.collapsed(offset: quantity.toString().length),
         );
       } else {
         log("Quantity controller for index $index is null");
@@ -243,7 +246,8 @@ class BillingProvider with ChangeNotifier{
 
   /// Calculate the grand total
   double get grandTotal {
-    return billingItems.fold(0.0, (sum, item) => sum + item.calculateSubtotal());
+    return billingItems.fold(
+        0.0, (sum, item) => sum + item.calculateSubtotal());
   }
 
   /// Total No of Billing Items :
@@ -252,45 +256,50 @@ class BillingProvider with ChangeNotifier{
   }
 
   // Total Discount of Billing Items :
-  String calculateTotalDiscount(){
+  String calculateTotalDiscount() {
     log("formattedAmount ${TextFormat.formattedAmount(billingItems.fold(0.0, (total, item) => total + item.calculateDiscount()))}");
-    return TextFormat.formattedAmount(billingItems.fold(0.0, (total, item) => total + item.calculateDiscount()));
+    return TextFormat.formattedAmount(billingItems.fold(
+        0.0, (total, item) => total + item.calculateDiscount()));
   }
 
   // Grand Total of Billing Items :
-  double calculatedGrandTotal(){
-    return billingItems.fold(0.0, (total, item) => total + item.calculateSubtotal());
+  double calculatedGrandTotal() {
+    return billingItems.fold(
+        0.0, (total, item) => total + item.calculateSubtotal());
   }
 
-  String calculatedMrpSubtotal(){
-    return TextFormat.formattedAmount(billingItems.fold(0.0, (total, item) => total + item.calculateMrpSubtotal()));
+  String calculatedMrpSubtotal() {
+    return TextFormat.formattedAmount(billingItems.fold(
+        0.0, (total, item) => total + item.calculateMrpSubtotal()));
   }
 
   int calculatedTotalProducts() => billingItems.length;
 
-  int calculatedTotalQuantity() => billingItems.fold(0, (total, item) => total + item.quantity);
-
+  int calculatedTotalQuantity() =>
+      billingItems.fold(0, (total, item) => total + item.quantity);
 
   /// --------- Print Bill / Place Order ---------------
-  RoundedLoadingButtonController printButtonController = RoundedLoadingButtonController();
-  RoundedLoadingButtonController paymentButtonController = RoundedLoadingButtonController();
+  RoundedLoadingButtonController printButtonController =
+      RoundedLoadingButtonController();
+  RoundedLoadingButtonController paymentButtonController =
+      RoundedLoadingButtonController();
 
   final BillPdf pdfService = BillPdf();
 
   // Place Order Api :
-  Future<void> placeOrderAndPrintBill(context,{required Order order})async{
-try{
-  final response = await _placeOrderRepo.placeOrder(order: order,context: context);
+  Future<void> placeOrderAndPrintBill(context, {required Order order}) async {
+    try {
+      final response =
+          await _placeOrderRepo.placeOrder(order: order, context: context);
       log("BIll:${order.customerId}");
       log("BIll:${order.products}");
-      if(response.responseCode==200){
-      log("BIll:$response");
-        await pdfService.printBill(
-            context,
+      if (response.responseCode == 200) {
+        log("BIll:$response");
+        await pdfService.printBill(context,
             invoiceNo: response.invoiceNo ?? 0); // Prints Bill
 
         // Clear Billing Fields
-        _billingItems = [];  // Empty Billing items
+        _billingItems = []; // Empty Billing items
         calculateTotalDiscount();
         calculateTotalItems();
         calculatedGrandTotal();
@@ -300,37 +309,34 @@ try{
         order.customerMobile = '';
         order.customerAddress = '';
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const NewBillingScreen()));
-
-      }
-      else{
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const NewBillingScreen()));
+      } else {
         Toasts.showToastBar(context: context, text: "Couldn't print receipts");
-          printButtonController.reset();
-          printAfterChangeButtonController.reset();
-          notifyListeners();
+        printButtonController.reset();
+        printAfterChangeButtonController.reset();
+        notifyListeners();
       }
-
-    }
-    catch(e){
-      Toasts.showToastBar(context: context, text: 'Something went wrong. Try Again');
+    } catch (e) {
+      Toasts.showToastBar(
+          context: context, text: 'Something went wrong. Try Again');
       throw Exception("placeOrder Provider Error : $e");
-    }
-    finally{
+    } finally {
       printButtonController.reset();
       printAfterChangeButtonController.reset();
       notifyListeners();
     }
-
   }
 
-    bool _barcodeMode = false;
+  bool _barcodeMode = false;
   bool get barcodeMode => _barcodeMode;
 
-  void barcodeModeChange(){
-    _barcodeMode =! _barcodeMode;
+  void barcodeModeChange() {
+    _barcodeMode = !_barcodeMode;
     notifyListeners();
   }
-  void findProductByBarcode(BuildContext context,String barcode) {
+
+  void findProductByBarcode(BuildContext context, String barcode) {
     try {
       final product = productsList.firstWhere((p) => p.barcode == barcode);
 
@@ -344,7 +350,10 @@ try{
 
       notifyListeners();
     } catch (e) {
-      Toasts.showToastBar(context: context, text: "Please scan correct barcode..",color: Colors.red);
+      Toasts.showToastBar(
+          context: context,
+          text: "Please scan correct barcode..",
+          color: Colors.red);
       // Product not found — you can log or show a message if needed
     }
   }
@@ -357,9 +366,34 @@ try{
     notifyListeners();
   }
 
+  String billNo = "";
+  List<BillObj> allBill = [];
+  List<BillObj> get allBillList => allBill;
+  Future<void> fetchBill(BuildContext context) async {
+    try {
+      PreviousBillObj response = await _productsRepo.getBill();
+
+      if (response.responseCode == "200") {
+        allBill = response.data;
+        var i = int.parse(allBill[0].invoiceNo) + 1;
+        billNo = i.toString();
+      } else {
+        billNo = '';
+      }
+    } catch (e) {
+      log("get billNo Error: $e");
+    } finally {
+      await Future.delayed(
+          const Duration(milliseconds: 10)); // let build complete
+      notifyListeners(); // Now safe
+    }
+  }
+
   /// --------- Payment Box ----------------
-  RoundedLoadingButtonController paymentBalanceButtonController = RoundedLoadingButtonController();
-  RoundedLoadingButtonController printAfterChangeButtonController = RoundedLoadingButtonController();
+  RoundedLoadingButtonController paymentBalanceButtonController =
+      RoundedLoadingButtonController();
+  RoundedLoadingButtonController printAfterChangeButtonController =
+      RoundedLoadingButtonController();
 
   TextEditingController paymentReceived = TextEditingController();
   TextEditingController paymentBalance = TextEditingController();
@@ -370,10 +404,10 @@ try{
   // Calculate Payment Balance
   void calculatePaymentBalance() {
     try {
-      if(paymentReceived.text.isEmpty){
+      if (paymentReceived.text.isEmpty) {
         _paymentBalanceAmount = '0';
         paymentBalance.text = '0';
-      }else{
+      } else {
         int receivedAmount = int.tryParse(paymentReceived.text.trim()) ?? 0;
         int grandTotal = calculatedGrandTotal().toInt();
         _paymentBalanceAmount = (receivedAmount - grandTotal).toString();
@@ -384,12 +418,14 @@ try{
       paymentBalance.text = '0';
     }
   }
+
   final FocusNode keyboardListenerFocusNode = FocusNode();
-  final billMethodFocusNode   = FocusNode();
+  final billMethodFocusNode = FocusNode();
   // Show Payment Balance Dialog
   void showPaymentBalanceDialog(
-      BuildContext context, {required void Function() onPressPrint,}) {
-
+    BuildContext context, {
+    required void Function() onPressPrint,
+  }) {
     paymentReceived.addListener(() {
       calculatePaymentBalance();
     });
@@ -406,9 +442,13 @@ try{
             textAlign: TextAlign.center,
           ),
           icon: IconButton(
-              onPressed: (){
-            Navigator.of(context).pop();
-          }, icon: const Icon(Icons.clear,color: Colors.red,)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                Icons.clear,
+                color: Colors.red,
+              )),
           iconPadding: EdgeInsets.fromLTRB(300, 0, 1, 1),
           content: Container(
             alignment: Alignment.center,
@@ -427,7 +467,8 @@ try{
                     ),
                     children: [
                       TextSpan(
-                        text: TextFormat.formattedAmount(calculatedGrandTotal()),
+                        text:
+                            TextFormat.formattedAmount(calculatedGrandTotal()),
                         style: GoogleFonts.lato(
                           fontSize: TextFormat.responsiveFontSize(context, 20),
                           fontWeight: FontWeight.bold,
@@ -443,7 +484,6 @@ try{
                   height: null,
                   labelText: "Payment Received",
                   autofocus: true,
-
                   controller: paymentReceived,
                   inputFormatters: InputFormatters.mobileNumberInput,
                 ),
@@ -476,18 +516,26 @@ try{
                     );
                   },
                 ),
-                const MyText(text: 'Select Payment Method',fontSize: 16,fontWeight: FontWeight.bold,),
+                const MyText(
+                  text: 'Select Payment Method',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
                 KeyboardListener(
                   focusNode: keyboardListenerFocusNode,
                   onKeyEvent: (KeyEvent event) {
-                    final currentIndex = billMethods.indexOf(selectBillMethod ?? "");
+                    final currentIndex =
+                        billMethods.indexOf(selectBillMethod ?? "");
                     if (event is KeyDownEvent) {
-                      if (event.logicalKey == LogicalKeyboardKey.enter || event.logicalKey == LogicalKeyboardKey.arrowRight) {
+                      if (event.logicalKey == LogicalKeyboardKey.enter ||
+                          event.logicalKey == LogicalKeyboardKey.arrowRight) {
                         int next = (currentIndex + 1) % billMethods.length;
                         changeBillMethod(billMethods[next]);
                         billMethodFocusNodes[next].requestFocus();
-                      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-                        int prev = (currentIndex - 1 + billMethods.length) % billMethods.length;
+                      } else if (event.logicalKey ==
+                          LogicalKeyboardKey.arrowLeft) {
+                        int prev = (currentIndex - 1 + billMethods.length) %
+                            billMethods.length;
                         changeBillMethod(billMethods[prev]);
                         billMethodFocusNodes[prev].requestFocus();
                       }
@@ -504,7 +552,7 @@ try{
                             groupValue: selectBillMethod,
                             onChanged: (value) {
                               changeBillMethod(value!);
-                             billMethodFocusNodes[index].requestFocus();
+                              billMethodFocusNodes[index].requestFocus();
                             },
                           ),
                           MyText(text: method, fontSize: 14),
@@ -539,61 +587,62 @@ try{
   List<OrderData> get allOrders => _allOrders;
   List<OrderData> get searchAllOrders => _searchAllOrders;
   List<OrderData> get lastOrder => _lastOrder;
-  final TextEditingController searchName   = TextEditingController();
+  final TextEditingController searchName = TextEditingController();
   final TextEditingController searchAmount = TextEditingController();
-  final TextEditingController searchProd   = TextEditingController();
-  Future<void> getAllOrderDetails(String stDate,String enDate) async {
+  final TextEditingController searchProd = TextEditingController();
+  Future<void> getAllOrderDetails(String stDate, String enDate) async {
     try {
-      _isRefresh=false;
+      _isRefresh = false;
       _allOrders = [];
       _searchAllOrders = [];
       notifyListeners();
 
-      final response = await _placeOrderRepo.getOrderDetails(stDate: stDate,enDate: enDate);
+      final response =
+          await _placeOrderRepo.getOrderDetails(stDate: stDate, enDate: enDate);
 
-      if(response.responseCode == '200'){
+      if (response.responseCode == '200') {
         _allOrders = response.ordersList ?? [];
         _searchAllOrders = response.ordersList ?? [];
-        _isRefresh=true;
-      }else {
-        _isRefresh=true;
+        _isRefresh = true;
+      } else {
+        _isRefresh = true;
         _allOrders = [];
         _searchAllOrders = [];
       }
     } catch (e) {
-      _isRefresh=true;
+      _isRefresh = true;
       _allOrders = [];
       _searchAllOrders = [];
       throw Exception(e);
-    }finally{
-      _isRefresh=true;
+    } finally {
+      _isRefresh = true;
       notifyListeners();
     }
   }
+
   Future<void> getLastOrderDetails(context) async {
     try {
       _lastOrder = [];
       notifyListeners();
       final response = await _placeOrderRepo.getLastOrderDetails();
 
-      if(response.responseCode == '200'){
+      if (response.responseCode == '200') {
         _lastOrder = response.ordersList ?? [];
         log("_lastOrder.toString()");
         log(_lastOrder.toString());
-        await pdfService.printCustomBill(
-            context,
-            data: _lastOrder[0]);
-      }else {
+        await pdfService.printCustomBill(context, data: _lastOrder[0]);
+      } else {
         _lastOrder = [];
       }
     } catch (e) {
       _lastOrder = [];
       throw Exception(e);
-    }finally{
-      _isRefresh=true;
+    } finally {
+      _isRefresh = true;
       notifyListeners();
     }
   }
+
   String _nameQuery = '';
   String _totalQuery = '';
   String _productQuery = '';
@@ -614,13 +663,15 @@ try{
         final enteredAmount = int.tryParse(_totalQuery);
         final actualAmount = int.tryParse(order.oTotal ?? '');
         if (enteredAmount != null && actualAmount != null) {
-          totalMatch = (actualAmount >= enteredAmount - 100 && actualAmount <= enteredAmount + 100);
+          totalMatch = (actualAmount >= enteredAmount - 100 &&
+              actualAmount <= enteredAmount + 100);
         } else {
           totalMatch = false;
         }
       }
 
-      final productMatch = order.productTitles?.toLowerCase().contains(_productQuery) ?? false;
+      final productMatch =
+          order.productTitles?.toLowerCase().contains(_productQuery) ?? false;
 
       return (_nameQuery.isEmpty || nameMatch) &&
           (_totalQuery.isEmpty || totalMatch) &&
@@ -641,7 +692,8 @@ try{
       if (user.oDate != null && user.oDate!.isNotEmpty) {
         try {
           DateTime parsedDate = DateTime.parse(user.oDate!);
-          formattedDate = DateFormat('dd-MM-yyyy').format(parsedDate).toLowerCase();
+          formattedDate =
+              DateFormat('dd-MM-yyyy').format(parsedDate).toLowerCase();
         } catch (e) {
           // If parse fails, fallback to raw string
           formattedDate = user.oDate!.toLowerCase();
@@ -659,6 +711,7 @@ try{
     _allOrders = suggestions;
     notifyListeners();
   }
+
   String formatDate(String dateString) {
     DateTime date = DateTime.parse(dateString);
     String formatted = DateFormat('dd-MM-yyyy').format(date);

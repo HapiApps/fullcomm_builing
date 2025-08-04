@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TextFormat {
-
   // Responsive FontSize
   static double responsiveFontSize(BuildContext context, double fontSize) {
     double screenWidth = MediaQuery.of(context).size.width;
     // Adjust the multiplier as needed to balance scaling.
-    return fontSize * (screenWidth / 1440); // Assuming 1440 is a typical desktop width.
+    return fontSize *
+        (screenWidth / 1440); // Assuming 1440 is a typical desktop width.
   }
 
   // Title Case
@@ -36,6 +36,4 @@ class TextFormat {
       decimalDigits: 1, // Set decimal places
     ).format(amount);
   }
-
-
 }

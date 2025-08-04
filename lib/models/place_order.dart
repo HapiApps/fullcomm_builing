@@ -43,10 +43,10 @@ class Order {
       'payment_id': paymentId,
       'platform': LocalData.platformKey,
       'o_total': orderGrandTotal,
-      'subtotal':orderSubTotal,
-      'received_amt':receivedAmt,
-      'pay_back_amt':payBackAmt,
-      'savings':savings,
+      'subtotal': orderSubTotal,
+      'received_amt': receivedAmt,
+      'pay_back_amt': payBackAmt,
+      'savings': savings,
       'products': products.map((p) => p.toJson()).toList(),
     };
   }

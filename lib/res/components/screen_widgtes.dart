@@ -5,14 +5,12 @@ import 'package:fullcomm_billing/utils/text_formats.dart';
 import 'k_text.dart';
 
 class ScreenWidgets {
-
   /// ------- Empty Alert --------
-  static Widget emptyAlert(
-      context,{
-        double? height,
-        double? width,
-        required String image,
-        required String text}) {
+  static Widget emptyAlert(context,
+      {double? height,
+      double? width,
+      required String image,
+      required String text}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

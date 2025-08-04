@@ -10,14 +10,14 @@ class CommonResponse {
   });
 
   factory CommonResponse.fromJson(Map<String, dynamic> json) => CommonResponse(
-    status: json["status"],
-    message: json["message"],
-    responseCode: json["responseCode"],
-  );
+        status: json["status"],
+        message: json["message"],
+        responseCode: json["responseCode"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "responseCode": responseCode,
-  };
+        "status": status,
+        "message": message,
+        "responseCode": responseCode,
+      };
 }

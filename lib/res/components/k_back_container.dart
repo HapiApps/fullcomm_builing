@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import '../colors.dart';
 
 class BackContainer extends StatelessWidget {
-  const BackContainer({super.key, required this.image, required this.child,this.padding, this.colorFilter});
+  const BackContainer(
+      {super.key,
+      required this.image,
+      required this.child,
+      this.padding,
+      this.colorFilter});
 
   final String image;
   final Widget child;
@@ -12,9 +17,8 @@ class BackContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final double screenHeight  = MediaQuery.of(context).size.height;
-    final double screenWidth   = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       height: screenHeight,
@@ -24,9 +28,9 @@ class BackContainer extends StatelessWidget {
           image: DecorationImage(
               image: AssetImage(image),
               fit: BoxFit.cover,
-              colorFilter: colorFilter ?? ColorFilter.mode(AppColors.black.withValues(alpha:0.1), BlendMode.dstATop)
-          )
-      ),
+              colorFilter: colorFilter ??
+                  ColorFilter.mode(AppColors.black.withValues(alpha: 0.1),
+                      BlendMode.dstATop))),
       child: child,
     );
   }

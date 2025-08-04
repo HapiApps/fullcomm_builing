@@ -16,7 +16,6 @@ class KeyboardDropdownField<T extends Object> extends StatefulWidget {
   final bool Function(String input, T item)? filterFn;
   final VoidCallback? onClear;
 
-
   const KeyboardDropdownField({
     super.key,
     required this.items,
@@ -28,7 +27,8 @@ class KeyboardDropdownField<T extends Object> extends StatefulWidget {
     this.focusNode,
     this.hintText,
     this.labelText,
-    this.textEditingController, this.onClear,
+    this.textEditingController,
+    this.onClear,
   });
 
   @override
@@ -88,7 +88,8 @@ class _KeyboardDropdownFieldState<T extends Object>
           onSubmitted: (_) => onSubmit(),
           style: GoogleFonts.lato(fontSize: 15),
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             filled: true,
             fillColor: AppColors.textFieldBackground,
             labelText: widget.labelText,
@@ -101,16 +102,20 @@ class _KeyboardDropdownFieldState<T extends Object>
               ),
             ),
             suffixIcon: IconButton(
-               onPressed: (){
-               setState(() {
-                 ctrl.clear();
-                 controller.clear();
-               });
-               if (widget.onClear != null) {
-                 widget.onClear!();
-               }
-               },
-                icon: const Icon(Icons.clear,color: AppColors.black,size: 14,)),
+                onPressed: () {
+                  setState(() {
+                    ctrl.clear();
+                    controller.clear();
+                  });
+                  if (widget.onClear != null) {
+                    widget.onClear!();
+                  }
+                },
+                icon: const Icon(
+                  Icons.clear,
+                  color: AppColors.black,
+                  size: 14,
+                )),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
@@ -151,24 +156,26 @@ class _KeyboardDropdownFieldState<T extends Object>
               child: options.isEmpty
                   ? const ListTile(title: Text("No results found"))
                   : ListView.builder(
-                controller: scrollController,
-                itemCount: options.length,
-                itemBuilder: (context, index) {
-                  final option = options.elementAt(index);
-                  final isHighlighted = index == highlightedIndex;
-                  return InkWell(
-                    onTap: () => onSelected(option),
-                    child: Container(
-                      color: isHighlighted ? Theme.of(context).highlightColor : null,
-                      height: 50,
-                      width: 400,
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: widget.itemBuilder(option),
+                      controller: scrollController,
+                      itemCount: options.length,
+                      itemBuilder: (context, index) {
+                        final option = options.elementAt(index);
+                        final isHighlighted = index == highlightedIndex;
+                        return InkWell(
+                          onTap: () => onSelected(option),
+                          child: Container(
+                            color: isHighlighted
+                                ? Theme.of(context).highlightColor
+                                : null,
+                            height: 50,
+                            width: 400,
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: widget.itemBuilder(option),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ),
         );
