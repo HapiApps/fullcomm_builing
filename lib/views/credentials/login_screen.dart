@@ -4,7 +4,6 @@ import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:fullcomm_billing/utils/toast_messages.dart';
 import 'package:fullcomm_billing/view_models/credentials_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../res/components/buttons.dart';
 import '../../res/components/k_back_container.dart';
 import '../../res/components/k_text.dart';
@@ -88,20 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           userProvider.loginButtonController
                               .start(); // Start Loading
 
-                          if (userProvider.mobileController.text
-                                      .trim()
-                                      .length ==
-                                  10 &&
-                              userProvider.passwordController.text
-                                  .trim()
-                                  .isNotEmpty) {
-                            userProvider.login(
-                              context: context,
-                              mobile: userProvider.mobileController.text.trim(),
-                              password:
-                                  userProvider.passwordController.text.trim(),
-                            );
-                          } else if (userProvider.mobileController.text
+                        if (userProvider.mobileController.text
                               .trim()
                               .isEmpty) {
                             userProvider.loginButtonController.reset();
@@ -140,12 +126,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: AppColors.errorMessage,
                             );
                           } else {
-                            userProvider.loginButtonController.reset();
-                            Toasts.showToastBar(
+                            userProvider.login(
                               context: context,
-                              text: 'Invalid Mobile/Password!',
-                              color: AppColors.errorMessage,
+                              mobile: userProvider.mobileController.text.trim(),
+                              password:
+                              userProvider.passwordController.text.trim(),
                             );
+                            // userProvider.loginButtonController.reset();
+                            // Toasts.showToastBar(
+                            //   context: context,
+                            //   text: 'Invalid Mobile/Password!',
+                            //   color: AppColors.errorMessage,
+                            // );
                           }
                         },
                       ),
@@ -160,19 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             : screenWidth * 0.35,
                         onPressed: () {
                           if (userProvider.mobileController.text
-                                      .trim()
-                                      .length ==
-                                  10 &&
-                              userProvider.passwordController.text
-                                  .trim()
-                                  .isNotEmpty) {
-                            userProvider.login(
-                              context: context,
-                              mobile: userProvider.mobileController.text.trim(),
-                              password:
-                                  userProvider.passwordController.text.trim(),
-                            );
-                          } else if (userProvider.mobileController.text
                               .trim()
                               .isEmpty) {
                             userProvider.loginButtonController.reset();
@@ -197,13 +176,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
-                              text: 'Enter Valid Password',
+                              text: 'Please enter your Password',
                               color: AppColors.errorMessage,
                             );
-                          } else if (userProvider.passwordController.text
-                                  .trim()
-                                  .length <
-                              8) {
+                          } else if (userProvider.passwordController.text.trim().length < 8) {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
@@ -211,12 +187,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: AppColors.errorMessage,
                             );
                           } else {
-                            userProvider.loginButtonController.reset();
-                            Toasts.showToastBar(
+                            userProvider.login(
                               context: context,
-                              text: 'Invalid Mobile/Password!',
-                              color: AppColors.errorMessage,
+                              mobile: userProvider.mobileController.text.trim(),
+                              password:
+                              userProvider.passwordController.text.trim(),
                             );
+                            // userProvider.loginButtonController.reset();
+                            // Toasts.showToastBar(
+                            //   context: context,
+                            //   text: 'Invalid Mobile/Password!',
+                            //   color: AppColors.errorMessage,
+                            // );
                           }
                         },
                         text: 'LOGIN',

@@ -83,16 +83,18 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    _focusNode.requestFocus();
+    _focusNodeSearch.requestFocus();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _focusNode.requestFocus();
-      _focusNodeSearch.requestFocus();
+
       Provider.of<BillingProvider>(context, listen: false)
           .getProducts(); // Fetch all Products & Stocks
       Provider.of<CustomersProvider>(context, listen: false)
           .getAllCustomers(context); // Fetch all Products & Stocks
       Provider.of<CustomersProvider>(context, listen: false)
           .resetCustomerDetails(); // Reset Customer details
+      Provider.of<BillingProvider>(context, listen: false).fetchBill(
+          context);
       Provider.of<BillingProvider>(context, listen: false)
           .setBillingItems([]); // Set Billing Items with Empty Table
     });
@@ -220,127 +222,93 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                 canPop: false,
                 child: Scaffold(
                   appBar: PreferredSize(
-                    preferredSize: Size.fromHeight(screenHeight * 0.20),
+                    preferredSize: Size.fromHeight(screenHeight * 0.25),
                     child: GestureDetector(
                       onTap: () {
                         _focusNode.requestFocus();
                       },
                       child: Container(
-                        color: AppColors.primary.withValues(alpha: 0.2),
+                        color: AppColors.white,
                         padding: const EdgeInsets.only(bottom: 3),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Top AppBar Section
-                            AppBar(
-                              toolbarHeight: screenHeight * 0.10,
-                              leading: Row(
-                                children: [
-                                  10.width,
-                                  SizedBox(
-                                    width: 60,
-                                    height: 50,
-                                    child: FittedBox(
-                                        fit: BoxFit.cover,
-                                        child: Image.asset(
-                                            'assets/logo/app_logo.png')),
-                                  ),
-                                ],
-                              ),
-                              leadingWidth: 100,
-                              // title: Row(
-                              //   mainAxisAlignment: MainAxisAlignment.center,
-                              //   crossAxisAlignment: CrossAxisAlignment.end,
-                              //   children: [
-                              //     const MyText(
-                              //       text: "${ProjectData.title} BillEase",
-                              //     ),
-                              //     5.width,
-                              //     const MyText(
-                              //       text: ProjectData.version,
-                              //       fontSize: 11,
-                              //       color: AppColors.grey,
-                              //     ),
-                              //   ],
-                              // ),
-                              automaticallyImplyLeading: false,
-                              centerTitle: true,
-                              backgroundColor: AppColors.transparent,
-                              elevation: 0, // Removes shadow
-                              bottom: PreferredSize(
-                                preferredSize:
-                                    Size.fromHeight(screenHeight * 0.20),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text.rich(TextSpan(
-                                          text: 'Bill No :  ',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: AppColors.ash,
-                                              fontWeight: FontWeight.bold),
-                                          children: <InlineSpan>[
-                                            TextSpan(
-                                              text: billingProvider.billNo,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: AppColors.black,
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          ])),
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      child: Row(
-                                        children: [
-                                          CustomerFieldWidgets.iconButton(
-                                            context: context,
-                                            toolTip: 'Search bill',
-                                            icon: 'assets/images/bill.svg',
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const OrderDetailPage()));
-                                            },
-                                          ),
-                                          CustomerFieldWidgets.iconButton(
-                                            context: context,
-                                            toolTip: 'Add Customer',
-                                            icon: 'assets/images/customer.svg',
-                                            onPressed: () {
-                                              customerProvider
-                                                  .addCustomerDialog(context);
-                                            },
-                                          ),
-                                          CustomerFieldWidgets.iconButton(
-                                            context: context,
-                                            toolTip: 'Refresh Stock Status',
-                                            icon: 'assets/images/Refresh.svg',
-                                            onPressed: () {
-                                              billingProvider.getProducts();
-                                            },
-                                          ),
-                                          CustomerFieldWidgets.iconButton(
-                                            context: context,
-                                            toolTip: 'Logout',
-                                            icon: 'assets/images/logout.svg',
-                                            onPressed: () {
-                                              userDataProvider.logout(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Image.asset('assets/logo/app_logo.png',width: 100,height: 50,),
                               ),
                             ),
-
-                            5.height,
-
+                            Container(
+                              padding: const EdgeInsets.only(
+                                left: 20
+                              ),
+                              child: Row(
+                                children: [
+                                  Text.rich(
+                                    TextSpan(
+                                      text: 'Bill No :  ',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: AppColors.ash,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: billingProvider.billNo ?? '',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: AppColors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                      CustomerFieldWidgets.iconButton(
+                                        context: context,
+                                        toolTip: 'Search bill',
+                                        icon: 'assets/images/bill.svg',
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const OrderDetailPage()),
+                                          );
+                                        },
+                                      ),
+                                      CustomerFieldWidgets.iconButton(
+                                        context: context,
+                                        toolTip: 'Add Customer',
+                                        icon: 'assets/images/customer.svg',
+                                        onPressed: () {
+                                          customerProvider.addCustomerDialog(context);
+                                        },
+                                      ),
+                                      CustomerFieldWidgets.iconButton(
+                                        context: context,
+                                        toolTip: 'Refresh Stock Status',
+                                        icon: 'assets/images/Refresh.svg',
+                                        onPressed: () {
+                                          billingProvider.getProducts();
+                                        },
+                                      ),
+                                      CustomerFieldWidgets.iconButton(
+                                        context: context,
+                                        toolTip: 'Logout',
+                                        icon: 'assets/images/logout.svg',
+                                        onPressed: () {
+                                          userDataProvider.logout(context);
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                             // Bottom Section (Customer Details and Inputs)
                             Flexible(
                               child: Padding(
@@ -849,8 +817,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                         children: [
                                           // Table Headings
                                           Container(
-                                            color: AppColors.primary
-                                                .withValues(alpha: 0.2),
+                                            color: AppColors.primary,
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 8),
                                             child: Row(
@@ -1351,7 +1318,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
         text: text,
         fontWeight: FontWeight.bold,
         textAlign: TextAlign.center,
-        color: AppColors.black,
+        color: AppColors.white,
         fontSize: 14,
       ),
     );
