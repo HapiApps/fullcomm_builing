@@ -16,7 +16,7 @@ class CustomerFieldWidgets {
             onTap: onPressed,
             child: CircleAvatar(
               radius: 23,
-              backgroundColor: Colors.yellow.withValues(alpha: 0.4),
+              backgroundColor: Colors.white,
               child: SvgPicture.asset(icon,width: 30,height: 30,),
             )),
       ),

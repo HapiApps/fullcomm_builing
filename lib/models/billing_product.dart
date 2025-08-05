@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:fullcomm_billing/models/products_response.dart';
 
 class BillingItem {
@@ -10,6 +11,8 @@ class BillingItem {
   String variationUnit;
   int quantity;
   String? outPrice;
+  TextEditingController? proController;
+  FocusNode? proFocusNode;
 
   BillingItem(
       {required this.id,
@@ -18,7 +21,10 @@ class BillingItem {
       required this.variation,
       required this.variationUnit,
       required this.quantity,
-      this.outPrice});
+      this.outPrice,
+        this.proController,
+        this.proFocusNode
+      });
 
   /// Calculate Mrp per product (for one product) :
   double mrpPerProduct() {

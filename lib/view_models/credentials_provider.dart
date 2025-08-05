@@ -43,8 +43,6 @@ class UserDataProvider with ChangeNotifier {
           mobile: mobile, password: password); // Call the Repo
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      log("response.responseCode:${response.responseCode}");
-      log("response$response");
       if (response.responseCode == 200) {
         prefs.setString('userId', response.userData!.id!);
         prefs.setString('userName', response.userData!.sName!);

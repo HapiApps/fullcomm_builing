@@ -276,4 +276,46 @@ class CustomersProvider with ChangeNotifier {
     customerAddressController.clear();
     notifyListeners();
   }
+
+  void showInputDialog(
+      {BuildContext? context,
+        TextEditingController? controller,
+        FocusNode? focus,
+        double? width,
+        double? height,
+        VoidCallback? onChanged,
+        void Function(String)? onSubmitted
+      }) {
+    showDialog(
+      context: context!,
+      builder: (context) {
+        return AlertDialog(
+          title: const MyText(text:'Product ',fontSize: 15,),
+          content: SizedBox(
+            height: 100,
+            child: MyTextField(
+              hintText: "Product Name",
+              autofocus: false,
+              focusNode:focus,
+              controller: controller!,
+              textCapitalization: TextCapitalization.words,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: onSubmitted,
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                child: MyText(text: "Cancel",color: AppColors.ash,)),
+            ElevatedButton(
+                onPressed: onChanged,
+                child: MyText(text: "Ok",color: AppColors.primary,))
+          ],
+        );
+      },
+    );
+  }
 }

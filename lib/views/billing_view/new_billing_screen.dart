@@ -822,6 +822,11 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                 vertical: 8),
                                             child: Row(
                                               children: [
+                                                // Flexible width for MRP
+                                                Expanded(
+                                                    flex: 1,
+                                                    child: _buildHeaderCell(
+                                                        "Change \nName")),
                                                 // Fixed-width for S.No
                                                 SizedBox(
                                                     width: 60,
@@ -872,6 +877,10 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                     flex: 2,
                                                     child: _buildHeaderCell(
                                                         "Subtotal")),
+                                                Expanded(
+                                                    flex: 1,
+                                                    child: _buildHeaderCell(
+                                                        "Remove")),
                                               ],
                                             ),
                                           ),
@@ -901,6 +910,56 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                 CrossAxisAlignment
                                                                     .center,
                                                             children: [
+                                                              Container(
+                                                                width: 50,
+                                                                height: 50,
+                                                                alignment: Alignment.center,
+                                                                child: IconButton(
+                                                                  onPressed: () {
+                                                                    if(billProduct.product.pTitle.toString().isNotEmpty){
+                                                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                        setState(() {
+                                                                          billProduct.proController!.clear();
+                                                                          billProduct.proFocusNode!.requestFocus();
+                                                                          customerProvider.showInputDialog(
+                                                                            context: context,
+                                                                            width: screenWidth * 0.20,
+                                                                            height: screenHeight * 0.07,
+                                                                            controller: billProduct.proController!,
+                                                                            focus: billProduct.proFocusNode,
+                                                                            onChanged: () {
+                                                                              setState(() {
+                                                                                if (billProduct.proController!.text.isNotEmpty) {
+                                                                                  // item.productTitle="${item.productTitle}/${item.proController!.text}";
+                                                                                  billProduct.product.pTitle = "${billProduct.productTitle}/${billProduct.proController!.text}";
+                                                                                  Navigator.of(context).pop();
+                                                                                }else{
+                                                                                  Toasts.showToastBar(
+                                                                                      context: context,
+                                                                                      text: 'Please Fill Product Name');
+                                                                                }
+                                                                              });
+                                                                            },
+                                                                            onSubmitted: (_) {
+                                                                              if (billProduct.proController!.text.isNotEmpty) {
+                                                                                billProduct.product.pTitle = "${billProduct.productTitle}/${billProduct.proController!.text}";
+                                                                              }
+                                                                             // billProduct.qtyFocusNode!.requestFocus();
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                          );
+                                                                        });
+                                                                      });
+                                                                    }else{
+                                                                      Toasts.showToastBar(
+                                                                          context: context,
+                                                                          text: 'Please Select Product Name');
+                                                                    }
+                                                                  },
+                                                                  icon: const Icon(Icons.edit),
+                                                                  tooltip: 'Edit Product Name',
+                                                                ),
+                                                              ),
                                                               /// S.No :
                                                               SizedBox(
                                                                   width: 60,
@@ -909,11 +968,9 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
 
                                                               /// Product Title :
                                                               Expanded(
-                                                                flex: 3,
+                                                                flex: 2,
                                                                 child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
                                                                     MyText(
                                                                       text: billProduct.product.isLoose ==
@@ -921,19 +978,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                           ? "${billProduct.product.pTitle}"
                                                                           : "${billProduct.product.pTitle} ${billProduct.product.pVariation ?? ""}${billProduct.product.unit ?? ""}",
                                                                     ),
-                                                                    10.width,
 
-                                                                    /// Delete Option :
-                                                                    IconButton(
-                                                                        tooltip:
-                                                                            'Delete ${billProduct.product.isLoose == '1' ? "${billProduct.productTitle} ${billProduct.variation / 1000}kg" : "${billProduct.productTitle} ${billProduct.variationUnit}"}',
-                                                                        onPressed:
-                                                                            () {
-                                                                          billingProvider.removeBillingItem(
-                                                                              index: index);
-                                                                        },
-                                                                        icon: const Icon(
-                                                                            Icons.delete_forever))
                                                                   ],
                                                                 ),
                                                               ),
