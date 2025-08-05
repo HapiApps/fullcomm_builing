@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fullcomm_billing/data/local_data.dart';
 import 'package:fullcomm_billing/repo/customer_repo.dart';
 import 'package:fullcomm_billing/res/colors.dart';
+import 'package:fullcomm_billing/res/components/k_dropdown.dart';
 import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:fullcomm_billing/utils/toast_messages.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
@@ -18,6 +19,55 @@ import '../utils/text_formats.dart';
 class CustomersProvider with ChangeNotifier {
   final CustomersRepository _customerRepo = CustomersRepository();
 
+  final List<String> _states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
+  ];
+
+  String? _selectedState;
+
+  List<String> get states => _states;
+
+  String? get selectedState => _selectedState;
+
+  void setState(String state) {
+    _selectedState = state;
+    notifyListeners();
+  }
   // Add Customer Fields :
   TextEditingController customerName = TextEditingController();
   TextEditingController customerMobile = TextEditingController();
@@ -74,7 +124,7 @@ class CustomersProvider with ChangeNotifier {
         if (!context.mounted) return;
         Navigator.pop(context);
 
-        Toasts.showToastBar(context: context, text: 'Customer is added.');
+        Toasts.showToastBar(context: context, text: 'Customer is added.',color: AppColors.successMessage);
       } else if (response.responseCode == 409) {
         // Existing Customer :
         if (!context.mounted) return;
@@ -128,43 +178,67 @@ class CustomersProvider with ChangeNotifier {
                     MyTextField(
                       labelText: "Customer's Name",
                       controller: customerName,
+                      isOptional: false,
                     ),
                     6.height,
                     MyTextField(
                       labelText: "Mobile",
+                      isOptional: false,
                       controller: customerMobile,
                       inputFormatters: InputFormatters.mobileNumberInput,
                     ),
                     6.height,
                     MyTextField(
                       labelText: "Door No, Street",
+                      isOptional: true,
                       controller: customerStreet,
                       textCapitalization: TextCapitalization.sentences,
                     ),
                     6.height,
                     MyTextField(
                       labelText: "Area",
+                      isOptional: true,
                       controller: customerArea,
                       textCapitalization: TextCapitalization.sentences,
                     ),
                     6.height,
                     MyTextField(
                       labelText: "City",
+                      isOptional: false,
                       controller: customerCity,
                       textCapitalization: TextCapitalization.sentences,
                     ),
                     6.height,
                     MyTextField(
                       labelText: "Pincode",
+                      isOptional: false,
                       controller: customerPincode,
                       inputFormatters: InputFormatters.pinCodeInput,
                     ),
                     6.height,
-                    MyTextField(
-                      labelText: "State",
-                      controller: customerState,
-                      textCapitalization: TextCapitalization.sentences,
+                    MyDropDown(
+
+                        labelText: "State",
+                      value: selectedState,
+                      items: states.map((String state) {
+                        return DropdownMenuItem(
+                          value: state,
+                          child: Text(state),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(value.toString);
+                          customerState.text = value;
+                        }
+                      },
                     ),
+                    // MyTextField(
+                    //   labelText: "State",
+                    //   controller: customerState,
+                    //   isOptional: true,
+                    //   textCapitalization: TextCapitalization.sentences,
+                    // ),
                     6.height,
                     Buttons.loginButton(
                       context: context,
@@ -182,7 +256,13 @@ class CustomersProvider with ChangeNotifier {
                               context: context,
                               text: "Please enter customer mobile",
                               color: Colors.red);
-                        } else if (customerCity.text.isEmpty) {
+                        }  else if (customerMobile.text.length!=10) {
+                          loadingButtonController.reset();
+                          Toasts.showToastBar(
+                              context: context,
+                              text: "Please enter correct customer mobile",
+                              color: Colors.red);
+                        }else if (customerCity.text.isEmpty) {
                           loadingButtonController.reset();
                           Toasts.showToastBar(
                               context: context,
@@ -296,6 +376,7 @@ class CustomersProvider with ChangeNotifier {
             child: MyTextField(
               hintText: "Product Name",
               autofocus: false,
+              isOptional: true,
               focusNode:focus,
               controller: controller!,
               textCapitalization: TextCapitalization.words,

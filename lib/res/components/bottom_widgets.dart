@@ -13,7 +13,7 @@ class BottomWidgets {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      height: screenHeight * 0.08,
+      height: screenHeight * 0.09,
       width: screenWidth * 0.13,
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
@@ -43,7 +43,7 @@ class BottomWidgets {
             ),
             Container(
               alignment: Alignment.center,
-              height: screenHeight * 0.04,
+              height: screenHeight * 0.05,
               child: MyText(
                   text: value,
                   color: AppColors.black,

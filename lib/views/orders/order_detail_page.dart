@@ -107,12 +107,17 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
       DateTime today = DateTime.now();
       DateTime tomorrow = today.add(const Duration(days: 1));
       String todayStr = DateFormat('yyyy-MM-dd').format(today);
       String tomorrowStr = DateFormat('yyyy-MM-dd').format(tomorrow);
       Provider.of<BillingProvider>(context, listen: false)
           .getAllOrderDetails(todayStr, tomorrowStr);
+      final billingProvider = Provider.of<BillingProvider>(context, listen: false);
+      billingProvider.searchName.clear();
+      billingProvider.searchAmount.clear();
+      billingProvider.searchProd.clear();
     });
   }
 
@@ -248,6 +253,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   MyTextField(
                     labelText: 'Customer Name',
                     width: 210,
+                    isOptional: true,
                     height: 40,
                     controller: billingProvider.searchName,
                     keyboardType: TextInputType.text,
@@ -268,6 +274,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                   MyTextField(
                     labelText: 'Amount',
+                    isOptional: true,
                     width: 210,
                     height: 40,
                     controller: billingProvider.searchAmount,
@@ -290,6 +297,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                   MyTextField(
                     labelText: 'Product Name',
+                    isOptional: true,
                     width: 210,
                     height: 40,
                     controller: billingProvider.searchProd,

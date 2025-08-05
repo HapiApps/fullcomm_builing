@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fullcomm_billing/res/components/k_text.dart';
+import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../colors.dart';
 
@@ -27,7 +29,7 @@ class MyTextField extends StatelessWidget {
       this.autofillHints,
       this.textAlign,
       this.maxLines,
-      this.minLines});
+      this.minLines, required this.isOptional});
 
   final TextEditingController controller;
   final FocusNode? focusNode;
@@ -42,6 +44,7 @@ class MyTextField extends StatelessWidget {
   final bool? obscureText;
   final List<TextInputFormatter>? inputFormatters;
   final Widget? suffixIcon;
+  final bool isOptional;
   final Widget? prefixIcon;
   final TextCapitalization? textCapitalization;
   final TextInputType? keyboardType;
@@ -76,7 +79,21 @@ class MyTextField extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: AppColors.textFieldBackground,
-          labelText: labelText,
+          label: Row(
+            mainAxisSize: MainAxisSize.min,
+            children:[
+              MyText(
+                text: labelText.toString(),
+              ),
+
+                  isOptional==false?const MyText(
+                    text: "*",
+                    color:Colors.red,
+                    fontSize: 20,
+                  ):0.height,
+
+            ],
+          ),
           labelStyle: GoogleFonts.lato(),
           hintText: hintText,
           hintStyle: GoogleFonts.lato(),

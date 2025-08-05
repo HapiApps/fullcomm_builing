@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       15.height,
                       MyTextField(
                         labelText: 'Mobile Number',
+                        isOptional: true,
                         width: screenWidth > 800
                             ? screenWidth * 0.20
                             : screenWidth * 0.35,
@@ -78,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       8.height,
                       MyTextField(
                         labelText: 'Password',
+                        isOptional: true,
                         width: screenWidth > 800
                             ? screenWidth * 0.20
                             : screenWidth * 0.35,

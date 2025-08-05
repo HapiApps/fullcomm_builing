@@ -218,7 +218,7 @@ class BillingProvider with ChangeNotifier {
       // Ensure the controller exists
       if (quantityControllers[index] != null) {
         quantityControllers[index]!.value = TextEditingValue(
-          text: quantity.toString(),
+          text: quantity.toString()=="0"?"":quantity.toString(),
           selection:
               TextSelection.collapsed(offset: quantity.toString().length),
         );
@@ -227,7 +227,6 @@ class BillingProvider with ChangeNotifier {
       }
     }
 
-    log("UpdateBillingItem: index=$index, variation=$variation, quantity=$quantity, quantityController=${quantityControllers[index]?.text}");
     notifyListeners();
   }
 
@@ -482,6 +481,7 @@ class BillingProvider with ChangeNotifier {
                 // Payment Received Input
                 MyTextField(
                   height: null,
+                  isOptional: true,
                   labelText: "Payment Received",
                   autofocus: true,
                   controller: paymentReceived,

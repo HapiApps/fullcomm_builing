@@ -113,8 +113,7 @@ class BillingItem {
       'is_loose': product.isLoose.toString(),
       'batch_no': product.batchNo.toString(),
       'p_title': productTitle,
-      'qty':
-          product.isLoose == '0' ? quantity : int.parse(variation.toString()),
+      'qty': product.isLoose == '0' ? quantity : int.parse(variation.toString()),
       'p_discount': (calculateMrpSubtotal() - calculateSubtotal()).toString(),
       'product_img': product.pImg.toString(),
       'out_price': calculateSubtotal().toString(),

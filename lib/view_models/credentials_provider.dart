@@ -48,6 +48,8 @@ class UserDataProvider with ChangeNotifier {
         prefs.setString('userName', response.userData!.sName!);
         prefs.setString('userMobile', response.userData!.sMobile!);
         prefs.setString('cosId', response.userData!.cosId!);
+        mobileController.clear();
+        passwordController.clear();
 
         prefs.setBool('seen', true); // Set User Logged In
 

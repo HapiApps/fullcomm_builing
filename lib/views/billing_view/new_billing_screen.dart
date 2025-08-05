@@ -301,7 +301,79 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                         toolTip: 'Logout',
                                         icon: 'assets/images/logout.svg',
                                         onPressed: () {
-                                          userDataProvider.logout(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                backgroundColor: AppColors.primary,
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      "Do you want to log out?",
+                                                      style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            backgroundColor: AppColors.primary,
+                                                            side: BorderSide(color: AppColors.secondary),
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(5),
+                                                            ),
+                                                          ),
+                                                          child: const Text(
+                                                            "No",
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 14,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(width: 10),
+                                                        ElevatedButton(
+                                                          onPressed: () async {
+                                                            userDataProvider.logout(context);
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            backgroundColor: AppColors.primary,
+                                                            side: BorderSide(color: AppColors.secondary),
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(5),
+                                                            ),
+                                                          ),
+                                                          child: const Text(
+                                                            "Yes",
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 14,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
                                         },
                                       ),
                                     ],
@@ -324,6 +396,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                       controller:
                                           billingProvider.cashierNameController,
                                       labelText: 'Cashier Name',
+                                      isOptional: true,
                                       textInputAction: TextInputAction.done,
                                       onChanged: (value) async {
                                         // Your onChanged logic
@@ -379,6 +452,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                           MyTextField(
                                             width: screenWidth * 0.20,
                                             height: 50,
+                                            isOptional: true,
                                             controller: customerProvider
                                                 .customerAddressController,
                                             labelText: 'Cust. Address',
@@ -392,6 +466,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                 ),
                               ),
                             ),
+                            5.height
                           ],
                         ),
                       ),
@@ -421,6 +496,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             ? MyTextField(
                                                 width: screenWidth * 0.35,
                                                 height: 45,
+                                          isOptional: true,
                                                 controller: billingProvider
                                                     .barcodeScanner,
                                                 labelText: 'Scan...',
@@ -555,14 +631,18 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                   },
                                                 ),
                                               ),
+                                        10.width,
                                         IconButton(
                                             tooltip: billingProvider.barcodeMode
                                                 ? 'Search Products'
                                                 : 'Scan Products',
                                             onPressed: () {
                                               //controller.barcodeMode.value = !controller.barcodeMode.value;
-                                              billingProvider
-                                                  .barcodeModeChange();
+                                              if(billingProvider.barcodeMode){
+                                                dropdownFocusNode.requestFocus();
+                                              }
+                                              billingProvider.barcodeModeChange();
+
                                               print(
                                                   "scan ${billingProvider.barcodeMode}");
                                             },
@@ -580,6 +660,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                           alignment: Alignment.center,
                                           child: MyTextField(
                                             focusNode: fieldFocusNode,
+                                            isOptional: true,
                                             height: 50,
                                             controller:
                                                 quantityVariationController,
@@ -669,6 +750,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                         ? billingProvider
                                                             .temporaryQuantity
                                                         : 1,
+                                                    proController: TextEditingController(),
+                                                    proFocusNode: FocusNode(),
                                                   ),
                                                 );
                                                 billingProvider
@@ -910,54 +993,66 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                 CrossAxisAlignment
                                                                     .center,
                                                             children: [
-                                                              Container(
-                                                                width: 50,
-                                                                height: 50,
-                                                                alignment: Alignment.center,
-                                                                child: IconButton(
-                                                                  onPressed: () {
-                                                                    if(billProduct.product.pTitle.toString().isNotEmpty){
-                                                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                        setState(() {
-                                                                          billProduct.proController!.clear();
-                                                                          billProduct.proFocusNode!.requestFocus();
-                                                                          customerProvider.showInputDialog(
-                                                                            context: context,
-                                                                            width: screenWidth * 0.20,
-                                                                            height: screenHeight * 0.07,
-                                                                            controller: billProduct.proController!,
-                                                                            focus: billProduct.proFocusNode,
-                                                                            onChanged: () {
-                                                                              setState(() {
-                                                                                if (billProduct.proController!.text.isNotEmpty) {
-                                                                                  // item.productTitle="${item.productTitle}/${item.proController!.text}";
-                                                                                  billProduct.product.pTitle = "${billProduct.productTitle}/${billProduct.proController!.text}";
-                                                                                  Navigator.of(context).pop();
-                                                                                }else{
-                                                                                  Toasts.showToastBar(
-                                                                                      context: context,
-                                                                                      text: 'Please Fill Product Name');
-                                                                                }
-                                                                              });
-                                                                            },
-                                                                            onSubmitted: (_) {
-                                                                              if (billProduct.proController!.text.isNotEmpty) {
-                                                                                billProduct.product.pTitle = "${billProduct.productTitle}/${billProduct.proController!.text}";
-                                                                              }
-                                                                             // billProduct.qtyFocusNode!.requestFocus();
-                                                                              Navigator.pop(context);
-                                                                            },
-                                                                          );
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Container(
+                                                                  width: 50,
+                                                                  height: 50,
+                                                                  alignment: Alignment.center,
+                                                                  child: IconButton(
+                                                                    onPressed: () {
+                                                                      if(billProduct.product.pTitle.toString().isNotEmpty){
+                                                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                          if (billProduct.proController != null &&
+                                                                              billProduct.proFocusNode != null) {
+
+                                                                            setState(() {
+                                                                              billProduct.proController!.clear();
+                                                                              billProduct.proFocusNode!.requestFocus();
+                                                                              customerProvider.showInputDialog(
+                                                                                context: context,
+                                                                                width: screenWidth * 0.20,
+                                                                                height: screenHeight * 0.07,
+                                                                                controller: billProduct.proController!,
+                                                                                focus: billProduct.proFocusNode,
+                                                                                onChanged: () {
+                                                                                  setState(() {
+                                                                                    final text = billProduct.proController!.text;
+                                                                                    if (text.isNotEmpty) {
+                                                                                      billProduct.product.pTitle = "${billProduct.productTitle}/$text";
+                                                                                      Navigator.of(context).pop();
+                                                                                    } else {
+                                                                                      Toasts.showToastBar(
+                                                                                        context: context,
+                                                                                        text: 'Please Fill Product Name',
+                                                                                      );
+                                                                                    }
+                                                                                  });
+                                                                                },
+                                                                                onSubmitted: (_) {
+                                                                                  final text = billProduct.proController!.text;
+                                                                                  if (text.isNotEmpty) {
+                                                                                    billProduct.product.pTitle = "${billProduct.productTitle}/$text";
+                                                                                  }
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                              );
+                                                                            });
+                                                                          } else {
+                                                                            debugPrint("One or more of the following is null: "
+                                                                                "proController, proFocusNode, product, productTitle");
+                                                                          }
                                                                         });
-                                                                      });
-                                                                    }else{
-                                                                      Toasts.showToastBar(
-                                                                          context: context,
-                                                                          text: 'Please Select Product Name');
-                                                                    }
-                                                                  },
-                                                                  icon: const Icon(Icons.edit),
-                                                                  tooltip: 'Edit Product Name',
+
+                                                                      }else{
+                                                                        Toasts.showToastBar(
+                                                                            context: context,
+                                                                            text: 'Please Select Product Name');
+                                                                      }
+                                                                    },
+                                                                    icon: const Icon(Icons.edit),
+                                                                    tooltip: 'Edit Product Name',
+                                                                  ),
                                                                 ),
                                                               ),
                                                               /// S.No :
@@ -968,7 +1063,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
 
                                                               /// Product Title :
                                                               Expanded(
-                                                                flex: 2,
+                                                                flex: 3,
                                                                 child: Row(
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
@@ -1040,18 +1135,29 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                             ),
                                                                         onChanged:
                                                                             (value) {
-                                                                          if (value
-                                                                              .isNotEmpty) {
+                                                                          if (value.isNotEmpty) {
                                                                             billingProvider.updateBillingItem(
                                                                               index,
                                                                               isLoose: '0',
                                                                               quantity: int.tryParse(value) ?? billProduct.quantity,
                                                                             );
+                                                                          }else{
+                                                                            billingProvider.updateBillingItem(
+                                                                              index,
+                                                                              isLoose: '0',
+                                                                              quantity: 0,
+                                                                            );
                                                                           }
                                                                         },
-                                                                        inputFormatters: [
-                                                                          StrictNonZeroIntFormatter(),
-                                                                        ],
+                                                                    inputFormatters: billingProvider
+                                                                        .selectedProduct
+                                                                        ?.isLoose ==
+                                                                        '1'
+                                                                        ? InputFormatters.variationInput
+                                                                        : InputFormatters.quantityInput,
+                                                                        // inputFormatters: [
+                                                                        //   StrictNonZeroIntFormatter(),
+                                                                        // ],
                                                                         onEditingComplete:
                                                                             () {})
                                                                     : _buildCell(
@@ -1092,10 +1198,22 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                 child:
                                                                     _buildCell(
                                                                   TextFormat.formattedAmount(
-                                                                      billProduct
+                                                                      billProduct.quantity.toString().isEmpty?0.0:billProduct
                                                                           .calculateSubtotal()),
                                                                 ),
                                                               ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: IconButton(
+                                                                    tooltip: 'Delete ${billProduct.product.isLoose == '1'
+                                                                        ? "${billProduct.productTitle} ${billProduct.variation/1000}kg"
+                                                                        : "${billProduct.productTitle} ${billProduct.variationUnit}"}',
+                                                                    onPressed: (){
+                                                                      billingProvider.removeBillingItem(index: index);
+                                                                    },
+                                                                    icon: const Icon(Icons.delete_forever_outlined,color: Colors.red,)
+                                                                ),
+                                                              )
                                                             ],
                                                           ),
                                                           DividerWidgets
@@ -1235,6 +1353,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                         height: null,
                         labelText: "Payment Received",
                         autofocus: true,
+                        isOptional: true,
                         controller: billingProvider.paymentReceived,
                         inputFormatters: InputFormatters.mobileNumberInput,
                         onEditingComplete: () {
@@ -1391,6 +1510,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: MyTextField(
         controller: controller,
+        isOptional: true,
         height: 50,
         inputFormatters: inputFormatters,
         textAlign: TextAlign.center,
