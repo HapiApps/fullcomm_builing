@@ -450,7 +450,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
 
                                           // Customer Address
                                           MyTextField(
-                                            width: screenWidth * 0.20,
+                                            width: screenWidth * 0.40,
                                             height: 50,
                                             isOptional: true,
                                             controller: customerProvider
@@ -526,17 +526,14 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                             .barcodeScanner
                                                             .text =
                                                         "${billingProvider.selectedProduct!.pTitle.toString()} ${billingProvider.selectedProduct!.pVariation.toString()}${billingProvider.selectedProduct!.unit.toString()}";
-                                                    billingProvider
-                                                        .updateTemporaryFields(
-                                                      variation:
-                                                          product.isLoose == '1'
-                                                              ? 1.0
-                                                              : null,
-                                                      quantity:
-                                                          product.isLoose == '0'
-                                                              ? 1
-                                                              : null,
-                                                    );
+                                                    // billingProvider.updateTemporaryFields(
+                                                    //   variation: product.isLoose == '1'
+                                                    //           ? 1.0
+                                                    //           : null,
+                                                    //   quantity: product.isLoose == '0'
+                                                    //           ? 1
+                                                    //           : null,
+                                                    // );
                                                     fieldFocusNode
                                                         .requestFocus();
                                                   } catch (e) {
@@ -598,36 +595,27 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                       ],
                                                     ),
                                                   ),
-                                                  textEditingController:
-                                                      dropdownController,
+                                                  textEditingController: dropdownController,
                                                   onSelected: (product) {
-                                                    billingProvider
-                                                            .selectedProduct =
-                                                        product;
-                                                    billingProvider
-                                                        .updateTemporaryFields(
-                                                      variation:
-                                                          product.isLoose == '1'
-                                                              ? 1.0
-                                                              : null,
-                                                      quantity:
-                                                          product.isLoose == '0'
-                                                              ? 1
-                                                              : null,
-                                                    );
-                                                    fieldFocusNode
-                                                        .requestFocus();
+                                                    billingProvider.selectedProduct = product;
+                                                    // billingProvider.updateTemporaryFields(
+                                                    //   variation: product.isLoose == '1'
+                                                    //           ? 1.0
+                                                    //           : null,
+                                                    //   quantity: product.isLoose == '0'
+                                                    //           ? 1
+                                                    //           : null,
+                                                    // );
+                                                    fieldFocusNode.requestFocus();
                                                   },
                                                   onClear: () {
-                                                    billingProvider
-                                                        .selectedProduct = null;
-                                                    billingProvider
-                                                        .updateTemporaryFields(
-                                                      quantity: 0,
-                                                      variation: 0.0,
-                                                    );
-                                                    quantityVariationController
-                                                        .clear();
+                                                    billingProvider.selectedProduct = null;
+                                                    // billingProvider
+                                                    //     .updateTemporaryFields(
+                                                    //   quantity: 0,
+                                                    //   variation: 0.0,
+                                                    // );
+                                                    //quantityVariationController.clear();
                                                   },
                                                 ),
                                               ),
@@ -683,13 +671,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             onChanged: (value) {
                                               print(
                                                   "billingProvider.selectedProduct ${billingProvider.selectedProduct}");
-                                              if (billingProvider
-                                                      .selectedProduct !=
-                                                  null) {
-                                                if (billingProvider
-                                                        .selectedProduct!
-                                                        .isLoose ==
-                                                    '1') {
+                                              if (billingProvider.selectedProduct != null) {
+                                                if (billingProvider.selectedProduct!.isLoose == '1') {
                                                   billingProvider
                                                       .updateTemporaryFields(
                                                     variation:
@@ -1005,7 +988,6 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                         WidgetsBinding.instance.addPostFrameCallback((_) {
                                                                           if (billProduct.proController != null &&
                                                                               billProduct.proFocusNode != null) {
-
                                                                             setState(() {
                                                                               billProduct.proController!.clear();
                                                                               billProduct.proFocusNode!.requestFocus();
@@ -1039,6 +1021,9 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                               );
                                                                             });
                                                                           } else {
+                                                                            Toasts.showToastBar(
+                                                                                context: context,
+                                                                                text: 'One or more of the following is null:');
                                                                             debugPrint("One or more of the following is null: "
                                                                                 "proController, proFocusNode, product, productTitle");
                                                                           }
@@ -1206,8 +1191,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                 flex: 1,
                                                                 child: IconButton(
                                                                     tooltip: 'Delete ${billProduct.product.isLoose == '1'
-                                                                        ? "${billProduct.productTitle} ${billProduct.variation/1000}kg"
-                                                                        : "${billProduct.productTitle} ${billProduct.variationUnit}"}',
+                                                                        ? "${billProduct.product.pTitle} ${billProduct.variation/1000}kg"
+                                                                        : "${billProduct.product.pTitle} ${billProduct.variationUnit}"}',
                                                                     onPressed: (){
                                                                       billingProvider.removeBillingItem(index: index);
                                                                     },
@@ -1226,7 +1211,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                     context,
                                                     image:
                                                         'assets/images/empty_bill.png',
-                                                    text: ''),
+                                                    text: 'No Product Found'),
                                           ),
                                         ],
                                       ),
@@ -1511,6 +1496,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
       child: MyTextField(
         controller: controller,
         isOptional: true,
+        hintText: "",
+        labelText: "",
         height: 50,
         inputFormatters: inputFormatters,
         textAlign: TextAlign.center,

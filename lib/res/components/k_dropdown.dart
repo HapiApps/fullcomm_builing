@@ -33,12 +33,13 @@ class MyDropDown<T> extends StatelessWidget {
         onChanged: onChanged,
         value: value,
         iconEnabledColor: AppColors.grey,
-        focusColor: AppColors.transparent,
-
+        focusColor: AppColors.textFieldBackground,
         focusNode: focusNode,
         autofocus: false,
         decoration: InputDecoration(
-          labelStyle: GoogleFonts.lato(fontSize: 14, color: Colors.black45),
+          focusColor: AppColors.textFieldBackground,
+          hoverColor: AppColors.textFieldBackground,
+          labelStyle: GoogleFonts.lato(fontSize: 15, color: Colors.black),
           labelText: labelText,
           filled: true,
           fillColor: AppColors.textFieldBackground,
@@ -48,24 +49,24 @@ class MyDropDown<T> extends StatelessWidget {
             borderSide: BorderSide(),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
               color: AppColors.textFieldBackground,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
               color: AppColors.primary,
             ),
           ),
           hintStyle: GoogleFonts.lato(),
         ),
-        isExpanded: true,
+        //isExpanded: true,
         iconSize: MediaQuery.of(context).size.width * 0.009,
         style: GoogleFonts.lato(
             color: AppColors.black,
-            fontSize: MediaQuery.of(context).size.width * 0.008),
+            fontSize: 15),
         validator: validator,
       ),
     );

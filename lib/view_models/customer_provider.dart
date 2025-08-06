@@ -56,6 +56,7 @@ class CustomersProvider with ChangeNotifier {
     "Ladakh",
     "Lakshadweep",
     "Puducherry",
+    ""
   ];
 
   String? _selectedState;
@@ -64,7 +65,7 @@ class CustomersProvider with ChangeNotifier {
 
   String? get selectedState => _selectedState;
 
-  void setState(String state) {
+  void changeState(String state) {
     _selectedState = state;
     notifyListeners();
   }
@@ -182,7 +183,7 @@ class CustomersProvider with ChangeNotifier {
                     ),
                     6.height,
                     MyTextField(
-                      labelText: "Mobile",
+                      labelText: "Mobile Number",
                       isOptional: false,
                       controller: customerMobile,
                       inputFormatters: InputFormatters.mobileNumberInput,
@@ -217,7 +218,8 @@ class CustomersProvider with ChangeNotifier {
                     ),
                     6.height,
                     MyDropDown(
-
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      width: MediaQuery.of(context).size.width * 0.35,
                         labelText: "State",
                       value: selectedState,
                       items: states.map((String state) {
@@ -228,8 +230,8 @@ class CustomersProvider with ChangeNotifier {
                       }).toList(),
                       onChanged: (value) {
                         if (value != null) {
-                          setState(value.toString);
                           customerState.text = value;
+                          changeState(customerState.text.trim());
                         }
                       },
                     ),
@@ -239,56 +241,96 @@ class CustomersProvider with ChangeNotifier {
                     //   isOptional: true,
                     //   textCapitalization: TextCapitalization.sentences,
                     // ),
-                    6.height,
-                    Buttons.loginButton(
-                      context: context,
-                      loadingButtonController: loadingButtonController,
-                      onPressed: () {
-                        if (customerName.text.isEmpty) {
-                          loadingButtonController.reset();
-                          Toasts.showToastBar(
-                              context: context,
-                              text: "Please enter customer name",
-                              color: Colors.red);
-                        } else if (customerMobile.text.isEmpty) {
-                          loadingButtonController.reset();
-                          Toasts.showToastBar(
-                              context: context,
-                              text: "Please enter customer mobile",
-                              color: Colors.red);
-                        }  else if (customerMobile.text.length!=10) {
-                          loadingButtonController.reset();
-                          Toasts.showToastBar(
-                              context: context,
-                              text: "Please enter correct customer mobile",
-                              color: Colors.red);
-                        }else if (customerCity.text.isEmpty) {
-                          loadingButtonController.reset();
-                          Toasts.showToastBar(
-                              context: context,
-                              text: "Please enter customer city",
-                              color: Colors.red);
-                        } else if (customerPincode.text.isEmpty) {
-                          loadingButtonController.reset();
-                          Toasts.showToastBar(
-                              context: context,
-                              text: "Please enter customer pincode",
-                              color: Colors.red);
-                        } else {
-                          addCustomer(
-                            context: context,
-                            name: customerName.text,
-                            mobile: customerMobile.text,
-                            addressLine1: customerStreet.text,
-                            area: customerArea.text,
-                            pincode: customerPincode.text,
-                            city: customerCity.text,
-                            state: customerState.text,
-                          );
-                        }
-                      },
-                      text: 'Submit',
-                    ),
+                    15.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)
+                              )
+                            ),
+                              onPressed: (){
+                               setState((){
+                                 customerName.clear();
+                                   customerMobile.clear();
+                               customerStreet.clear();
+                               customerArea.clear();
+                               customerCity.clear();
+                               customerPincode.clear();
+                               changeState("");
+                               });
+                              },
+                              child: MyText(text: "Clear",
+                                color: AppColors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        Buttons.loginButton(
+                          context: context,
+                          width: 300,
+                          height: 50,
+                          loadingButtonController: loadingButtonController,
+                          onPressed: () {
+                            if (customerName.text.isEmpty) {
+                              loadingButtonController.reset();
+                              Toasts.showToastBar(
+                                  context: context,
+                                  text: "Please enter customer name",
+                                  color: Colors.red);
+                            } else if (customerMobile.text.isEmpty) {
+                              loadingButtonController.reset();
+                              Toasts.showToastBar(
+                                  context: context,
+                                  text: "Please enter customer mobile",
+                                  color: Colors.red);
+                            }  else if (customerMobile.text.length!=10) {
+                              loadingButtonController.reset();
+                              Toasts.showToastBar(
+                                  context: context,
+                                  text: "Please enter 10 digits mobile number",
+                                  color: Colors.red);
+                            }else if (customerCity.text.isEmpty) {
+                              loadingButtonController.reset();
+                              Toasts.showToastBar(
+                                  context: context,
+                                  text: "Please enter customer city",
+                                  color: Colors.red);
+                            } else if (customerPincode.text.isEmpty) {
+                              loadingButtonController.reset();
+                              Toasts.showToastBar(
+                                  context: context,
+                                  text: "Please enter customer pincode",
+                                  color: Colors.red);
+                            } else if (customerPincode.text.length!=6) {
+                              loadingButtonController.reset();
+                              Toasts.showToastBar(
+                                  context: context,
+                                  text: "Please enter 6 digits pincode",
+                                  color: Colors.red);
+                            } else {
+                              addCustomer(
+                                context: context,
+                                name: customerName.text,
+                                mobile: customerMobile.text,
+                                addressLine1: customerStreet.text,
+                                area: customerArea.text,
+                                pincode: customerPincode.text,
+                                city: customerCity.text,
+                                state: customerState.text,
+                              );
+                            }
+                          },
+                          text: 'Submit',
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -378,6 +420,7 @@ class CustomersProvider with ChangeNotifier {
               autofocus: false,
               isOptional: true,
               focusNode:focus,
+              labelText: "Product Name",
               controller: controller!,
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.text,
@@ -390,7 +433,7 @@ class CustomersProvider with ChangeNotifier {
                 onPressed: (){
                   Navigator.of(context).pop();
                 },
-                child: MyText(text: "Cancel",color: AppColors.ash,)),
+                child: MyText(text: "Cancel",color: AppColors.black,)),
             ElevatedButton(
                 onPressed: onChanged,
                 child: MyText(text: "Ok",color: AppColors.primary,))

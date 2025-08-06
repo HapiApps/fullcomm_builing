@@ -459,7 +459,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   : billingProvider.allOrders.isEmpty
                       ? Column(
                           children: [
-                            100.height,
+                            350.height,
                             const MyText(text: "Not Found", color: Colors.grey)
                           ],
                         )
@@ -593,13 +593,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             ),
                                           )),
                                           DataCell(Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
-                                              IconButton(
-                                                icon: const Icon(
+                                              GestureDetector(
+                                                child: const Icon(
                                                     Icons
                                                         .shopping_cart_outlined,
                                                     color: Colors.grey),
-                                                onPressed: () {
+                                                onTap: () {
                                                   if (products.isNotEmpty &&
                                                       products[0] != "null") {
                                                     showDialog(

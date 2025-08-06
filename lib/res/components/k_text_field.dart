@@ -128,7 +128,7 @@ class MyTextField extends StatelessWidget {
         onFieldSubmitted: onFieldSubmitted,
         onEditingComplete: onEditingComplete,
         enabled: enabled ?? true,
-        minLines: minLines,
+        //minLines: minLines,
       ),
     );
   }
