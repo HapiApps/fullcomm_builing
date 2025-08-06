@@ -34,6 +34,7 @@ class MyDropDown<T> extends StatelessWidget {
         value: value,
         iconEnabledColor: AppColors.grey,
         focusColor: AppColors.transparent,
+
         focusNode: focusNode,
         autofocus: false,
         decoration: InputDecoration(

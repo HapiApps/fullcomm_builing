@@ -15,10 +15,18 @@ import '../views/credentials/login_screen.dart';
 import '../views/orders/order_detail_page.dart';
 
 class UserDataProvider with ChangeNotifier {
+  bool _isVisible = true;
+
+  bool get isVisible => _isVisible;
+
+  void toggleVisibility() {
+    _isVisible = !_isVisible;
+    notifyListeners();
+  }
+
   final CredentialsRepository _credentialsRepo = CredentialsRepository();
 
-  RoundedLoadingButtonController loginButtonController =
-      RoundedLoadingButtonController();
+  RoundedLoadingButtonController loginButtonController = RoundedLoadingButtonController();
 
   // Input Fields :
   TextEditingController mobileController = TextEditingController();
@@ -57,7 +65,7 @@ class UserDataProvider with ChangeNotifier {
         if (!context.mounted) return;
         Toasts.showToastBar(
           context: context,
-          text: 'Login Successful',
+          text: 'Login Successfully',
           color: AppColors.successMessage,
         );
         if (!context.mounted) return;

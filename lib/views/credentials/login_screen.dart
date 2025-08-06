@@ -80,18 +80,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       MyTextField(
                         labelText: 'Password',
                         isOptional: true,
+                        obscureText: userProvider.isVisible,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            userProvider.isVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            userProvider.toggleVisibility();
+                          },
+                        ),
                         width: screenWidth > 800
                             ? screenWidth * 0.20
                             : screenWidth * 0.35,
                         controller: userProvider.passwordController,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (value) {
-                          userProvider.loginButtonController
-                              .start(); // Start Loading
 
-                        if (userProvider.mobileController.text
-                              .trim()
-                              .isEmpty) {
+                        onFieldSubmitted: (value) {
+                          userProvider.loginButtonController.start(); // Start Loading
+
+                        if (userProvider.mobileController.text.trim().isEmpty) {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
@@ -105,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
-                              text: 'Please enter correct mobile number.',
+                              text: 'Please enter 10 digit mobile number.',
                               color: AppColors.errorMessage,
                             );
                           } else if (userProvider.passwordController.text
@@ -169,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             userProvider.loginButtonController.reset();
                             Toasts.showToastBar(
                               context: context,
-                              text: 'Please enter your correct mobile number.',
+                              text: 'Please enter 10 digit mobile number.',
                               color: AppColors.errorMessage,
                             );
                           } else if (userProvider.passwordController.text

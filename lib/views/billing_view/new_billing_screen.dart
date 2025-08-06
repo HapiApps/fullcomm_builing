@@ -456,8 +456,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             controller: customerProvider
                                                 .customerAddressController,
                                             labelText: 'Cust. Address',
-                                            maxLines: null,
-                                            minLines: 2,
+                                            //maxLines: null,
+                                            //minLines: 2,
                                           ),
                                         ],
                                       ),

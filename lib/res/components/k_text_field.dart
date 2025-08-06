@@ -123,7 +123,7 @@ class MyTextField extends StatelessWidget {
           ),
         ),
         onChanged: onChanged,
-        maxLines: maxLines,
+        //maxLines: maxLines,
         autofillHints: autofillHints,
         onFieldSubmitted: onFieldSubmitted,
         onEditingComplete: onEditingComplete,
