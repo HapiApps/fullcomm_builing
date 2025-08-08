@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:fullcomm_billing/utils/text_formats.dart';
 
@@ -15,10 +16,11 @@ class ScreenWidgets {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            image,
+          SvgPicture.asset(
+          image,
             height: height ?? MediaQuery.of(context).size.height * 0.35,
             width: width ?? MediaQuery.of(context).size.height * 0.35,
+
           ),
           5.height,
           MyText(

@@ -10,7 +10,6 @@ import 'package:fullcomm_billing/repo/place_order_repo.dart';
 import 'package:fullcomm_billing/repo/products_repo.dart';
 import 'package:fullcomm_billing/utils/toast_messages.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../models/bill_obj.dart';
 import '../models/billing_product.dart';
 import '../models/place_order.dart';
@@ -41,27 +40,27 @@ class BillingProvider with ChangeNotifier {
 
   String stDate = '';
   String enDate = '';
-  PickerDateRange? selectedRange;
-
-  void setDateRange(PickerDateRange? range) {
-    selectedRange = range;
-
-    if (range != null) {
-      final start = range.startDate!;
-      final end = range.endDate ?? DateTime.now();
-
-      stDate = _formatDate(start);
-      enDate = _formatDate(end);
-
-      final endForApi = end.add(const Duration(days: 1));
-      getAllOrderDetails(start.toString(), endForApi.toString());
-    } else {
-      stDate = '';
-      enDate = '';
-    }
-
-    notifyListeners();
-  }
+  // PickerDateRange? selectedRange;
+  //
+  // void setDateRange(PickerDateRange? range) {
+  //   selectedRange = range;
+  //
+  //   if (range != null) {
+  //     final start = range.startDate!;
+  //     final end = range.endDate ?? DateTime.now();
+  //
+  //     stDate = _formatDate(start);
+  //     enDate = _formatDate(end);
+  //
+  //     final endForApi = end.add(const Duration(days: 1));
+  //     getAllOrderDetails(start.toString(), endForApi.toString());
+  //   } else {
+  //     stDate = '';
+  //     enDate = '';
+  //   }
+  //
+  //   notifyListeners();
+  // }
 
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, "0")}-${date.day.toString().padLeft(2, "0")}";
@@ -357,12 +356,13 @@ class BillingProvider with ChangeNotifier {
     }
   }
 
-  List<String> billMethods = ["Cash", "Money Transfer", "Cheque"];
-  List<FocusNode> billMethodFocusNodes = List.generate(3, (_) => FocusNode());
+  List<String> billMethods = ["Cash", "Money Transfer", "Cheque", "Cancel"];
+  List<FocusNode> billMethodFocusNodes = List.generate(4, (_) => FocusNode());
   String? selectBillMethod = "Cash";
   void changeBillMethod(String method) {
     selectBillMethod = method;
     notifyListeners();
+
   }
 
   String billNo = "";

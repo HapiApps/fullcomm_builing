@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyText extends StatelessWidget {
-  const MyText(
-      {super.key,
-      required this.text,
-      this.fontSize,
-      this.fontWeight,
-      this.textAlign,
-      this.color,
-      this.letterSpacing,
-      this.maxLines,
-      this.overflow,
-      this.textDecoration,
-      this.fontStyle,
-      this.softWrap,
-      this.shadows});
+  const MyText({
+    super.key,
+    required this.text,
+    this.fontSize,
+    this.fontWeight,
+    this.textAlign,
+    this.color,
+    this.letterSpacing,
+    this.maxLines,
+    this.overflow,
+    this.textDecoration,
+    this.fontStyle,
+    this.softWrap,
+    this.shadows,
+    this.isBold = false,
+  });
 
   final String text;
   final double? fontSize;
@@ -29,19 +31,23 @@ class MyText extends StatelessWidget {
   final bool? softWrap;
   final List<Shadow>? shadows;
   final TextDecoration? textDecoration;
+  final bool isBold;
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle style = GoogleFonts.lato(
+      fontSize: fontSize,
+      fontWeight: isBold ? FontWeight.bold : fontWeight,
+      letterSpacing: letterSpacing,
+      color: color,
+      fontStyle: fontStyle,
+      decoration: textDecoration,
+      shadows: shadows,
+    );
+
     return Text(
       text,
-      style: GoogleFonts.lato(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          letterSpacing: letterSpacing,
-          color: color,
-          fontStyle: fontStyle,
-          decoration: textDecoration,
-          shadows: shadows),
+      style: style,
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

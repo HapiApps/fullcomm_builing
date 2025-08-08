@@ -19,7 +19,7 @@ const double _kMinimumWidth = 112.0;
 const double _kDefaultHorizontalPadding = 12.0;
 
 class MyDropdownMenuEntry2<T> {
-  const MyDropdownMenuEntry2({
+  const MyDropdownMenuEntry2( {
     required this.value,
     required this.label,
     this.labelWidget,
@@ -27,6 +27,7 @@ class MyDropdownMenuEntry2<T> {
     this.trailingIcon,
     this.enabled = true,
     this.style,
+    this.borderRadius,
   });
 
   final T value;
@@ -36,6 +37,7 @@ class MyDropdownMenuEntry2<T> {
   final Widget? trailingIcon;
   final bool enabled;
   final ButtonStyle? style;
+  final double? borderRadius;
 }
 
 class MyDropdownMenu2<T> extends StatefulWidget {
@@ -69,11 +71,12 @@ class MyDropdownMenu2<T> extends StatefulWidget {
     this.alignmentOffset,
     required this.dropdownMenuEntries,
     this.inputFormatters,
-    this.labelText,
+    this.labelText, this.borderRadius, this.height, this.dropdownColor,
   }) : assert(filterCallback == null || enableFilter);
 
   final bool enabled;
   final double? width;
+  final double? height;
   final double? menuHeight;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
@@ -101,6 +104,8 @@ class MyDropdownMenu2<T> extends StatefulWidget {
   final SearchCallback<T>? searchCallback;
   final List<TextInputFormatter>? inputFormatters;
   final Offset? alignmentOffset;
+  final double? borderRadius;
+  final Color? dropdownColor;
 
   @override
   State<MyDropdownMenu2<T>> createState() => _MyDropdownMenuState<T>();
@@ -351,7 +356,7 @@ class _MyDropdownMenuState<T> extends State<MyDropdownMenu2<T>> {
             effectiveOverlayColor ?? defaultStyle.overlayColor!)!;
         final Color focusedBackgroundColor =
             resolveFocusedColor(effectiveBackgroundColor) ??
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12);
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.12);
 
         effectiveStyle = effectiveStyle.copyWith(
           backgroundColor:
@@ -562,6 +567,7 @@ class _MyDropdownMenuState<T> extends State<MyDropdownMenu2<T>> {
         final Widget textField = TextField(
             key: _anchorKey,
             enabled: widget.enabled,
+
             mouseCursor: effectiveMouseCursor,
             focusNode: widget.focusNode,
             autofocus: false,
@@ -613,17 +619,17 @@ class _MyDropdownMenuState<T> extends State<MyDropdownMenu2<T>> {
               filled: true,
               fillColor: AppColors.textFieldBackground,
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(widget.borderRadius ?? 8),
                   borderSide: const BorderSide(
                       width: 0, color: AppColors.textFieldBackground)),
               enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(widget.borderRadius ?? 8),
                   borderSide: const BorderSide(
-                      width: 0, color: AppColors.textFieldBackground)),
+                      width: 0,   color: Color(0xff9e9e9e))),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(widget.borderRadius ?? 8),
                   borderSide:
-                      const BorderSide(width: 0, color: AppColors.primary)),
+                      const BorderSide(width: 0,  color: Color(0xff9e9e9e))),
               hintText: widget.hintText,
               helperText: widget.helperText,
               errorText: widget.errorText,
@@ -650,6 +656,7 @@ class _MyDropdownMenuState<T> extends State<MyDropdownMenu2<T>> {
           },
           child: _DropdownMenuBody(
             width: widget.width,
+
             children: <Widget>[
               textField,
               ..._initialMenu!.map((Widget item) =>

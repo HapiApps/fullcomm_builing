@@ -12,7 +12,7 @@ class MyDropDown<T> extends StatelessWidget {
       this.onChanged,
       this.height,
       this.width,
-      this.focusNode});
+      this.focusNode, this.borderRadius});
 
   final String labelText;
   final double? height;
@@ -22,6 +22,7 @@ class MyDropDown<T> extends StatelessWidget {
   final String? Function(T?)? validator;
   final List<DropdownMenuItem<T>>? items;
   final void Function(T?)? onChanged;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +50,13 @@ class MyDropDown<T> extends StatelessWidget {
             borderSide: BorderSide(),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(borderRadius ?? 20),
             borderSide: const BorderSide(
               color: AppColors.textFieldBackground,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(borderRadius ?? 20),
             borderSide: const BorderSide(
               color: AppColors.primary,
             ),

@@ -29,7 +29,7 @@ class BackContainer extends StatelessWidget {
               image: AssetImage(image),
               fit: BoxFit.cover,
               colorFilter: colorFilter ??
-                  ColorFilter.mode(AppColors.black.withValues(alpha: 0.1),
+                  ColorFilter.mode(AppColors.black.withOpacity(0.1),
                       BlendMode.dstATop))),
       child: child,
     );

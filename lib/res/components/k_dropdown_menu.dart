@@ -351,7 +351,7 @@ class _MyDropdownMenuState<T> extends State<MyDropdownMenu<T>> {
             effectiveOverlayColor ?? defaultStyle.overlayColor!)!;
         final Color focusedBackgroundColor =
             resolveFocusedColor(effectiveBackgroundColor) ??
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12);
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.12);
 
         effectiveStyle = effectiveStyle.copyWith(
           backgroundColor:

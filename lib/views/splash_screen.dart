@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: BackContainer(
         image: 'assets/vectors/splash_vec.jpg',
         colorFilter: ColorFilter.mode(
-          AppColors.black.withValues(alpha: 0.1),
+          AppColors.black.withOpacity(0.1),
           BlendMode.dstATop,
         ),
         child: Center(

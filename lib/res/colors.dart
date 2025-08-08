@@ -5,12 +5,11 @@ class AppColors {
   static const Color secondary = Colors.white;
   static const Color introTitleTxtColor = Color(0xFF0078D7);
   static const Color introSubTitleColor = Color(0xFFD9EEFF);
-  static const Color textFieldBackground = Color(0xFFF3F6FA);
+  static const Color textFieldBackground = Color(0xFFffffff);
   static const Color shimmerHighlight = Color(0xFFFCFCFC);
   static const Color shimmerBase = Color(0xFFF4F3F3);
   static const Color appAccentColor = Color(0xFF0078D7);
-  static Color discountBadge = primary.withValues(alpha: 0.3);
-
+  static Color discountBadge = primary.withOpacity(0.3);
   static const Color white = Colors.white;
   static const Color paperWhite = Color(0xFFF2F3F4);
   static const Color black = Colors.black;

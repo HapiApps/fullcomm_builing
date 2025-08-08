@@ -29,7 +29,7 @@ class MyTextField extends StatelessWidget {
       this.autofillHints,
       this.textAlign,
       this.maxLines,
-      this.minLines, required this.isOptional});
+      this.minLines, required this.isOptional, this.borderRadius, this.fillColor, this.focusedBorderColor, this.enabledBorderColor, this.labelBlackText,});
 
   final TextEditingController controller;
   final FocusNode? focusNode;
@@ -54,14 +54,25 @@ class MyTextField extends StatelessWidget {
   final void Function()? onEditingComplete;
   final Iterable<String>? autofillHints;
   final TextAlign? textAlign;
+  final double? borderRadius;
+  final Color? fillColor;
+  final Color? focusedBorderColor;
+  final Color? enabledBorderColor;
+  final String? labelBlackText;
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: height ?? screenHeight * 0.08,
-      width: width ?? screenWidth * 0.35,
+      height: height ?? screenHeight * 0.05,
+      width: width ?? screenWidth * 0.25,
       child: TextFormField(
         controller: controller,
         style: GoogleFonts.lato(
@@ -78,7 +89,7 @@ class MyTextField extends StatelessWidget {
         textAlign: textAlign ?? TextAlign.start,
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppColors.textFieldBackground,
+          fillColor: fillColor ?? AppColors.textFieldBackground,
           label: Row(
             mainAxisSize: MainAxisSize.min,
             children:[
@@ -101,24 +112,25 @@ class MyTextField extends StatelessWidget {
           prefixIcon: prefixIcon,
           contentPadding: const EdgeInsets.fromLTRB(10, 30, 5, 0),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
+
+            borderRadius: BorderRadius.circular(borderRadius ?? 20),
+            borderSide:  BorderSide(
               width: 0,
-              color: AppColors.textFieldBackground,
+              color:  enabledBorderColor ?? AppColors.textFieldBackground,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
+            borderRadius: BorderRadius.circular(borderRadius ?? 20),
+            borderSide:  BorderSide(
               width: 0,
-              color: AppColors.textFieldBackground,
+              color:  enabledBorderColor ?? AppColors.textFieldBackground,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
+            borderRadius: BorderRadius.circular(borderRadius ?? 20),
+            borderSide:  BorderSide(
               width: 0,
-              color: AppColors.primary,
+              color: focusedBorderColor ?? AppColors.primary,
             ),
           ),
         ),

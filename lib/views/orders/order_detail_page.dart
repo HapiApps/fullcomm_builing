@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../data/project_data.dart';
 import '../../res/colors.dart';
@@ -21,86 +20,86 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  void showDatePickerDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        final dateProvider =
-            Provider.of<BillingProvider>(context, listen: false);
-        dynamic selectedRange; // to store selected value temporarily
-
-        return StatefulBuilder(
-          // to update state inside dialog
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const MyText(
-                text: '   Select Date',
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-              ),
-              content: SizedBox(
-                height: 300,
-                width: 300,
-                child: SfDateRangePicker(
-                  backgroundColor: const Color(0xffFFFCF9),
-                  minDate: DateTime(2023),
-                  maxDate: DateTime.now(),
-                  selectionMode: DateRangePickerSelectionMode.range,
-                  onSelectionChanged:
-                      (DateRangePickerSelectionChangedArgs args) {
-                    setState(() {
-                      selectedRange = args.value;
-                    });
-                  },
-                ),
-              ),
-              actions: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MyText(
-                      text: 'Click and drag to select multiple dates',
-                      color: AppColors.primary,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      child: const MyText(
-                        text: 'Cancel',
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: const MyText(
-                        text: 'OK',
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onPressed: () {
-                        if (selectedRange != null) {
-                          dateProvider.changeDateFilter(" ");
-                          dateProvider.setDateRange(selectedRange);
-                        }
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+  // void showDatePickerDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       final dateProvider =
+  //           Provider.of<BillingProvider>(context, listen: false);
+  //       dynamic selectedRange; // to store selected value temporarily
+  //
+  //       return StatefulBuilder(
+  //         // to update state inside dialog
+  //         builder: (context, setState) {
+  //           return AlertDialog(
+  //             title: const MyText(
+  //               text: '   Select Date',
+  //               color: AppColors.primary,
+  //               fontWeight: FontWeight.bold,
+  //             ),
+  //             content: SizedBox(
+  //               height: 300,
+  //               width: 300,
+  //               child: SfDateRangePicker(
+  //                 backgroundColor: const Color(0xffFFFCF9),
+  //                 minDate: DateTime(2023),
+  //                 maxDate: DateTime.now(),
+  //                 selectionMode: DateRangePickerSelectionMode.range,
+  //                 onSelectionChanged:
+  //                     (DateRangePickerSelectionChangedArgs args) {
+  //                   setState(() {
+  //                     selectedRange = args.value;
+  //                   });
+  //                 },
+  //               ),
+  //             ),
+  //             actions: [
+  //               const Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   MyText(
+  //                     text: 'Click and drag to select multiple dates',
+  //                     color: AppColors.primary,
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                 children: [
+  //                   TextButton(
+  //                     child: const MyText(
+  //                       text: 'Cancel',
+  //                       color: Colors.grey,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                     onPressed: () {
+  //                       Navigator.of(context).pop();
+  //                     },
+  //                   ),
+  //                   TextButton(
+  //                     child: const MyText(
+  //                       text: 'OK',
+  //                       color: AppColors.primary,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                     onPressed: () {
+  //                       if (selectedRange != null) {
+  //                         dateProvider.changeDateFilter(" ");
+  //                         dateProvider.setDateRange(selectedRange);
+  //                       }
+  //                       Navigator.of(context).pop();
+  //                     },
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   void initState() {
@@ -137,6 +136,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           title: const MyText(
             text: "Search Bill Details",
             color: AppColors.primary,
+            isBold: true,
           ),
         ),
         body: Container(
@@ -168,7 +168,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               DateFormat('yyyy-MM-dd').format(today);
                           String endStr = DateFormat('yyyy-MM-dd').format(end);
                           billingProvider.getAllOrderDetails(endStr, todayStr);
-                          billingProvider.setDateRange(null);
+                          //billingProvider.setDateRange(null);
                         },
                       ),
                       const MyText(
@@ -190,7 +190,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               DateFormat('yyyy-MM-dd').format(today);
                           String endStr = DateFormat('yyyy-MM-dd').format(end);
                           billingProvider.getAllOrderDetails(endStr, todayStr);
-                          billingProvider.setDateRange(null);
+                         // billingProvider.setDateRange(null);
                         },
                       ),
                       const MyText(text: 'Last 7 Days', color: AppColors.black),
@@ -213,7 +213,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               DateFormat('yyyy-MM-dd').format(tomorrow);
                           billingProvider.getAllOrderDetails(
                               todayStr, tomorrowStr);
-                          billingProvider.setDateRange(null);
+                         // billingProvider.setDateRange(null);
                         },
                       ),
                       const MyText(text: 'Today', color: AppColors.black),
@@ -221,7 +221,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      showDatePickerDialog(context);
+                      //showDatePickerDialog(context);
                     },
                     child: Container(
                       width: 210,

@@ -178,7 +178,7 @@
 //                 appBar: PreferredSize(
 //                   preferredSize: Size.fromHeight(screenHeight * 0.20),
 //                   child: Container(
-//                     color: AppColors.primary.withValues(alpha:0.2),
+//                     color: AppColors.primary.withOpacity(alpha:0.2),
 //                     padding: const EdgeInsets.only(bottom: 3),
 //                     child: Column(
 //                       mainAxisSize: MainAxisSize.min,
@@ -249,7 +249,7 @@
 //                                   message: 'Options',
 //                                   child: CircleAvatar(
 //                                     radius: 23,
-//                                     backgroundColor: Colors.yellow.withValues(alpha:0.4),
+//                                     backgroundColor: Colors.yellow.withOpacity(alpha:0.4),
 //                                     child: SvgPicture.asset('assets/icons/options.svg'),
 //                                   ),
 //                                 ),
@@ -934,7 +934,7 @@
 //                 ),
 //                 bottomNavigationBar: billingProvider.isLoading ? 0.height
 //                     : Container(
-//                   color: AppColors.primary.withValues(alpha:0.1),
+//                   color: AppColors.primary.withOpacity(alpha:0.1),
 //                   padding: const EdgeInsets.only(top: 8,left: 12,right: 12,bottom: 8),
 //                   height: screenHeight * 0.12,
 //                   child: Row(

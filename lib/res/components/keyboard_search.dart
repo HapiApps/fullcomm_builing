@@ -16,6 +16,7 @@ class KeyboardDropdownField<T extends Object> extends StatefulWidget {
   final bool Function(String input, T item)? filterFn;
   final VoidCallback? onClear;
 
+
   const KeyboardDropdownField({
     super.key,
     required this.items,
@@ -120,14 +121,14 @@ class _KeyboardDropdownFieldState<T extends Object>
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
                 width: 0,
-                color: AppColors.textFieldBackground,
+                color: Color(0xff9E9E9E),
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
                 width: 0,
-                color: AppColors.primary,
+                color:Color(0xff9E9E9E),
               ),
             ),
           ),
