@@ -229,6 +229,7 @@ class CustomersProvider with ChangeNotifier {
                       height: 60,
                     ),
                     10.height,
+
                     MyDropDown(
                       height: MediaQuery.of(context).size.height * 0.08,
                       width: MediaQuery.of(context).size.width * 0.25,
@@ -254,7 +255,14 @@ class CustomersProvider with ChangeNotifier {
                     //   isOptional: true,
                     //   textCapitalization: TextCapitalization.sentences,
                     // ),
-                    15.height,
+                    10.height,
+                MyTextField(
+                labelText: "Country",
+                isOptional: false,
+                controller: customerPincode,
+                borderRadius: 8,
+                height: 60,
+              ), 10.height,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

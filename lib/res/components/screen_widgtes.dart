@@ -22,7 +22,7 @@ class ScreenWidgets {
             width: width ?? MediaQuery.of(context).size.height * 0.35,
 
           ),
-          5.height,
+
           MyText(
             text: text,
             fontSize: TextFormat.responsiveFontSize(context, 16),

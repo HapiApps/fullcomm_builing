@@ -225,28 +225,38 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                   backgroundColor: Color(0xffffffff),
                   appBar: AppBar(
                     backgroundColor: Color(0xffffffff),
-                    toolbarHeight: 80,
-                    leading: Image.asset('assets/logo/app_logo.png',width: 100,height: 50,),
-                    title:    Text.rich(
-                                        TextSpan(
-                                          text: 'Bill No :  ',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: AppColors.ash,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          children: [
-                                            TextSpan(
-                                              text: billingProvider.billNo ?? '',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: AppColors.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                    ),
+                    toolbarHeight: 100,
+                    leadingWidth: 150,
+                    leading:
+                    Image.asset('assets/logo/app_logo.png',width: 100,height: 90,),
+                    title:Text("ARUU Billing Portal",style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold
+                    ),),
+                    centerTitle: true,
+
+
+                    // Text.rich(
+                    //                     TextSpan(
+                    //                       text: '',
+                    //                       style: TextStyle(
+                    //                         fontSize: 15,
+                    //                         color: AppColors.ash,
+                    //                         fontWeight: FontWeight.bold,
+                    //                       ),
+                    //                       children: [
+                    //                         TextSpan(
+                    //                           text: billingProvider.billNo ?? '',
+                    //                           style: TextStyle(
+                    //                             fontSize: 15,
+                    //                             color: AppColors.black,
+                    //                             fontWeight: FontWeight.bold,
+                    //                           ),
+                    //                         ),
+                    //                       ],
+                    //                     ),
+                    // ),
                   actions: [
                                         CustomerFieldWidgets.iconButton(
                                         context: context,
@@ -555,37 +565,25 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             child: Column(
                                               crossAxisAlignment:CrossAxisAlignment.start,
                                               children: [
-                                                RichText(
-                                                  text: TextSpan(
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '  Bill No :  ',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: AppColors.ash,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
                                                     children: [
                                                       TextSpan(
-                                                        text: 'Cashier Name',
-                                                        style: TextStyle(color:Color(0xff9E9E9E), fontSize: 13),
-                                                      ),
-                                                      TextSpan(
-                                                        text: '*',
-                                                        style: TextStyle(color: Colors.red, fontSize: 13),
+                                                        text: billingProvider.billNo ?? '',
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: AppColors.black,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                                MyTextField(
-                                                  width: screenWidth * 0.20,
-                                                  height: 41,
-                                                  controller:
-                                                  billingProvider.cashierNameController,
-                                                  hintText: 'Cashier Name',
-                                                  labelText: '',
-
-                                                  fillColor: Color(0xffffffff),
-                                                  focusedBorderColor: Color(0xff9e9e9e),
-                                                  enabledBorderColor: Color(0xff9e9e9e),
-                                                  isOptional: true,
-                                                  borderRadius: 5,
-                                                  textInputAction: TextInputAction.done,
-                                                  onChanged: (value) async {
-                                                    // Your onChanged logic
-                                                  },
                                                 ),
                                               ],
                                             ),
@@ -593,46 +591,72 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('Customer Contact', style: TextStyle(fontSize: 13,color:Color(0xff9E9E9E))),
-                                              MyDropdownMenu2<CustomerData>(
-                                                width: screenWidth * 0.26,
-                                                height: 40,
-                                                borderRadius: 5,
-                                                labelText: '',
-                                                hintText: "Select Customer...",
-                                                menuHeight: screenHeight * 0.20,
-                                                enableSearch: true,
-                                                enableFilter: true,
-                                                // dropdownColor: Colors.red,
-                                                dropdownMenuEntries:
-                                                customerProvider
-                                                    .allCustomersList
-                                                    .map((customer) {
-                                                  return MyDropdownMenuEntry2(
-                                                    value: customer,
-                                                    label:
-                                                    '${customer.name} - ${customer.mobile}',
-                                                  );
-                                                }).toList(),
-                                                onSelected: (value) {
-                                                  customerProvider
-                                                      .setCustomerDetails(
-                                                    customerId:
-                                                    value!.userId.toString(),
-                                                    customerName:
-                                                    value.name.toString(),
-                                                    customerMobile:
-                                                    value.mobile.toString(),
-                                                    customerAddress:
-                                                    "${value.addressLine1 ?? ''} ${value.area ?? ''} ${value.city ?? ''}-${value.pincode ?? ''}",
-                                                  );
-                                                  _focusNode.requestFocus();
-                                                },
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Cashier Name:  ',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: AppColors.ash,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: billingProvider.billNo ?? '',
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: AppColors.black,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
+                                              // MyTextField(
+                                              //   width: screenWidth * 0.20,
+                                              //   height: 41,
+                                              //   controller:
+                                              //   billingProvider.cashierNameController,
+                                              //   hintText: 'Cashier Name',
+                                              //   labelText: '',
+                                              //
+                                              //   fillColor: Color(0xffffffff),
+                                              //   focusedBorderColor: Color(0xff9e9e9e),
+                                              //   enabledBorderColor: Color(0xff9e9e9e),
+                                              //   isOptional: true,
+                                              //   borderRadius: 5,
+                                              //   textInputAction: TextInputAction.done,
+                                              //   onChanged: (value) async {
+                                              //     // Your onChanged logic
+                                              //   },
+                                              // ),
                                             ],
                                           ),
 
                                           // Customer Address
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Customer', style: TextStyle(fontSize: 15,color:Color(0xff9E9E9E))),
+                                                MyTextField(
+                                                  width: screenWidth * 0.20,
+                                                  height: 41,
+                                                  isOptional: true,
+                                                  controller: customerProvider
+                                                      .customerAddressController,
+                                                  hintText: "Customer Address",
+                                                  labelText: '',
+                                                  focusedBorderColor: Color(0xff9e9e9e),
+                                                  enabledBorderColor: Color(0xff9e9e9e),
+                                                  fillColor: Color(0xffffffff),
+                                                  borderRadius: 5,
+                                                  //maxLines: null,
+                                                  //minLines: 2,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                                             child: Column(
@@ -666,8 +690,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                               /// Fixed Header:
                               // Row containing Search Dropdown and Variation/Quantity field
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   /// Searchable DropdownMenu (Header)
                                   Padding(
@@ -737,7 +760,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                   items: billingProvider
                                                       .productsList,
                                                   hintText: "Search Product...",
-                                                  labelText: "Product",
+                                                  labelText: " Product",
                                                   labelBuilder: (product) => product
                                                               .isLoose ==
                                                           '0'
@@ -1076,217 +1099,258 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                               ),
                               10.height,
                               ///  Billing Table :
-                              Expanded(
-                                child: Card(
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(0)),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Color(0xfff0f9ff),
-                                          borderRadius:
-                                              BorderRadius.circular(0),
-                                        border: Border.all(
-                                          color: Color(0xfff3f3f2), 
-                                          width: 2.0,
+                              billingProvider.billingItems.isEmpty?SizedBox(
+                                width: 260,
+                                child: Column(
+                                  children: [
+                                    ScreenWidgets.emptyAlert(
+                                        context,
+                                        image:
+                                        'assets/images/noproduct.svg',
+                                        text: 'No Product Found'),
+                                  ],
+                                ),
+                              ): Expanded(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xfff0f9ff),
+                                        borderRadius:
+                                            BorderRadius.circular(0),
+                                      // border: Border.all(
+                                      //   color: Color(0xfff3f3f2),
+                                      //   width: 2.0,
+                                      // ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.8), // darker shadow
+                                          spreadRadius: 0, // no side spread
+                                          blurRadius: 12,  // softer & bigger shadow
+                                          offset: const Offset(0, 8), // more downward distance
                                         ),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          // Table Headings
-                                          Container(
-                                            color: AppColors.primary,
-
+                                      ],
+                                    ),
+                                    child:
+                                        // Table Headings
+                                        Container(
+                                        color: Color(0xffF0F9FF),
+                                          child: SizedBox(
+                                            width: screenWidth * 0.98,
                                             child: SingleChildScrollView(
-                                              scrollDirection: Axis.vertical,
-                                              child: SingleChildScrollView(
-                                                scrollDirection: Axis.horizontal, // For wide tables
-                                                child: SizedBox(
-                                                  width: screenWidth * 0.98,
-                                                  child: DataTable(
-                                                    dividerThickness: 0,
-                                                    showBottomBorder: false,
-                                                    dataRowHeight: 50, // Row height for all data rows
-                                                    headingRowHeight: 50,
-                                                    horizontalMargin: 0,
-                                                    // Height for header row
-                                                    border: const TableBorder(
-                                                      left: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                                      right: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                                      verticalInside: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                                      top: BorderSide.none,
-                                                      bottom: BorderSide.none,
-                                                      horizontalInside: BorderSide.none,
-                                                    ), // Column lines
-                                                    headingRowColor: MaterialStateProperty.resolveWith(
-                                                          (states) => Color(0xff0078D7), // Header background
+                                              child: DataTable(
+                                                dividerThickness: 0,
+                                                showBottomBorder: false,
+                                                dataRowHeight: 50, // Row height for all data rows
+                                                headingRowHeight: 50,
+                                                horizontalMargin: 0,
+                                                // Height for header row
+                                                border: const TableBorder(
+                                                  verticalInside: BorderSide(width: 1, color: Color(0xff9E9E9E)),
+                                                  top: BorderSide.none,
+                                                  bottom: BorderSide.none,
+                                                  horizontalInside: BorderSide.none,
+                                                ), // Column lines
+                                                headingRowColor: MaterialStateProperty.resolveWith(
+                                                      (states) => Color(0xff0078D7), // Header background
+                                                ),
+                                                columns: [
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: Text("Change\nName", textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "S.No", color: Colors.white)),
                                                     ),
-                                                    columns: [
-                                                      DataColumn(
-                                                        numeric: false,
-                                                        label: Text("Change\nName"),
-                                                      ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "S.No", color: Colors.white)),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "Product", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "Variation", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "Quantity", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "MRP", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "Our Price", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "Discount", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "SubTotal", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                  DataColumn(
+                                                    headingRowAlignment: MainAxisAlignment.center,
+                                                    label: SizedBox(
+                                                      height: 50,
+                                                      child: Center(child: MyText(text: "Remove", color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                ],
+                                                rows: List.generate(billingProvider.billingItems.length, (index) {
+                                                  final billProduct = billingProvider.billingItems[index];
+                                                  return DataRow(
+                                                    color: MaterialStateProperty.resolveWith(
+                                                          (states) => index % 2 == 0 ? Colors.white : const Color(0xffD9EEFF),
+                                                    ),
+                                                    cells: [
+                                                      DataCell(
+                                                        Center(
+                                                          child: IconButton(
+                                                            icon: const Icon(Icons.add),
+                                                            tooltip: 'Edit Product Name',
+                                                            onPressed: () {
+                                                              // Your existing edit logic here
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "Product", color: Colors.white)),
+                                                      DataCell(Center(child: Text("${index + 1}",textAlign: TextAlign.center,))),
+                                                      DataCell(Center(
+                                                        child: Text(
+                                                          billProduct.product.isLoose == '1'
+                                                              ? "${billProduct.product.pTitle}"
+                                                              : "${billProduct.product.pTitle} ${billProduct.product.pVariation ?? ""}${billProduct.product.unit ?? ""}",textAlign: TextAlign.center,
                                                         ),
+                                                      )),
+                                                      DataCell(
+                                                        billProduct.product.isLoose == '1'
+                                                            ? SizedBox(
+                                                          height: 40,
+
+                                                          child: TextFormField(
+                                                            controller: TextEditingController(
+                                                              text: "${billProduct.variation / 1000}",
+
+                                                            ),
+                                                            onChanged: (value) {
+                                                              billingProvider.updateBillingItem(
+                                                                index,
+                                                                isLoose: '1',
+                                                                variation: double.tryParse(value) ??
+                                                                    billProduct.variation * 1000,
+                                                              );
+                                                            },
+                                                          ),
+                                                        )
+                                                            : Center(child: Text(billProduct.variationUnit ?? "",)),
                                                       ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "Variation", color: Colors.white)),
-                                                        ),
+                                                      DataCell(
+                                                        billProduct.product.isLoose == '0'
+                                                            ? SizedBox(
+                                                          height: 40,
+
+                                                          child: TextFormField(
+
+                                                            controller: billingProvider.quantityControllers[index] ??
+                                                                TextEditingController(
+                                                                  text: "${billProduct.quantity}",
+                                                                ),
+                                                            decoration: const InputDecoration(
+
+                                                              border: InputBorder.none, // Removes underline
+                                                              isDense: true, // Reduces padding
+                                                              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                                            ),
+                                                            textAlign: TextAlign.end,
+                                                            keyboardType: TextInputType.number,
+                                                            inputFormatters: [
+                                                              LengthLimitingTextInputFormatter(5), // Limit to 5 digits
+                                                            ],
+                                                            onChanged: (value) {
+                                                              if (value.isNotEmpty) {
+                                                                billingProvider.updateBillingItem(
+                                                                  index,
+                                                                  isLoose: '0',
+                                                                  quantity: int.tryParse(value) ?? billProduct.quantity,
+                                                                );
+                                                              } else {
+                                                                billingProvider.updateBillingItem(
+                                                                  index,
+                                                                  isLoose: '0',
+                                                                  quantity: 0,
+                                                                );
+                                                              }
+                                                            },
+                                                          ),
+                                                        )
+                                                            : Text("${billProduct.quantity}"),
                                                       ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "Quantity", color: Colors.white)),
-                                                        ),
-                                                      ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "MRP", color: Colors.white)),
-                                                        ),
-                                                      ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "Our Price", color: Colors.white)),
-                                                        ),
-                                                      ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "Discount", color: Colors.white)),
-                                                        ),
-                                                      ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "SubTotal", color: Colors.white)),
-                                                        ),
-                                                      ),
-                                                      DataColumn(
-                                                        label: SizedBox(
-                                                          height: 50,
-                                                          child: Center(child: MyText(text: "Remove", color: Colors.white)),
+
+                                                      DataCell(
+                                                          Align(
+                                                            alignment:Alignment.centerRight,
+                                                            child: Text(TextFormat.formattedAmount(
+                                                            billProduct.mrpPerProduct()), textAlign: TextAlign.end,),
+                                                          )),
+                                                      DataCell(Align(
+                                                        alignment:Alignment.centerRight,
+                                                        child: Text(TextFormat.formattedAmount(
+                                                            billProduct.calculateOutPrice())),
+                                                      )),
+                                                      DataCell(Align(
+                                                        alignment:Alignment.centerRight,
+                                                        child: Text(
+                                                            billProduct.calculateDiscount().toStringAsFixed(2)),
+                                                      )),
+                                                      DataCell(Align(
+                                                        alignment:Alignment.centerRight,
+                                                        child: Text(TextFormat.formattedAmount(
+                                                          billProduct.calculateSubtotal(),
+                                                        )),
+                                                      )),
+                                                      DataCell(
+                                                        Center(
+                                                          child: IconButton(
+                                                            icon: const Icon(Icons.delete, color: Colors.red),
+                                                            onPressed: () =>
+                                                                billingProvider.removeBillingItem(index: index),
+                                                          ),
                                                         ),
                                                       ),
                                                     ],
-                                                    rows: List.generate(billingProvider.billingItems.length, (index) {
-                                                      final billProduct = billingProvider.billingItems[index];
-                                                      return DataRow(
-                                                        color: MaterialStateProperty.resolveWith(
-                                                              (states) => index % 2 == 0 ? Colors.white : const Color(0xffD9EEFF),
-                                                        ),
-                                                        cells: [
-                                                          DataCell(
-                                                            IconButton(
-                                                              icon: const Icon(Icons.add),
-                                                              tooltip: 'Edit Product Name',
-                                                              onPressed: () {
-                                                                // Your existing edit logic here
-                                                              },
-                                                            ),
-                                                          ),
-                                                          DataCell(Text("${index + 1}")),
-                                                          DataCell(Text(
-                                                            billProduct.product.isLoose == '1'
-                                                                ? "${billProduct.product.pTitle}"
-                                                                : "${billProduct.product.pTitle} ${billProduct.product.pVariation ?? ""}${billProduct.product.unit ?? ""}",
-                                                          )),
-                                                          DataCell(
-                                                            billProduct.product.isLoose == '1'
-                                                                ? SizedBox(
-                                                              height: 40,
-                                                              child: TextFormField(
-                                                                controller: TextEditingController(
-                                                                  text: "${billProduct.variation / 1000}",
-                                                                ),
-                                                                onChanged: (value) {
-                                                                  billingProvider.updateBillingItem(
-                                                                    index,
-                                                                    isLoose: '1',
-                                                                    variation: double.tryParse(value) ??
-                                                                        billProduct.variation * 1000,
-                                                                  );
-                                                                },
-                                                              ),
-                                                            )
-                                                                : Text(billProduct.variationUnit ?? ""),
-                                                          ),
-                                                          DataCell(
-                                                            billProduct.product.isLoose == '0'
-                                                                ? SizedBox(
-                                                              height: 40,
-                                                              child: TextFormField(
-                                                                controller: billingProvider.quantityControllers[index] ??
-                                                                    TextEditingController(
-                                                                      text: "${billProduct.quantity}",
-                                                                    ),
-                                                                decoration: const InputDecoration(
-                                                                  border: InputBorder.none, // Removes underline
-                                                                  isDense: true, // Reduces padding
-                                                                  contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                                                ),
-                                                                keyboardType: TextInputType.number,
-                                                                onChanged: (value) {
-                                                                  if (value.isNotEmpty) {
-                                                                    billingProvider.updateBillingItem(
-                                                                      index,
-                                                                      isLoose: '0',
-                                                                      quantity: int.tryParse(value) ?? billProduct.quantity,
-                                                                    );
-                                                                  } else {
-                                                                    billingProvider.updateBillingItem(
-                                                                      index,
-                                                                      isLoose: '0',
-                                                                      quantity: 0,
-                                                                    );
-                                                                  }
-                                                                },
-                                                              ),
-                                                            )
-                                                                : Text("${billProduct.quantity}"),
-                                                          ),
-
-                                                          DataCell(Text(TextFormat.formattedAmount(
-                                                              billProduct.mrpPerProduct()))),
-                                                          DataCell(Text(TextFormat.formattedAmount(
-                                                              billProduct.calculateOutPrice()))),
-                                                          DataCell(Text(
-                                                              billProduct.calculateDiscount().toStringAsFixed(2))),
-                                                          DataCell(Text(TextFormat.formattedAmount(
-                                                            billProduct.calculateSubtotal(),
-                                                          ))),
-                                                          DataCell(
-                                                            IconButton(
-                                                              icon: const Icon(Icons.delete, color: Colors.red),
-                                                              onPressed: () =>
-                                                                  billingProvider.removeBillingItem(index: index),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    }),
-                                                  ),
-                                                ),
+                                                  );
+                                                }),
                                               ),
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                            ),
+                                          )
+                                        ),
                                   ),
                                 ),
                               ),
@@ -1295,49 +1359,207 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                   ),
                   bottomNavigationBar: billingProvider.isLoading
                       ? 0.height
-                      : Container(
-                          color: Colors.white,
-                          padding: const EdgeInsets.only(
-                              top: 8, left: 12, right: 12, bottom: 8),
-                          height: screenHeight * 0.12,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BottomWidgets.valueCard(
-                                  context: context,
-                                  title: 'Items',
-                                  value: billingProvider
-                                      .calculatedTotalProducts()
-                                      .toString()),
-                              BottomWidgets.valueCard(
-                                  context: context,
-                                  title: 'Qty',
-                                  value: billingProvider
-                                      .calculatedTotalQuantity()
-                                      .toString()),
-                              BottomWidgets.valueCard(
-                                  context: context,
-                                  title: 'Subtotal',
-                                  value: billingProvider
-                                      .calculatedMrpSubtotal()
-                                      .toString()),
-                              BottomWidgets.valueCard(
-                                  context: context,
-                                  title: 'Discount',
-                                  value:
-                                      billingProvider.calculateTotalDiscount()),
-                              BottomWidgets.valueCard(
-                                  context: context,
-                                  title: 'GST',
-                                  value: '0.0%'),
-                              BottomWidgets.valueCard(
-                                  context: context,
-                                  title: 'Grand Total',
-                                  value: TextFormat.formattedAmount(
-                                      billingProvider.calculatedGrandTotal())),
-                            ],
-                          ),
+                      : SizedBox(
+                    height: 180,
+                        width: screenWidth,
+                        child: Column(
+                          children: [
+                            Container(
+                                color: Colors.white,
+                                padding: const EdgeInsets.only(
+                                    top: 20, left: 12, right: 12, bottom: 0),
+                                height: 90,
+                                width: screenWidth,
+                                child: DataTable(
+                                  headingRowHeight: 40, // Height for header
+                                  dataRowHeight: 40,    // Height for data
+                                  headingTextStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                  border: const TableBorder(
+                                    // left: BorderSide(width: 1, color: Color(0xff9E9E9E)),
+                                    // right: BorderSide(width: 1, color: Color(0xff9E9E9E)),
+                                    verticalInside: BorderSide(width: 1, color: Color(0xff9E9E9E)),
+                                    top: BorderSide.none,
+                                    bottom: BorderSide.none,
+                                    horizontalInside: BorderSide.none,
+                                  ),
+                                              headingRowColor: MaterialStateProperty.resolveWith(
+                                              (states) => Color(0xff0078D7),
+                                              ),
+                                  columns: const [
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            'Items',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            'Qty',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            'Subtotal',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            'Discount',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            'GST',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            'Grand Total',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+
+                                  rows: [
+                                    DataRow(
+                                      cells: [
+                                        DataCell(Center(
+                                          child: Text(
+                                              billingProvider.calculatedTotalProducts().toString()),
+                                        )),
+                                        DataCell(Center(
+                                          child: Text(
+                                              billingProvider.calculatedTotalQuantity().toString()),
+                                        )),
+                                        DataCell(Center(
+                                          child: Text(
+                                              billingProvider.calculatedMrpSubtotal().toString()),
+                                        )),
+                                        DataCell(Center(
+                                          child: Text(
+                                              billingProvider.calculateTotalDiscount().toString()),
+                                        )),
+                                        DataCell(Center(child: Text('0.0%'))),
+                                        DataCell(Center(
+                                          child: Text(
+                                              TextFormat.formattedAmount(
+                                                  billingProvider.calculatedGrandTotal())),
+                                        )),
+                                      ],
+                                    ),
+                                  ],
+                                )
+
+                                              ),
+                            Container(
+                              height: 90,
+                              width: screenWidth,
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 12, right: 12, bottom: 0),
+                              decoration: BoxDecoration(
+                                border: const Border(
+                                  left: BorderSide(color: Colors.black, width: 1),  // Outer left border
+                                  right: BorderSide(color: Colors.black, width: 1), // Outer right border
+                                ),
+                              ),
+                              child: DataTable(
+                                headingRowHeight: 40,
+                                dataRowHeight: 40,
+                                dividerThickness: 0, // No horizontal dividers
+                                headingTextStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                                border: const TableBorder(
+                                  verticalInside: BorderSide(color: Color(0xff9E9E9E), width: 1), // Column dividers
+                                  // left: BorderSide(color: Colors.black, width: 1),   // Left border
+                                  // right: BorderSide(color: Colors.black, width: 1),  // Right border
+                                ),
+                                headingRowColor: MaterialStateProperty.resolveWith(
+                                      (states) => Color(0xffD9EEFF),
+                                ),
+                                columns: const [
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'Loading Charge',
+                                          style: TextStyle(color: Color(0xff0078D7)),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'Cutting Charge',
+                                          style: TextStyle(color: Color(0xff0078D7)),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'Freight Charge',
+                                          style: TextStyle(color: Color(0xff0078D7)),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+
+                                rows: const [
+                                  DataRow(
+                                    cells: [
+                                      DataCell(Center(child: Text('0'))),
+                                      DataCell(Center(child: Text('0'))),
+                                      DataCell(Center(child: Text('0'))),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+
+                          ],
                         ),
+                      ),
                 ),
               ),
             ),
@@ -1586,6 +1808,33 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
     );
   }
 }
+DataColumn _buildHeader(String text, double width) {
+  return DataColumn(
+    label: SizedBox(
+      width: width,
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ),
+  );
+}
+
+DataCell _buildCell(String text, double width, Alignment alignment) {
+  return DataCell(
+    SizedBox(
+      width: width,
+      child: Align(
+        alignment: alignment,
+        child: Text(text),
+      ),
+    ),
+  );
+}
+
 
 /// Product Dropdown (Deprecated) :
 // MyDropdownMenu<ProductData>(
