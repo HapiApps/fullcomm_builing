@@ -282,7 +282,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                backgroundColor: AppColors.primary,
+                                backgroundColor: AppColors.white,
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 24),
                                 shape: RoundedRectangleBorder(
@@ -297,7 +297,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                       style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: AppColors.primary,
                                       ),
                                     ),
                                     const SizedBox(height: 20),
@@ -309,9 +309,9 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             Navigator.pop(context);
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColors.primary,
+                                            backgroundColor: AppColors.white,
                                             side: BorderSide(
-                                                color: AppColors.secondary),
+                                                color: AppColors.primary),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5),
@@ -320,7 +320,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                           child: const Text(
                                             "No",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: AppColors.primary,
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -399,9 +399,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                       TextSpan(
                                                         text: billingProvider.billNo ??'',
                                                         style: TextStyle(
-                                                          fontSize: 15,
+                                                          fontSize: 14,
                                                           color: AppColors.black,
-                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
                                                     ],
@@ -425,10 +424,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                     TextSpan(
                                                       text: billingProvider.cashierNameController.text,
                                                       style: TextStyle(
-                                                        fontSize: 15,
+                                                        fontSize: 14,
                                                         color: AppColors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ],
@@ -450,36 +447,12 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                         fontSize: 13,
                                                         color:
                                                             Color(0xff9E9E9E)),
-                                                // MyDropdownMenu2<CustomerData>(
-                                                //   width: screenWidth * 0.20,
-                                                //   labelText: 'Cust. Contact',
-                                                //   hintText: "Select Customer...",
-                                                //   menuHeight: screenHeight * 0.40,
-                                                //   enableSearch: true,
-                                                //   enableFilter: true,
-                                                //   dropdownMenuEntries: customerProvider.allCustomersList.map((customer) {
-                                                //     return MyDropdownMenuEntry2(
-                                                //       value: customer,
-                                                //       label: '${customer.name} - ${customer.mobile}',
-                                                //     );
-                                                //   }).toList(),
-                                                //   onSelected: (value) {
-                                                //     customerProvider.setCustomerDetails(
-                                                //       customerId: value!.userId.toString(),
-                                                //       customerName: value.name.toString(),
-                                                //       customerMobile: value.mobile.toString(),
-                                                //       customerAddress:
-                                                //       "${value.addressLine1 ?? ''} ${value.area ?? ''} ${value.city ?? ''}-${value.pincode ?? ''}",
-                                                //     );
-                                                //     _focusNode.requestFocus();
-                                                //   },
-                                                // ),
                                                 SizedBox(
                                                   width: screenWidth * 0.20,
                                                   height: 40,
                                                   child: KeyboardDropdownField<CustomerData>(
                                                     items: customerProvider.allCustomersList,
-                                                    borderRadius: 0,
+                                                    borderRadius: 5,
                                                     hintText: "Cust. Contact",
                                                     labelText: "",
                                                     labelBuilder: (customer) =>'${customer.name} - ${customer.mobile}',
@@ -556,10 +529,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                       .customerAddressController,
                                                   hintText: "Customer Address",
                                                   labelText: '',
-                                                  focusedBorderColor:
-                                                      Color(0xff9e9e9e),
-                                                  enabledBorderColor:
-                                                      Color(0xff9e9e9e),
+                                                  focusedBorderColor: Color(0xff9e9e9e),
+                                                  enabledBorderColor: Color(0xff9e9e9e),
                                                   fillColor: Color(0xffffffff),
                                                   borderRadius: 5,
                                                   //maxLines: null,
@@ -615,10 +586,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                 .barcodeScanner
                                                                 .text);
 
-                                                    billingProvider.selectedProduct =
-                                                        product;
-                                                    billingProvider
-                                                            .barcodeScanner
+                                                    billingProvider.selectedProduct =product;
+                                                    billingProvider.barcodeScanner
                                                             .text =
                                                         "${billingProvider.selectedProduct!.pTitle.toString()} ${billingProvider.selectedProduct!.pVariation.toString()}${billingProvider.selectedProduct!.unit.toString()}";
                                                     // billingProvider.updateTemporaryFields(

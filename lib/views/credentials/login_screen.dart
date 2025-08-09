@@ -62,14 +62,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: AppColors.darkBlue,
                         letterSpacing: 0.5,
                       ),
-                      25.height,
+                      10.height,
                       MyText(
                         text: 'Login to your account',
                         fontSize: TextFormat.responsiveFontSize(context, 19),
                         fontWeight: FontWeight.w500,
                         color: AppColors.darkBlue,
                       ),
-                      15.height,
+                      70.height,
                       MyTextField(
                         labelText: 'Mobile Number',
                         isOptional: true,
@@ -77,16 +77,24 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? screenWidth * 0.20
                             : screenWidth * 0.35,
                         controller: userProvider.mobileController,
+                        focusedBorderColor: AppColors.primary,
+                        enabledBorderColor: Color(0xff9e9e9e),
+                        fillColor: Color(0xffffffff),
+                        borderRadius: 5,
                         keyboardType: TextInputType.number,
                         autofocus: true,
                         textInputAction: TextInputAction.next,
                         inputFormatters: InputFormatters.mobileNumberInput,
                       ),
-                      8.height,
+                      25.height,
                       MyTextField(
                         labelText: 'Password',
                         isOptional: true,
                         obscureText: userProvider.isVisible,
+                        focusedBorderColor: AppColors.primary,
+                        enabledBorderColor: Color(0xff9e9e9e),
+                        fillColor: Color(0xffffffff),
+                        borderRadius: 5,
                         suffixIcon: IconButton(
                           icon: Icon(
                             userProvider.isVisible
@@ -158,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         },
                       ),
-                      8.height,
+                      50.height,
                       Buttons.loginButton(
                         context: context,
                         loadingButtonController:

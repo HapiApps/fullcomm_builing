@@ -177,78 +177,104 @@ class CustomersProvider with ChangeNotifier {
                       fontWeight: FontWeight.bold,
                     ),
                     6.height,
-                    MyTextField(
-                      labelText: "Customer's Name",
-                      controller: customerName,
-                      isOptional: false,
-                      borderRadius: 8,
-                     height: 60,
+                    Row(
+                      children: [
+                        MyTextField(
+                          labelText: "Customer's Name",
+                          controller: customerName,
+                          isOptional: false,
+                          borderRadius: 8,
+                         height: 60,
+                        ),
+                        10.width,
+                        MyTextField(
+                          labelText: "Mobile Number",
+                          isOptional: false,
+                          controller: customerMobile,
+                          inputFormatters: InputFormatters.mobileNumberInput,
+                          borderRadius: 8,
+                          height: 60,
+                        ),
+                      ],
                     ),
                     10.height,
-                    MyTextField(
-                      labelText: "Mobile Number",
-                      isOptional: false,
-                      controller: customerMobile,
-                      inputFormatters: InputFormatters.mobileNumberInput,
-                      borderRadius: 8,
-                      height: 60,
+                    Row(
+                      children: [
+                        MyTextField(
+                          labelText: "Door No, Street",
+                          isOptional: true,
+                          controller: customerStreet,
+                          textCapitalization: TextCapitalization.sentences,
+                          borderRadius: 8,
+                          height: 60,
+                        ),
+                        10.width,
+                        MyTextField(
+                          labelText: "Area",
+                          isOptional: true,
+                          controller: customerArea,
+                          textCapitalization: TextCapitalization.sentences,
+                          borderRadius: 8,
+                          height: 60,
+                        ),
+                      ],
                     ),
+
                     10.height,
-                    MyTextField(
-                      labelText: "Door No, Street",
-                      isOptional: true,
-                      controller: customerStreet,
-                      textCapitalization: TextCapitalization.sentences,
-                      borderRadius: 8,
-                      height: 60,
+                    Row(
+                      children: [
+                        MyTextField(
+                          labelText: "City",
+                          isOptional: false,
+                          controller: customerCity,
+                          textCapitalization: TextCapitalization.sentences,
+                          borderRadius: 8,
+                          height: 60,
+                        ),
+                        10.width,
+                        MyTextField(
+                          labelText: "Pincode",
+                          isOptional: false,
+                          controller: customerPincode,
+                          inputFormatters: InputFormatters.pinCodeInput,
+                          borderRadius: 8,
+                          height: 60,
+                        ),
+                      ],
                     ),
-                    6.height,
-                    MyTextField(
-                      labelText: "Area",
-                      isOptional: true,
-                      controller: customerArea,
-                      textCapitalization: TextCapitalization.sentences,
-                      borderRadius: 8,
-                      height: 60,
-                    ),
-                    10.height,
-                    MyTextField(
-                      labelText: "City",
-                      isOptional: false,
-                      controller: customerCity,
-                      textCapitalization: TextCapitalization.sentences,
-                      borderRadius: 8,
-                      height: 60,
-                    ),
-                    10.height,
-                    MyTextField(
-                      labelText: "Pincode",
-                      isOptional: false,
-                      controller: customerPincode,
-                      inputFormatters: InputFormatters.pinCodeInput,
-                      borderRadius: 8,
-                      height: 60,
-                    ),
+
                     10.height,
 
-                    MyDropDown(
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      width: MediaQuery.of(context).size.width * 0.25,
-                        labelText: "State",
-                      value: selectedState,
-                      borderRadius: 8,
-                      items: states.map((String state) {
-                        return DropdownMenuItem(
-                          value: state,
-                          child: Text(state),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          customerState.text = value;
-                          changeState(customerState.text.trim());
-                        }
-                      },
+                    Row(
+                      children: [
+                        MyDropDown(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                            labelText: "State",
+                          value: selectedState,
+                          borderRadius: 8,
+                          items: states.map((String state) {
+                            return DropdownMenuItem(
+                              value: state,
+                              child: Text(state),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              customerState.text = value;
+                              changeState(customerState.text.trim());
+                            }
+                          },
+                        ),
+                        10.width,
+                        MyTextField(
+                          labelText: "Country",
+                          isOptional: false,
+                          controller: customerCountry,
+                          borderRadius: 8,
+                          height: 60,
+                        ),
+                      ],
                     ),
                     // MyTextField(
                     //   labelText: "State",
@@ -256,14 +282,7 @@ class CustomersProvider with ChangeNotifier {
                     //   isOptional: true,
                     //   textCapitalization: TextCapitalization.sentences,
                     // ),
-                    10.height,
-                MyTextField(
-                labelText: "Country",
-                isOptional: false,
-                controller: customerCountry,
-                borderRadius: 8,
-                height: 60,
-              ), 10.height,
+              10.height,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

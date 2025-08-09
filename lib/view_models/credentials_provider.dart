@@ -72,7 +72,7 @@ class UserDataProvider with ChangeNotifier {
         if (!context.mounted) return;
         Toasts.showToastBar(
           context: context,
-          text: 'Incorrect Mobile/Password.',
+          text: 'Invalid username or password.',
           color: AppColors.errorMessage,
         );
         log("Login Error: ${response.message}");

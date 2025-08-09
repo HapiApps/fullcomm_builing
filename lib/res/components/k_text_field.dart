@@ -60,12 +60,6 @@ class MyTextField extends StatelessWidget {
   final Color? enabledBorderColor;
   final String? labelBlackText;
 
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -112,7 +106,6 @@ class MyTextField extends StatelessWidget {
           prefixIcon: prefixIcon,
           contentPadding: const EdgeInsets.fromLTRB(10, 30, 5, 0),
           border: OutlineInputBorder(
-
             borderRadius: BorderRadius.circular(borderRadius ?? 20),
             borderSide:  BorderSide(
               width: 0,

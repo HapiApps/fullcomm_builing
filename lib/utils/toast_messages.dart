@@ -71,7 +71,7 @@ class Toasts {
         child: Material(
           color: Colors.transparent,
           child: Container(
-            width: 300,
+            width: 400,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               color: color ?? Colors.black87,
