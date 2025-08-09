@@ -9,10 +9,8 @@ import '../data/local_data.dart';
 import '../data/project_data.dart';
 import '../res/colors.dart';
 import '../utils/toast_messages.dart';
-import '../views/billing_view/billing_screen.dart';
 import '../views/billing_view/new_billing_screen.dart';
 import '../views/credentials/login_screen.dart';
-import '../views/orders/order_detail_page.dart';
 
 class UserDataProvider with ChangeNotifier {
   bool _isVisible = true;
@@ -69,8 +67,7 @@ class UserDataProvider with ChangeNotifier {
           color: AppColors.successMessage,
         );
         if (!context.mounted) return;
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const NewBillingScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const NewBillingScreen()));
       } else {
         if (!context.mounted) return;
         Toasts.showToastBar(

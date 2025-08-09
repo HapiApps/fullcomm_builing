@@ -71,7 +71,7 @@ class BillingItem {
       // Loose product: variation * pricePerGram (Variation is in gram)
       return (variation * double.parse(product.pricePerG));
     } else {
-      // Regular product: price * quantity
+
       return (double.parse(product.outPrice.toString()) * quantity);
     }
   }

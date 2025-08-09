@@ -12,6 +12,7 @@ class KeyboardDropdownField<T extends Object> extends StatefulWidget {
   final FocusNode? focusNode;
   final String? hintText;
   final String? labelText;
+  final double borderRadius;
   final TextEditingController? textEditingController;
   final bool Function(String input, T item)? filterFn;
   final VoidCallback? onClear;
@@ -29,7 +30,7 @@ class KeyboardDropdownField<T extends Object> extends StatefulWidget {
     this.hintText,
     this.labelText,
     this.textEditingController,
-    this.onClear,
+    this.onClear, required this.borderRadius,
   });
 
   @override
@@ -96,7 +97,7 @@ class _KeyboardDropdownFieldState<T extends Object>
             labelText: widget.labelText,
             hintText: widget.hintText,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: const BorderSide(
                 width: 0,
                 color: AppColors.textFieldBackground,
@@ -118,14 +119,14 @@ class _KeyboardDropdownFieldState<T extends Object>
                   size: 14,
                 )),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: const BorderSide(
                 width: 0,
                 color: Color(0xff9E9E9E),
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(widget.borderRadius),
               borderSide: const BorderSide(
                 width: 0,
                 color:Color(0xff9E9E9E),

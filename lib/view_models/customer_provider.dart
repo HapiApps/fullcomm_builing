@@ -76,6 +76,7 @@ class CustomersProvider with ChangeNotifier {
   TextEditingController customerArea = TextEditingController();
   TextEditingController customerCity = TextEditingController();
   TextEditingController customerPincode = TextEditingController();
+  TextEditingController customerCountry = TextEditingController();
   TextEditingController customerState =
       TextEditingController(text: 'TamilNadu');
 
@@ -259,7 +260,7 @@ class CustomersProvider with ChangeNotifier {
                 MyTextField(
                 labelText: "Country",
                 isOptional: false,
-                controller: customerPincode,
+                controller: customerCountry,
                 borderRadius: 8,
                 height: 60,
               ), 10.height,

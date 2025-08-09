@@ -1,16 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fullcomm_billing/models/products_response.dart';
 import 'package:fullcomm_billing/res/colors.dart';
-import 'package:fullcomm_billing/res/components/bottom_widgets.dart';
 import 'package:fullcomm_billing/res/components/buttons.dart';
 import 'package:fullcomm_billing/res/components/k_loadings.dart';
 import 'package:fullcomm_billing/res/components/k_text.dart';
 import 'package:fullcomm_billing/res/components/screen_widgtes.dart';
-import 'package:fullcomm_billing/res/widgets/divider_widgets.dart';
 import 'package:fullcomm_billing/utils/input_formatters.dart';
 import 'package:fullcomm_billing/utils/sized_box.dart';
 import 'package:fullcomm_billing/utils/text_formats.dart';
@@ -19,17 +16,13 @@ import 'package:fullcomm_billing/view_models/billing_provider.dart';
 import 'package:fullcomm_billing/view_models/credentials_provider.dart';
 import 'package:fullcomm_billing/view_models/customer_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../data/project_data.dart';
 import '../../models/billing_product.dart';
 import '../../models/customers_response.dart';
 import '../../models/place_order.dart';
 import '../../res/components/customer_widgets.dart';
-import '../../res/components/k_dropdown_menu_2.dart';
 import '../../res/components/k_text_field.dart';
 import '../../res/components/keyboard_search.dart';
-import '../../utils/header.dart';
-import '../../utils/non_zero_int_format.dart';
 import '../orders/order_detail_page.dart';
 
 class NextPageIntent extends Intent {
@@ -87,15 +80,13 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
     _focusNode.requestFocus();
     _focusNodeSearch.requestFocus();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
       Provider.of<BillingProvider>(context, listen: false)
           .getProducts(); // Fetch all Products & Stocks
       Provider.of<CustomersProvider>(context, listen: false)
           .getAllCustomers(context); // Fetch all Products & Stocks
       Provider.of<CustomersProvider>(context, listen: false)
           .resetCustomerDetails(); // Reset Customer details
-      Provider.of<BillingProvider>(context, listen: false).fetchBill(
-          context);
+      Provider.of<BillingProvider>(context, listen: false).fetchBill(context);
       Provider.of<BillingProvider>(context, listen: false)
           .setBillingItems([]); // Set Billing Items with Empty Table
     });
@@ -211,7 +202,6 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
               ),
               AltOnlyIntent: CallbackAction<Intent>(
                 onInvoke: (intent) {
-                  print('Alt alone pressed!');
                   return null;
                 },
               ),
@@ -227,318 +217,149 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                     backgroundColor: Color(0xffffffff),
                     toolbarHeight: 100,
                     leadingWidth: 150,
-                    leading:
-                    Image.asset('assets/logo/app_logo.png',width: 100,height: 90,),
-                    title:Text("ARUU Billing Portal",style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                    ),),
+                    leading: Image.asset(
+                      'assets/logo/app_logo.png',
+                      width: 100,
+                      height: 90,
+                    ),
+
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MyText(
+                          text: "ARUU Billing Portal",
+                              color: Colors.black,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold
+                        ),
+                        MyText(
+                            text: " v${ProjectData.version}",
+                            color: Colors.grey,
+                            fontSize: 15,
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
+                    ),
                     centerTitle: true,
-
-
-                    // Text.rich(
-                    //                     TextSpan(
-                    //                       text: '',
-                    //                       style: TextStyle(
-                    //                         fontSize: 15,
-                    //                         color: AppColors.ash,
-                    //                         fontWeight: FontWeight.bold,
-                    //                       ),
-                    //                       children: [
-                    //                         TextSpan(
-                    //                           text: billingProvider.billNo ?? '',
-                    //                           style: TextStyle(
-                    //                             fontSize: 15,
-                    //                             color: AppColors.black,
-                    //                             fontWeight: FontWeight.bold,
-                    //                           ),
-                    //                         ),
-                    //                       ],
-                    //                     ),
-                    // ),
-                  actions: [
-                                        CustomerFieldWidgets.iconButton(
-                                        context: context,
-                                        toolTip: 'Search bill',
-                                        icon: 'assets/images/bill.svg',
-                                        onPressed: () {
-                                        Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const OrderDetailPage()),
-                                        );
-                                        },
-                                        ),20.width,
-                                        CustomerFieldWidgets.iconButton(
-                                        context: context,
-                                        toolTip: 'Add Customer',
-                                        icon: 'assets/images/customer.svg',
-                                        onPressed: () {
-                                        customerProvider.addCustomerDialog(context);
-                                        },
-              ),20.width,
-              CustomerFieldWidgets.iconButton(
-              context: context,
-              toolTip: 'Refresh Stock Status',
-              icon: 'assets/images/Refresh.svg',
-
-              onPressed: () {
-              billingProvider.getProducts();
-              },
-
-              ),20.width,
-              CustomerFieldWidgets.iconButton(
-              context: context,
-              toolTip: 'Logout',
-              icon: 'assets/images/logout.svg',
-              onPressed: () {
-              showDialog(
-              context: context,
-              builder: (BuildContext context) {
-              return AlertDialog(
-              backgroundColor: AppColors.primary,
-              contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-              shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              ),
-              content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              const Text(
-              "Do you want to log out?",
-              style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-              ElevatedButton(
-              onPressed: () {
-              Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.secondary),
-              shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-              ),
-              ),
-              child: const Text(
-              "No",
-              style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              ),
-              ),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-              onPressed: () async {
-              userDataProvider.logout(context);
-              },
-              style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.secondary),
-              shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-              ),
-              ),
-              child: const Text(
-              "Yes",
-              style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              ),
-              ),
-              ),
-              ],
-              ),
-              ],
-              ),
-              );
-              },
-              );
-              },
-              ),
-                                        ],
+                    actions: [
+                      CustomerFieldWidgets.iconButton(
+                        context: context,
+                        toolTip: 'Search bill',
+                        icon: 'assets/images/bill.svg',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const OrderDetailPage()),
+                          );
+                        },
+                      ),
+                      20.width,
+                      CustomerFieldWidgets.iconButton(
+                        context: context,
+                        toolTip: 'Add Customer',
+                        icon: 'assets/images/customer.svg',
+                        onPressed: () {
+                          customerProvider.addCustomerDialog(context);
+                        },
+                      ),
+                      20.width,
+                      CustomerFieldWidgets.iconButton(
+                        context: context,
+                        toolTip: 'Refresh Stock Status',
+                        icon: 'assets/images/Refresh.svg',
+                        onPressed: () {
+                          billingProvider.getProducts();
+                        },
+                      ),
+                      20.width,
+                      CustomerFieldWidgets.iconButton(
+                        context: context,
+                        toolTip: 'Logout',
+                        icon: 'assets/images/logout.svg',
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: AppColors.primary,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 24),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Do you want to log out?",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.primary,
+                                            side: BorderSide(
+                                                color: AppColors.secondary),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "No",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            userDataProvider.logout(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.primary,
+                                            side: BorderSide(
+                                                color: AppColors.secondary),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "Yes",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  // PreferredSize(
-                  //   preferredSize: Size.fromHeight(screenHeight * 0.25),
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       _focusNode.requestFocus();
-                  //     },
-                  //     child: Container(
-                  //       color: AppColors.white,
-                  //       padding: const EdgeInsets.only(bottom: 5),
-                  //       child: Column(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         children: [
-                  //           Align(
-                  //             alignment: Alignment.centerLeft,
-                  //             child: FittedBox(
-                  //               fit: BoxFit.cover,
-                  //               child: Image.asset('assets/logo/app_logo.png',width: 100,height: 50,),
-                  //             ),
-                  //           ),
-                  //           Container(
-                  //             padding: const EdgeInsets.only(
-                  //               left: 20
-                  //             ),
-                  //             child: Row(
-                  //               children: [
-                  //                 Text.rich(
-                  //                   TextSpan(
-                  //                     text: 'Bill No :  ',
-                  //                     style: TextStyle(
-                  //                       fontSize: 15,
-                  //                       color: AppColors.ash,
-                  //                       fontWeight: FontWeight.bold,
-                  //                     ),
-                  //                     children: [
-                  //                       TextSpan(
-                  //                         text: billingProvider.billNo ?? '',
-                  //                         style: TextStyle(
-                  //                           fontSize: 15,
-                  //                           color: AppColors.black,
-                  //                           fontWeight: FontWeight.bold,
-                  //                         ),
-                  //                       ),
-                  //                     ],
-                  //                   ),
-                  //                 ),
-                  //                 const Spacer(),
-                  //                 Row(
-                  //                   children: [
-                  //                     CustomerFieldWidgets.iconButton(
-                  //                       context: context,
-                  //                       toolTip: 'Search bill',
-                  //                       icon: 'assets/images/bill.svg',
-                  //                       onPressed: () {
-                  //                         Navigator.push(
-                  //                           context,
-                  //                           MaterialPageRoute(builder: (context) => const OrderDetailPage()),
-                  //                         );
-                  //                       },
-                  //                     ),20.width,
-                  //                     CustomerFieldWidgets.iconButton(
-                  //                       context: context,
-                  //                       toolTip: 'Add Customer',
-                  //                       icon: 'assets/images/customer.svg',
-                  //                       onPressed: () {
-                  //                         customerProvider.addCustomerDialog(context);
-                  //                       },
-                  //                     ),20.width,
-                  //                     CustomerFieldWidgets.iconButton(
-                  //                       context: context,
-                  //                       toolTip: 'Refresh Stock Status',
-                  //                       icon: 'assets/images/Refresh.svg',
-                  //
-                  //                       onPressed: () {
-                  //                         billingProvider.getProducts();
-                  //                       },
-                  //
-                  //                     ),20.width,
-                  //                     CustomerFieldWidgets.iconButton(
-                  //                       context: context,
-                  //                       toolTip: 'Logout',
-                  //                       icon: 'assets/images/logout.svg',
-                  //                       onPressed: () {
-                  //                         showDialog(
-                  //                           context: context,
-                  //                           builder: (BuildContext context) {
-                  //                             return AlertDialog(
-                  //                               backgroundColor: AppColors.primary,
-                  //                               contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-                  //                               shape: RoundedRectangleBorder(
-                  //                                 borderRadius: BorderRadius.circular(8),
-                  //                               ),
-                  //                               content: Column(
-                  //                                 mainAxisSize: MainAxisSize.min,
-                  //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                  //                                 children: [
-                  //                                   const Text(
-                  //                                     "Do you want to log out?",
-                  //                                     style: TextStyle(
-                  //                                       fontSize: 17,
-                  //                                       fontWeight: FontWeight.bold,
-                  //                                       color: Colors.white,
-                  //                                     ),
-                  //                                   ),
-                  //                                   const SizedBox(height: 20),
-                  //                                   Row(
-                  //                                     mainAxisAlignment: MainAxisAlignment.end,
-                  //                                     children: [
-                  //                                       ElevatedButton(
-                  //                                         onPressed: () {
-                  //                                           Navigator.pop(context);
-                  //                                         },
-                  //                                         style: ElevatedButton.styleFrom(
-                  //                                           backgroundColor: AppColors.primary,
-                  //                                           side: BorderSide(color: AppColors.secondary),
-                  //                                           shape: RoundedRectangleBorder(
-                  //                                             borderRadius: BorderRadius.circular(5),
-                  //                                           ),
-                  //                                         ),
-                  //                                         child: const Text(
-                  //                                           "No",
-                  //                                           style: TextStyle(
-                  //                                             color: Colors.white,
-                  //                                             fontSize: 14,
-                  //                                             fontWeight: FontWeight.bold,
-                  //                                           ),
-                  //                                         ),
-                  //                                       ),
-                  //                                       const SizedBox(width: 10),
-                  //                                       ElevatedButton(
-                  //                                         onPressed: () async {
-                  //                                           userDataProvider.logout(context);
-                  //                                         },
-                  //                                         style: ElevatedButton.styleFrom(
-                  //                                           backgroundColor: AppColors.primary,
-                  //                                           side: BorderSide(color: AppColors.secondary),
-                  //                                           shape: RoundedRectangleBorder(
-                  //                                             borderRadius: BorderRadius.circular(5),
-                  //                                           ),
-                  //                                         ),
-                  //                                         child: const Text(
-                  //                                           "Yes",
-                  //                                           style: TextStyle(
-                  //                                             color: Colors.white,
-                  //                                             fontSize: 14,
-                  //                                             fontWeight: FontWeight.bold,
-                  //                                           ),
-                  //                                         ),
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ],
-                  //                               ),
-                  //                             );
-                  //                           },
-                  //                         );
-                  //                       },
-                  //                     ),
-                  //                   ],
-                  //                 )
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           // 30.height,
-                  //           // Bottom Section (Customer Details and Inputs)
-                  //
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   body: GestureDetector(
                     onTap: () {
                       _focusNode.requestFocus();
@@ -550,8 +371,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                             children: [
                               Container(
                                 height: 90,
-
-                                color:Color(0xfffdfafa),
+                                color: Color(0xfffdfafa),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -563,7 +383,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                             child: Column(
-                                              crossAxisAlignment:CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text.rich(
                                                   TextSpan(
@@ -571,11 +392,12 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                     style: TextStyle(
                                                       fontSize: 15,
                                                       color: AppColors.ash,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                     children: [
                                                       TextSpan(
-                                                        text: billingProvider.billNo ?? '',
+                                                        text: billingProvider.billNo ??'',
                                                         style: TextStyle(
                                                           fontSize: 15,
                                                           color: AppColors.black,
@@ -601,68 +423,131 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                   ),
                                                   children: [
                                                     TextSpan(
-                                                      text: billingProvider.billNo ?? '',
+                                                      text: billingProvider.cashierNameController.text,
                                                       style: TextStyle(
                                                         fontSize: 15,
                                                         color: AppColors.black,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                              // MyTextField(
-                                              //   width: screenWidth * 0.20,
-                                              //   height: 41,
-                                              //   controller:
-                                              //   billingProvider.cashierNameController,
-                                              //   hintText: 'Cashier Name',
-                                              //   labelText: '',
-                                              //
-                                              //   fillColor: Color(0xffffffff),
-                                              //   focusedBorderColor: Color(0xff9e9e9e),
-                                              //   enabledBorderColor: Color(0xff9e9e9e),
-                                              //   isOptional: true,
-                                              //   borderRadius: 5,
-                                              //   textInputAction: TextInputAction.done,
-                                              //   onChanged: (value) async {
-                                              //     // Your onChanged logic
-                                              //   },
-                                              // ),
                                             ],
                                           ),
 
                                           // Customer Address
                                           Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 10, 0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text('Customer', style: TextStyle(fontSize: 15,color:Color(0xff9E9E9E))),
-                                                MyTextField(
+                                                MyText(
+                                                    text: 'Customer',
+                                                        fontSize: 13,
+                                                        color:
+                                                            Color(0xff9E9E9E)),
+                                                // MyDropdownMenu2<CustomerData>(
+                                                //   width: screenWidth * 0.20,
+                                                //   labelText: 'Cust. Contact',
+                                                //   hintText: "Select Customer...",
+                                                //   menuHeight: screenHeight * 0.40,
+                                                //   enableSearch: true,
+                                                //   enableFilter: true,
+                                                //   dropdownMenuEntries: customerProvider.allCustomersList.map((customer) {
+                                                //     return MyDropdownMenuEntry2(
+                                                //       value: customer,
+                                                //       label: '${customer.name} - ${customer.mobile}',
+                                                //     );
+                                                //   }).toList(),
+                                                //   onSelected: (value) {
+                                                //     customerProvider.setCustomerDetails(
+                                                //       customerId: value!.userId.toString(),
+                                                //       customerName: value.name.toString(),
+                                                //       customerMobile: value.mobile.toString(),
+                                                //       customerAddress:
+                                                //       "${value.addressLine1 ?? ''} ${value.area ?? ''} ${value.city ?? ''}-${value.pincode ?? ''}",
+                                                //     );
+                                                //     _focusNode.requestFocus();
+                                                //   },
+                                                // ),
+                                                SizedBox(
                                                   width: screenWidth * 0.20,
-                                                  height: 41,
-                                                  isOptional: true,
-                                                  controller: customerProvider
-                                                      .customerAddressController,
-                                                  hintText: "Customer Address",
-                                                  labelText: '',
-                                                  focusedBorderColor: Color(0xff9e9e9e),
-                                                  enabledBorderColor: Color(0xff9e9e9e),
-                                                  fillColor: Color(0xffffffff),
-                                                  borderRadius: 5,
-                                                  //maxLines: null,
-                                                  //minLines: 2,
+                                                  height: 40,
+                                                  child: KeyboardDropdownField<CustomerData>(
+                                                    items: customerProvider.allCustomersList,
+                                                    borderRadius: 0,
+                                                    hintText: "Cust. Contact",
+                                                    labelText: "",
+                                                    labelBuilder: (customer) =>'${customer.name} - ${customer.mobile}',
+                                                    itemBuilder: (customer) =>
+                                                        Container(
+                                                          width: screenWidth * 0.20,
+                                                          padding: const EdgeInsets
+                                                              .fromLTRB(10, 5, 10, 5),
+                                                          child: MyText(
+                                                            text: '${customer.name} - ${customer.mobile}',
+                                                            color: Colors.black,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                    textEditingController: dropdownController,
+                                                    onSelected: (value) {
+                                                          customerProvider.setCustomerDetails(
+                                                            customerId: value.userId.toString(),
+                                                            customerName: value.name.toString(),
+                                                            customerMobile: value.mobile.toString(),
+                                                            customerAddress:
+                                                            "${value.addressLine1 ?? ''} ${value.area ?? ''} ${value.city ?? ''}-${value.pincode ?? ''}",
+                                                          );
+                                                          _focusNode.requestFocus();
+                                                    },
+                                                    onClear: () {
+                                                      customerProvider.setCustomerDetails(
+                                                        customerId: "",
+                                                        customerName: "",
+                                                        customerMobile: "",
+                                                        customerAddress: "",
+                                                      );
+                                                      //quantityVariationController.clear();
+                                                    },
+                                                  ),
                                                 ),
+                                                // MyTextField(
+                                                //   width: screenWidth * 0.20,
+                                                //   height: 41,
+                                                //   isOptional: true,
+                                                //   controller: customerProvider
+                                                //       .customerAddressController,
+                                                //   hintText: "Customer",
+                                                //   labelText: '',
+                                                //   focusedBorderColor:
+                                                //       Color(0xff9e9e9e),
+                                                //   enabledBorderColor:
+                                                //       Color(0xff9e9e9e),
+                                                //   fillColor: Color(0xffffffff),
+                                                //   borderRadius: 5,
+                                                //   //maxLines: null,
+                                                //   //minLines: 2,
+                                                // ),
                                               ],
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 10, 0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text('Customer Address', style: TextStyle(fontSize: 13,color:Color(0xff9E9E9E))),
+                                                MyText(
+                                                    text: 'Customer Address',
+                                                        fontSize: 13,
+                                                        color:
+                                                            Color(0xff9E9E9E)),
                                                 MyTextField(
                                                   width: screenWidth * 0.20,
                                                   height: 41,
@@ -671,8 +556,10 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                       .customerAddressController,
                                                   hintText: "Customer Address",
                                                   labelText: '',
-                                                  focusedBorderColor: Color(0xff9e9e9e),
-                                                  enabledBorderColor: Color(0xff9e9e9e),
+                                                  focusedBorderColor:
+                                                      Color(0xff9e9e9e),
+                                                  enabledBorderColor:
+                                                      Color(0xff9e9e9e),
                                                   fillColor: Color(0xffffffff),
                                                   borderRadius: 5,
                                                   //maxLines: null,
@@ -685,12 +572,15 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                       ),
                                     ],
                                   ),
-                                ),),
+                                ),
+                              ),
                               10.height,
+
                               /// Fixed Header:
                               // Row containing Search Dropdown and Variation/Quantity field
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   /// Searchable DropdownMenu (Header)
                                   Padding(
@@ -701,7 +591,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             ? MyTextField(
                                                 width: screenWidth * 0.35,
                                                 height: 45,
-                                          isOptional: true,
+                                                isOptional: true,
 
                                                 controller: billingProvider
                                                     .barcodeScanner,
@@ -725,8 +615,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                                 .barcodeScanner
                                                                 .text);
 
-                                                    billingProvider
-                                                            .selectedProduct =
+                                                    billingProvider.selectedProduct =
                                                         product;
                                                     billingProvider
                                                             .barcodeScanner
@@ -740,8 +629,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                     //           ? 1
                                                     //           : null,
                                                     // );
-                                                    fieldFocusNode
-                                                        .requestFocus();
+                                                    fieldFocusNode.requestFocus();
                                                   } catch (e) {
                                                     Toasts.showToastBar(
                                                         context: context,
@@ -754,21 +642,17 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                               )
                                             : SizedBox(
                                                 width: screenWidth * 0.55,
-                                                child: KeyboardDropdownField<
-                                                    ProductData>(
+                                                child: KeyboardDropdownField<ProductData>(
+                                                  borderRadius: 20,
                                                   focusNode: dropdownFocusNode,
-                                                  items: billingProvider
-                                                      .productsList,
+                                                  items: billingProvider.productsList,
                                                   hintText: "Search Product...",
                                                   labelText: " Product",
-                                                  labelBuilder: (product) => product
-                                                              .isLoose ==
-                                                          '0'
+                                                  labelBuilder: (product) => product.isLoose == '0'
                                                       ? '${product.pTitle} ${product.pVariation}${product.unit}'
                                                       : '${product.pTitle} (${product.pVariation})',
                                                   itemBuilder: (product) =>
                                                       Container(
-
                                                     width: screenWidth * 0.55,
                                                     padding: const EdgeInsets
                                                         .fromLTRB(10, 5, 10, 5),
@@ -789,9 +673,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                         SizedBox(
                                                           width: 50,
                                                           child: MyText(
-                                                            text: product
-                                                                        .isLoose ==
-                                                                    '1'
+                                                            text: product.isLoose == '1'
                                                                 ? "₹${(double.parse(product.mrp.toString()) / (double.parse(product.stockQty.toString()) / 1000)).toStringAsFixed(1)}/kg"
                                                                 : "₹${double.parse(product.mrp.toString()).toStringAsFixed(1)}",
                                                             fontSize: 14,
@@ -805,23 +687,25 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                   textEditingController: dropdownController,
                                                   onSelected: (product) {
                                                     billingProvider.selectedProduct = product;
-                                                    // billingProvider.updateTemporaryFields(
-                                                    //   variation: product.isLoose == '1'
-                                                    //           ? 1.0
-                                                    //           : null,
-                                                    //   quantity: product.isLoose == '0'
-                                                    //           ? 1
-                                                    //           : null,
-                                                    // );
-                                                    fieldFocusNode.requestFocus();
+                                                    billingProvider.updateTemporaryFields(
+                                                      variation: product.isLoose == '1'
+                                                              ? 1.0
+                                                              : null,
+                                                      quantity: product.isLoose == '0'
+                                                              ? 1
+                                                              : null,
+                                                    );
+                                                    fieldFocusNode
+                                                        .requestFocus();
                                                   },
                                                   onClear: () {
-                                                    billingProvider.selectedProduct = null;
-                                                    // billingProvider
-                                                    //     .updateTemporaryFields(
-                                                    //   quantity: 0,
-                                                    //   variation: 0.0,
-                                                    // );
+                                                    billingProvider
+                                                        .selectedProduct = null;
+                                                    billingProvider
+                                                        .updateTemporaryFields(
+                                                      quantity: 0,
+                                                      variation: 0.0,
+                                                    );
                                                     //quantityVariationController.clear();
                                                   },
                                                 ),
@@ -833,10 +717,12 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                 : 'Scan Products',
                                             onPressed: () {
                                               //controller.barcodeMode.value = !controller.barcodeMode.value;
-                                              if(billingProvider.barcodeMode){
-                                                dropdownFocusNode.requestFocus();
+                                              if (billingProvider.barcodeMode) {
+                                                dropdownFocusNode
+                                                    .requestFocus();
                                               }
-                                              billingProvider.barcodeModeChange();
+                                              billingProvider
+                                                  .barcodeModeChange();
 
                                               print(
                                                   "scan ${billingProvider.barcodeMode}");
@@ -858,8 +744,10 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             isOptional: true,
                                             height: 50,
 
-                                            focusedBorderColor: Color(0xff9e9e9e),
-                                            enabledBorderColor: Color(0xff9e9e9e),
+                                            focusedBorderColor:
+                                                Color(0xff9e9e9e),
+                                            enabledBorderColor:
+                                                Color(0xff9e9e9e),
                                             controller:
                                                 quantityVariationController,
                                             labelText: billingProvider
@@ -879,10 +767,14 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                             //   StrictNonZeroIntFormatter(),
                                             // ],
                                             onChanged: (value) {
-                                              print(
-                                                  "billingProvider.selectedProduct ${billingProvider.selectedProduct}");
-                                              if (billingProvider.selectedProduct != null) {
-                                                if (billingProvider.selectedProduct!.isLoose == '1') {
+
+                                              if (billingProvider
+                                                      .selectedProduct !=
+                                                  null) {
+                                                if (billingProvider
+                                                        .selectedProduct!
+                                                        .isLoose ==
+                                                    '1') {
                                                   billingProvider
                                                       .updateTemporaryFields(
                                                     variation:
@@ -943,7 +835,8 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                         ? billingProvider
                                                             .temporaryQuantity
                                                         : 1,
-                                                    proController: TextEditingController(),
+                                                    proController:
+                                                        TextEditingController(),
                                                     proFocusNode: FocusNode(),
                                                   ),
                                                 );
@@ -980,21 +873,25 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                 .getLastOrderDetails(context);
                                           },
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: AppColors.primary,
+                                            backgroundColor: AppColors.primary,
                                             shape: RoundedRectangleBorder(
-
-                                              borderRadius: BorderRadius.circular(6),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
                                               side: BorderSide(
-                                                color:Color(0xff0055989), // ✅ Border color here
-                                                width: 1.5,           // ✅ Border thickness
-                                              ),// ✅ Set border radius here
+                                                color: Color(
+                                                    0xff0055989),
+                                                width:
+                                                    1.5,
+                                              ),
                                             ),
-                                            minimumSize: const Size(120, 48), ),
+                                            minimumSize: const Size(120, 48),
+                                          ),
                                           child: MyText(
                                             text: 'Reprint',
                                             color: AppColors.secondary,
-                                            fontSize: TextFormat.responsiveFontSize(
-                                                context, 12),
+                                            fontSize:
+                                                TextFormat.responsiveFontSize(
+                                                    context, 12),
                                             letterSpacing: 1,
                                           ),
                                         ),
@@ -1011,62 +908,63 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                                   .clear();
                                               showPaymentBalanceDialog(context,
                                                   onPressPrint: () {
-                                                    if (customerProvider
-                                                        .selectedCustomerId.isEmpty) {
-                                                      customerProvider
-                                                          .setCustomerDetails(
+                                                if (customerProvider
+                                                    .selectedCustomerId
+                                                    .isEmpty) {
+                                                  customerProvider
+                                                      .setCustomerDetails(
                                                           customerId:
-                                                          ProjectData.cashId,
+                                                              ProjectData
+                                                                  .cashId,
                                                           customerName: "Cash",
                                                           customerMobile:
-                                                          "1212121212",
+                                                              "1212121212",
                                                           customerAddress:
-                                                          "Chennai");
-                                                    }
-                                                    billingProvider
-                                                        .placeOrderAndPrintBill(
-                                                      context,
-                                                      order: Order(
-                                                          customerMobile: customerProvider
-                                                              .selectedCustomerMobile,
-                                                          customerId: customerProvider
-                                                              .selectedCustomerId,
-                                                          customerName: customerProvider
-                                                              .selectedCustomerName,
-                                                          customerAddress: customerProvider
-                                                              .customerAddressController
-                                                              .text,
-                                                          cashier: billingProvider
-                                                              .cashierNameController
-                                                              .text
-                                                              .trim(),
-                                                          paymentMethod: billingProvider
-                                                              .selectBillMethod
-                                                              .toString(),
-                                                          paymentId: billingProvider.selectBillMethod.toString() == "Cash"
-                                                              ? '2'
-                                                              : '1',
-                                                          products: billingProvider
-                                                              .billingItems,
-                                                          orderGrandTotal:
-                                                          billingProvider
-                                                              .calculatedGrandTotal()
-                                                              .toString(),
-                                                          orderSubTotal: billingProvider
-                                                              .calculatedGrandTotal()
-                                                              .toString(),
-                                                          receivedAmt: billingProvider
+                                                              "Chennai");
+                                                }
+                                                billingProvider.placeOrderAndPrintBill(
+                                                  context,
+                                                  order: Order(
+                                                      customerMobile: customerProvider
+                                                          .selectedCustomerMobile,
+                                                      customerId: customerProvider
+                                                          .selectedCustomerId,
+                                                      customerName: customerProvider
+                                                          .selectedCustomerName,
+                                                      customerAddress: customerProvider
+                                                          .customerAddressController
+                                                          .text,
+                                                      cashier: billingProvider
+                                                          .cashierNameController
+                                                          .text
+                                                          .trim(),
+                                                      paymentMethod: billingProvider
+                                                          .selectBillMethod
+                                                          .toString(),
+                                                      paymentId: billingProvider.selectBillMethod.toString() == "Cash"
+                                                          ? '2'
+                                                          : '1',
+                                                      products: billingProvider
+                                                          .billingItems,
+                                                      orderGrandTotal: billingProvider
+                                                          .calculatedGrandTotal()
+                                                          .toString(),
+                                                      orderSubTotal: billingProvider
+                                                          .calculatedGrandTotal()
+                                                          .toString(),
+                                                      receivedAmt: billingProvider
                                                               .paymentReceived
                                                               .text
                                                               .isEmpty
-                                                              ? "0.0"
-                                                              : double.parse(billingProvider.paymentReceived.text).toStringAsFixed(1),
-                                                          payBackAmt: (((billingProvider.paymentReceived.text.isEmpty ? 0.0 : double.parse(billingProvider.paymentReceived.text)) - billingProvider.calculatedGrandTotal()).abs().toStringAsFixed(2)),
-                                                          savings: '${billingProvider.billingItems.fold(0.0, (total, item) => total + item.calculateDiscount())}'),
-                                                    );
-                                                  });
+                                                          ? "0.0"
+                                                          : double.parse(billingProvider.paymentReceived.text).toStringAsFixed(1),
+                                                      payBackAmt: (((billingProvider.paymentReceived.text.isEmpty ? 0.0 : double.parse(billingProvider.paymentReceived.text)) - billingProvider.calculatedGrandTotal()).abs().toStringAsFixed(2)),
+                                                      savings: '${billingProvider.billingItems.fold(0.0, (total, item) => total + item.calculateDiscount())}'),
+                                                );
+                                              });
                                             } else {
-                                              billingProvider.printButtonController
+                                              billingProvider
+                                                  .printButtonController
                                                   .reset();
                                               Toasts.showToastBar(
                                                   context: context,
@@ -1077,18 +975,23 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: AppColors.primary,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(6),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
                                               side: BorderSide(
-                                                color:Color(0xff0055989), // ✅ Border color here
-                                                width: 1.5,           // ✅ Border thickness
+                                                color: Color(
+                                                    0xff0055989),
+                                                width:
+                                                    1.5,
                                               ),
                                             ),
-                                            minimumSize: const Size(120, 48), ),
+                                            minimumSize: const Size(120, 48),
+                                          ),
                                           child: MyText(
                                             text: 'Print Bill',
                                             color: AppColors.secondary,
-                                            fontSize: TextFormat.responsiveFontSize(
-                                                context, 12),
+                                            fontSize:
+                                                TextFormat.responsiveFontSize(
+                                                    context, 12),
                                             letterSpacing: 1,
                                           ),
                                         ),
@@ -1098,303 +1001,655 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                 ],
                               ),
                               10.height,
+
                               ///  Billing Table :
-                              billingProvider.billingItems.isEmpty?SizedBox(
-                                width: 260,
-                                child: Column(
-                                  children: [
-                                    ScreenWidgets.emptyAlert(
-                                        context,
-                                        image:
-                                        'assets/images/noproduct.svg',
-                                        text: 'No Product Found'),
-                                  ],
-                                ),
-                              ): Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Color(0xfff0f9ff),
-                                        borderRadius:
-                                            BorderRadius.circular(0),
-                                      // border: Border.all(
-                                      //   color: Color(0xfff3f3f2),
-                                      //   width: 2.0,
-                                      // ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.8), // darker shadow
-                                          spreadRadius: 0, // no side spread
-                                          blurRadius: 12,  // softer & bigger shadow
-                                          offset: const Offset(0, 8), // more downward distance
-                                        ),
-                                      ],
-                                    ),
-                                    child:
-                                        // Table Headings
-                                        Container(
-                                        color: Color(0xffF0F9FF),
-                                          child: SizedBox(
-                                            width: screenWidth * 0.98,
-                                            child: SingleChildScrollView(
-                                              child: DataTable(
-                                                dividerThickness: 0,
-                                                showBottomBorder: false,
-                                                dataRowHeight: 50, // Row height for all data rows
-                                                headingRowHeight: 50,
-                                                horizontalMargin: 0,
-                                                // Height for header row
-                                                border: const TableBorder(
-                                                  verticalInside: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                                  top: BorderSide.none,
-                                                  bottom: BorderSide.none,
-                                                  horizontalInside: BorderSide.none,
-                                                ), // Column lines
-                                                headingRowColor: MaterialStateProperty.resolveWith(
-                                                      (states) => Color(0xff0078D7), // Header background
-                                                ),
-                                                columns: [
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: Text("Change\nName", textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "S.No", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "Product", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "Variation", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "Quantity", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "MRP", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "Our Price", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "Discount", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "SubTotal", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                  DataColumn(
-                                                    headingRowAlignment: MainAxisAlignment.center,
-                                                    label: SizedBox(
-                                                      height: 50,
-                                                      child: Center(child: MyText(text: "Remove", color: Colors.white)),
-                                                    ),
-                                                  ),
-                                                ],
-                                                rows: List.generate(billingProvider.billingItems.length, (index) {
-                                                  final billProduct = billingProvider.billingItems[index];
-                                                  return DataRow(
-                                                    color: MaterialStateProperty.resolveWith(
-                                                          (states) => index % 2 == 0 ? Colors.white : const Color(0xffD9EEFF),
-                                                    ),
-                                                    cells: [
-                                                      DataCell(
-                                                        Center(
-                                                          child: IconButton(
-                                                            icon: const Icon(Icons.add),
-                                                            tooltip: 'Edit Product Name',
-                                                            onPressed: () {
-                                                              // Your existing edit logic here
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      DataCell(Center(child: Text("${index + 1}",textAlign: TextAlign.center,))),
-                                                      DataCell(Center(
-                                                        child: Text(
-                                                          billProduct.product.isLoose == '1'
-                                                              ? "${billProduct.product.pTitle}"
-                                                              : "${billProduct.product.pTitle} ${billProduct.product.pVariation ?? ""}${billProduct.product.unit ?? ""}",textAlign: TextAlign.center,
-                                                        ),
-                                                      )),
-                                                      DataCell(
-                                                        billProduct.product.isLoose == '1'
-                                                            ? SizedBox(
-                                                          height: 40,
-
-                                                          child: TextFormField(
-                                                            controller: TextEditingController(
-                                                              text: "${billProduct.variation / 1000}",
-
-                                                            ),
-                                                            onChanged: (value) {
-                                                              billingProvider.updateBillingItem(
-                                                                index,
-                                                                isLoose: '1',
-                                                                variation: double.tryParse(value) ??
-                                                                    billProduct.variation * 1000,
-                                                              );
-                                                            },
-                                                          ),
-                                                        )
-                                                            : Center(child: Text(billProduct.variationUnit ?? "",)),
-                                                      ),
-                                                      DataCell(
-                                                        billProduct.product.isLoose == '0'
-                                                            ? SizedBox(
-                                                          height: 40,
-
-                                                          child: TextFormField(
-
-                                                            controller: billingProvider.quantityControllers[index] ??
-                                                                TextEditingController(
-                                                                  text: "${billProduct.quantity}",
-                                                                ),
-                                                            decoration: const InputDecoration(
-
-                                                              border: InputBorder.none, // Removes underline
-                                                              isDense: true, // Reduces padding
-                                                              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                                            ),
-                                                            textAlign: TextAlign.end,
-                                                            keyboardType: TextInputType.number,
-                                                            inputFormatters: [
-                                                              LengthLimitingTextInputFormatter(5), // Limit to 5 digits
-                                                            ],
-                                                            onChanged: (value) {
-                                                              if (value.isNotEmpty) {
-                                                                billingProvider.updateBillingItem(
-                                                                  index,
-                                                                  isLoose: '0',
-                                                                  quantity: int.tryParse(value) ?? billProduct.quantity,
-                                                                );
-                                                              } else {
-                                                                billingProvider.updateBillingItem(
-                                                                  index,
-                                                                  isLoose: '0',
-                                                                  quantity: 0,
-                                                                );
-                                                              }
-                                                            },
-                                                          ),
-                                                        )
-                                                            : Text("${billProduct.quantity}"),
-                                                      ),
-
-                                                      DataCell(
-                                                          Align(
-                                                            alignment:Alignment.centerRight,
-                                                            child: Text(TextFormat.formattedAmount(
-                                                            billProduct.mrpPerProduct()), textAlign: TextAlign.end,),
-                                                          )),
-                                                      DataCell(Align(
-                                                        alignment:Alignment.centerRight,
-                                                        child: Text(TextFormat.formattedAmount(
-                                                            billProduct.calculateOutPrice())),
-                                                      )),
-                                                      DataCell(Align(
-                                                        alignment:Alignment.centerRight,
-                                                        child: Text(
-                                                            billProduct.calculateDiscount().toStringAsFixed(2)),
-                                                      )),
-                                                      DataCell(Align(
-                                                        alignment:Alignment.centerRight,
-                                                        child: Text(TextFormat.formattedAmount(
-                                                          billProduct.calculateSubtotal(),
-                                                        )),
-                                                      )),
-                                                      DataCell(
-                                                        Center(
-                                                          child: IconButton(
-                                                            icon: const Icon(Icons.delete, color: Colors.red),
-                                                            onPressed: () =>
-                                                                billingProvider.removeBillingItem(index: index),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                }),
+                              billingProvider.billingItems.isEmpty
+                                  ? SizedBox(
+                                      width: 260,
+                                      child: Column(
+                                        children: [
+                                          ScreenWidgets.emptyAlert(context,
+                                              image:
+                                                  'assets/images/noproduct.svg',
+                                              text: 'No Product Found'),
+                                        ],
+                                      ),
+                                    )
+                                  : Expanded(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xfff0f9ff),
+                                            borderRadius:
+                                                BorderRadius.circular(0),
+                                            // border: Border.all(
+                                            //   color: Color(0xfff3f3f2),
+                                            //   width: 2.0,
+                                            // ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.withOpacity(
+                                                    0.8), // darker shadow
+                                                spreadRadius:
+                                                    0, // no side spread
+                                                blurRadius:
+                                                    12, // softer & bigger shadow
+                                                offset: const Offset(0,
+                                                    8), // more downward distance
                                               ),
-                                            ),
-                                          )
+                                            ],
+                                          ),
+                                          child:
+                                              // Table Headings
+                                              Container(
+                                                  color: Color(0xffF0F9FF),
+                                                  child: SizedBox(
+                                                    width: screenWidth * 0.98,
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      child: DataTable(
+                                                        dividerThickness: 0,
+                                                        showBottomBorder: false,
+                                                        dataRowHeight:
+                                                            50, // Row height for all data rows
+                                                        headingRowHeight: 50,
+                                                        horizontalMargin: 0,
+                                                        // Height for header row
+                                                        border:
+                                                            const TableBorder(
+                                                          verticalInside:
+                                                              BorderSide(
+                                                                  width: 1,
+                                                                  color: Color(
+                                                                      0xff9E9E9E)),
+                                                          top: BorderSide.none,
+                                                          bottom:
+                                                              BorderSide.none,
+                                                          horizontalInside:
+                                                              BorderSide.none,
+                                                        ), // Column lines
+                                                        headingRowColor:
+                                                            MaterialStateProperty
+                                                                .resolveWith(
+                                                          (states) => Color(
+                                                              0xff0078D7), // Header background
+                                                        ),
+                                                        columns: [
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: Text(
+                                                                "Change\nName",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white)),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "S.No",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "Product",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "Variation",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "Quantity",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "MRP",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "Our Price",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "Discount",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "SubTotal",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                          DataColumn(
+                                                            headingRowAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            label: SizedBox(
+                                                              height: 50,
+                                                              child: Center(
+                                                                  child: MyText(
+                                                                      text:
+                                                                          "Remove",
+                                                                      color: Colors
+                                                                          .white)),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                        rows: List.generate(
+                                                            billingProvider
+                                                                .billingItems
+                                                                .length,
+                                                            (index) {
+                                                          final billProduct =
+                                                              billingProvider
+                                                                      .billingItems[
+                                                                  index];
+                                                          return DataRow(
+                                                            color:
+                                                                MaterialStateProperty
+                                                                    .resolveWith(
+                                                              (states) => index %
+                                                                          2 ==
+                                                                      0
+                                                                  ? Colors.white
+                                                                  : const Color(
+                                                                      0xffD9EEFF),
+                                                            ),
+                                                            cells: [
+                                                              DataCell(
+                                                                Center(
+                                                                  child:
+                                                                      IconButton(
+                                                                    icon: const Icon(
+                                                                        Icons.add),
+                                                                    tooltip:
+                                                                        'Edit Product Name',
+                                                                    onPressed: () {
+                                                                          if(billProduct.product.pTitle.toString().isNotEmpty){
+                                                                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                              if (billProduct.proController != null &&
+                                                                                  billProduct.proFocusNode != null) {
+                                                                                setState(() {
+                                                                                  billProduct.proController!.clear();
+                                                                                  billProduct.proFocusNode!.requestFocus();
+                                                                                  customerProvider.showInputDialog(
+                                                                                    context: context,
+                                                                                    width: screenWidth * 0.20,
+                                                                                    height: screenHeight * 0.07,
+                                                                                    controller: billProduct.proController!,
+                                                                                    focus: billProduct.proFocusNode,
+                                                                                    onChanged: () {
+                                                                                      setState(() {
+                                                                                        final text = billProduct.proController!.text;
+                                                                                        if (text.isNotEmpty) {
+                                                                                          billProduct.product.pTitle = "${billProduct.productTitle}/$text";
+                                                                                          Navigator.of(context).pop();
+                                                                                        } else {
+                                                                                          Toasts.showToastBar(
+                                                                                            context: context,
+                                                                                            text: 'Please Fill Product Name',
+                                                                                          );
+                                                                                        }
+                                                                                      });
+                                                                                    },
+                                                                                    onSubmitted: (_) {
+                                                                                      final text = billProduct.proController!.text;
+                                                                                      if (text.isNotEmpty) {
+                                                                                        billProduct.product.pTitle = "${billProduct.productTitle}/$text";
+                                                                                      }
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                  );
+                                                                                });
+                                                                              } else {
+                                                                                Toasts.showToastBar(
+                                                                                    context: context,
+                                                                                    text: 'One or more of the following is null:');
+                                                                                debugPrint("One or more of the following is null: "
+                                                                                    "proController, proFocusNode, product, productTitle");
+                                                                              }
+                                                                            });
+
+                                                                          }else{
+                                                                            Toasts.showToastBar(
+                                                                                context: context,
+                                                                                text: 'Please Select Product Name');
+                                                                          }
+                                                                      // Your existing edit logic here
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              DataCell(Center(
+                                                                  child: Text(
+                                                                "${index + 1}",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ))),
+                                                              DataCell(Center(
+                                                                child: Text(
+                                                                  billProduct.product
+                                                                              .isLoose ==
+                                                                          '1'
+                                                                      ? "${billProduct.product.pTitle}"
+                                                                      : "${billProduct.product.pTitle} ${billProduct.product.pVariation ?? ""}${billProduct.product.unit ?? ""}",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                              )),
+                                                              DataCell(
+                                                                billProduct.product
+                                                                            .isLoose ==
+                                                                        '1'
+                                                                    ? SizedBox(
+                                                                        height:
+                                                                            40,
+                                                                        child:
+                                                                            TextFormField(
+                                                                          controller:
+                                                                              TextEditingController(
+                                                                            text:
+                                                                                "${billProduct.variation / 1000}",
+                                                                          ),
+                                                                          onChanged:
+                                                                              (value) {
+                                                                            billingProvider.updateBillingItem(
+                                                                              index,
+                                                                              isLoose: '1',
+                                                                              variation: double.tryParse(value) ?? billProduct.variation * 1000,
+                                                                            );
+                                                                          },
+                                                                        ),
+                                                                      )
+                                                                    : Center(
+                                                                        child:
+                                                                            Text(
+                                                                        billProduct.variationUnit ??
+                                                                            "",
+                                                                      )),
+                                                              ),
+                                                              DataCell(
+                                                                billProduct.product
+                                                                            .isLoose ==
+                                                                        '0'
+                                                                    ? SizedBox(
+                                                                        height:
+                                                                            40,
+                                                                        child:
+                                                                            TextFormField(
+                                                                          controller: billingProvider.quantityControllers[index] ??
+                                                                              TextEditingController(
+                                                                                text: "${billProduct.quantity}",
+                                                                              ),
+                                                                          decoration:
+                                                                              const InputDecoration(
+                                                                            border:
+                                                                                InputBorder.none, // Removes underline
+                                                                            isDense:
+                                                                                true, // Reduces padding
+                                                                            contentPadding:
+                                                                                EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                                                          ),
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                          keyboardType:
+                                                                              TextInputType.number,
+                                                                          inputFormatters: [
+                                                                            LengthLimitingTextInputFormatter(5), // Limit to 5 digits
+                                                                          ],
+                                                                          onChanged:
+                                                                              (value) {
+                                                                            if (value.isNotEmpty) {
+                                                                              billingProvider.updateBillingItem(
+                                                                                index,
+                                                                                isLoose: '0',
+                                                                                quantity: int.tryParse(value) ?? billProduct.quantity,
+                                                                              );
+                                                                            } else {
+                                                                              billingProvider.updateBillingItem(
+                                                                                index,
+                                                                                isLoose: '0',
+                                                                                quantity: 0,
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      )
+                                                                    : Text(
+                                                                        "${billProduct.quantity}"),
+                                                              ),
+                                                              DataCell(Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Text(
+                                                                  TextFormat.formattedAmount(
+                                                                      billProduct
+                                                                          .mrpPerProduct()),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .end,
+                                                                ),
+                                                              )),
+                                                              DataCell(Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Text(TextFormat
+                                                                    .formattedAmount(
+                                                                        billProduct
+                                                                            .calculateOutPrice())),
+                                                              )),
+                                                              DataCell(Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Text(billProduct
+                                                                    .calculateDiscount()
+                                                                    .toStringAsFixed(
+                                                                        2)),
+                                                              )),
+                                                              DataCell(Align(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: Text(
+                                                                    TextFormat
+                                                                        .formattedAmount(
+                                                                  billProduct
+                                                                      .calculateSubtotal(),
+                                                                )),
+                                                              )),
+                                                              DataCell(
+                                                                Center(
+                                                                  child:
+                                                                  IconButton(
+                                                                        tooltip: 'Delete ${billProduct.product.isLoose == '1'
+                                                                            ? "${billProduct.product.pTitle} ${billProduct.variation/1000}kg"
+                                                                            : "${billProduct.product.pTitle} ${billProduct.variationUnit}"}',
+                                                                    icon: const Icon(
+                                                                        Icons
+                                                                            .delete,
+                                                                        color: Colors
+                                                                            .red),
+                                                                    onPressed: () =>
+                                                                        billingProvider.removeBillingItem(
+                                                                            index:
+                                                                                index),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }),
+                                                      ),
+                                                    ),
+                                                  )),
                                         ),
-                                  ),
-                                ),
-                              ),
+                                      ),
+                                    ),
                             ],
                           ),
                   ),
                   bottomNavigationBar: billingProvider.isLoading
                       ? 0.height
                       : SizedBox(
-                    height: 180,
-                        width: screenWidth,
-                        child: Column(
-                          children: [
-                            Container(
-                                color: Colors.white,
-                                padding: const EdgeInsets.only(
-                                    top: 20, left: 12, right: 12, bottom: 0),
+                          height: 180,
+                          width: screenWidth,
+                          child: Column(
+                            children: [
+                              Container(
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.only(
+                                      top: 20, left: 12, right: 12, bottom: 0),
+                                  height: 90,
+                                  width: screenWidth,
+                                  child: DataTable(
+                                    headingRowHeight: 40, // Height for header
+                                    dataRowHeight: 40, // Height for data
+                                    headingTextStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                    border: const TableBorder(
+                                      // left: BorderSide(width: 1, color: Color(0xff9E9E9E)),
+                                      // right: BorderSide(width: 1, color: Color(0xff9E9E9E)),
+                                      verticalInside: BorderSide(
+                                          width: 1, color: Color(0xff9E9E9E)),
+                                      top: BorderSide.none,
+                                      bottom: BorderSide.none,
+                                      horizontalInside: BorderSide.none,
+                                    ),
+                                    headingRowColor:
+                                        MaterialStateProperty.resolveWith(
+                                      (states) => Color(0xff0078D7),
+                                    ),
+                                    columns: const [
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'Items',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'Qty',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'Subtotal',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'Discount',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'GST',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              'Grand Total',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+
+                                    rows: [
+                                      DataRow(
+                                        cells: [
+                                          DataCell(Center(
+                                            child: Text(billingProvider
+                                                .calculatedTotalProducts()
+                                                .toString()),
+                                          )),
+                                          DataCell(Center(
+                                            child: Text(billingProvider
+                                                .calculatedTotalQuantity()
+                                                .toString()),
+                                          )),
+                                          DataCell(
+                                              Center(
+                                            child: MyText(
+                                                text: billingProvider
+                                                .calculatedMrpSubtotal()
+                                                .toString()),
+                                          )),
+                                          DataCell(Center(
+                                            child: Text(billingProvider
+                                                .calculateTotalDiscount()
+                                                .toString()),
+                                          )),
+                                          DataCell(Center(child: Text('0.0%'))),
+                                          DataCell(Center(
+                                            child: Text(TextFormat
+                                                .formattedAmount(billingProvider
+                                                    .calculatedGrandTotal())),
+                                          )),
+                                        ],
+                                      ),
+                                    ],
+                                  )),
+                              Container(
                                 height: 90,
                                 width: screenWidth,
+                                padding: const EdgeInsets.only(
+                                    top: 10, left: 12, right: 12, bottom: 0),
+                                decoration: BoxDecoration(
+                                  border: const Border(
+                                    left: BorderSide(
+                                        color: Colors.black,
+                                        width: 1), // Outer left border
+                                    right: BorderSide(
+                                        color: Colors.black,
+                                        width: 1), // Outer right border
+                                  ),
+                                ),
                                 child: DataTable(
-                                  headingRowHeight: 40, // Height for header
-                                  dataRowHeight: 40,    // Height for data
+                                  headingRowHeight: 40,
+                                  dataRowHeight: 40,
+                                  dividerThickness: 0, // No horizontal dividers
                                   headingTextStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
                                   border: const TableBorder(
-                                    // left: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                    // right: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                    verticalInside: BorderSide(width: 1, color: Color(0xff9E9E9E)),
-                                    top: BorderSide.none,
-                                    bottom: BorderSide.none,
-                                    horizontalInside: BorderSide.none,
+                                    verticalInside: BorderSide(
+                                        color: Color(0xff9E9E9E),
+                                        width: 1), // Column dividers
+                                    // left: BorderSide(color: Colors.black, width: 1),   // Left border
+                                    // right: BorderSide(color: Colors.black, width: 1),  // Right border
                                   ),
-                                              headingRowColor: MaterialStateProperty.resolveWith(
-                                              (states) => Color(0xff0078D7),
-                                              ),
+                                  headingRowColor:
+                                      MaterialStateProperty.resolveWith(
+                                    (states) => Color(0xffD9EEFF),
+                                  ),
                                   columns: const [
                                     DataColumn(
                                       label: Expanded(
                                         child: Center(
                                           child: Text(
-                                            'Items',
-                                            style: TextStyle(color: Colors.white),
+                                            'Loading Charge',
+                                            style: TextStyle(
+                                                color: Color(0xff0078D7)),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
@@ -1403,8 +1658,10 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                       label: Expanded(
                                         child: Center(
                                           child: Text(
-                                            'Qty',
-                                            style: TextStyle(color: Colors.white),
+                                            'Cutting Charge',
+                                            style: TextStyle(
+                                                color: Color(0xff0078D7)),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
@@ -1413,153 +1670,66 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                       label: Expanded(
                                         child: Center(
                                           child: Text(
-                                            'Subtotal',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Expanded(
-                                        child: Center(
-                                          child: Text(
-                                            'Discount',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Expanded(
-                                        child: Center(
-                                          child: Text(
-                                            'GST',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Expanded(
-                                        child: Center(
-                                          child: Text(
-                                            'Grand Total',
-                                            style: TextStyle(color: Colors.white),
+                                            'Freight Charge',
+                                            style: TextStyle(
+                                                color: Color(0xff0078D7)),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ],
 
-                                  rows: [
+                                  rows:  [
                                     DataRow(
                                       cells: [
-                                        DataCell(Center(
-                                          child: Text(
-                                              billingProvider.calculatedTotalProducts().toString()),
-                                        )),
-                                        DataCell(Center(
-                                          child: Text(
-                                              billingProvider.calculatedTotalQuantity().toString()),
-                                        )),
-                                        DataCell(Center(
-                                          child: Text(
-                                              billingProvider.calculatedMrpSubtotal().toString()),
-                                        )),
-                                        DataCell(Center(
-                                          child: Text(
-                                              billingProvider.calculateTotalDiscount().toString()),
-                                        )),
-                                        DataCell(Center(child: Text('0.0%'))),
-                                        DataCell(Center(
-                                          child: Text(
-                                              TextFormat.formattedAmount(
-                                                  billingProvider.calculatedGrandTotal())),
-                                        )),
+                                        DataCell(
+                                            Center(child: TextField(
+                                              controller: billingProvider.loadingCharge,
+                                              focusNode: billingProvider.loadingChargeFocusNode,
+                                              onSubmitted: (_){
+                                                billingProvider.updateFooterButtons();
+                                                billingProvider.cuttingChargeFocusNode.requestFocus();
+                                              },
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.lato(fontSize: 15),
+                                              decoration: const InputDecoration(border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 5)
+                                              ),
+                                            ),)),
+                                        DataCell(Center(child: TextField(
+                                          controller: billingProvider.cuttingCharge,
+                                          focusNode: billingProvider.cuttingChargeFocusNode,
+                                          onSubmitted: (_){
+                                            billingProvider.updateFooterButtons();
+                                            billingProvider.freightChargeFocusNode.requestFocus();
+                                          },
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.lato(fontSize: 15),
+                                          decoration: const InputDecoration(border: InputBorder.none,
+                                              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 5)
+                                          ),
+                                        ),)),
+                                        DataCell(Center(child: TextField(
+                                          controller: billingProvider.freightCharge,
+                                          focusNode: billingProvider.freightChargeFocusNode,
+                                          onSubmitted: (_){
+                                            billingProvider.updateFooterButtons();
+                                          },
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.lato(fontSize: 15),
+                                          decoration: const InputDecoration(border: InputBorder.none,
+                                              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 5)
+                                          ),
+                                        ),)),
                                       ],
                                     ),
                                   ],
-                                )
-
-                                              ),
-                            Container(
-                              height: 90,
-                              width: screenWidth,
-                              padding: const EdgeInsets.only(
-                                  top: 10, left: 12, right: 12, bottom: 0),
-                              decoration: BoxDecoration(
-                                border: const Border(
-                                  left: BorderSide(color: Colors.black, width: 1),  // Outer left border
-                                  right: BorderSide(color: Colors.black, width: 1), // Outer right border
                                 ),
-                              ),
-                              child: DataTable(
-                                headingRowHeight: 40,
-                                dataRowHeight: 40,
-                                dividerThickness: 0, // No horizontal dividers
-                                headingTextStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                                border: const TableBorder(
-                                  verticalInside: BorderSide(color: Color(0xff9E9E9E), width: 1), // Column dividers
-                                  // left: BorderSide(color: Colors.black, width: 1),   // Left border
-                                  // right: BorderSide(color: Colors.black, width: 1),  // Right border
-                                ),
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                      (states) => Color(0xffD9EEFF),
-                                ),
-                                columns: const [
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'Loading Charge',
-                                          style: TextStyle(color: Color(0xff0078D7)),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'Cutting Charge',
-                                          style: TextStyle(color: Color(0xff0078D7)),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'Freight Charge',
-                                          style: TextStyle(color: Color(0xff0078D7)),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-
-                                rows: const [
-                                  DataRow(
-                                    cells: [
-                                      DataCell(Center(child: Text('0'))),
-                                      DataCell(Center(child: Text('0'))),
-                                      DataCell(Center(child: Text('0'))),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-
-                          ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
                 ),
               ),
             ),
@@ -1719,12 +1889,14 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
                                   groupValue: billingProvider.selectBillMethod,
                                   onChanged: (value) {
                                     billingProvider.changeBillMethod(value!);
-                                    billingProvider.billMethodFocusNodes[index]
-                                        .requestFocus();
+                                    billingProvider.billMethodFocusNodes[index].requestFocus();
                                   },
-                                  focusColor: Colors.transparent, // Removes blue focus color
-                                  overlayColor: MaterialStateProperty.all(Colors.transparent), // Removes ripple
-                                  visualDensity: VisualDensity.compact, // Optional: compact spacing
+                                  focusColor: Colors
+                                      .transparent, // Removes blue focus color
+                                  overlayColor: MaterialStateProperty.all(
+                                      Colors.transparent), // Removes ripple
+                                  visualDensity: VisualDensity
+                                      .compact, // Optional: compact spacing
                                 ),
                                 MyText(text: method, fontSize: 14),
                               ],
@@ -1770,7 +1942,6 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
     );
   }
 
-
   /// Billing Products Widget :
   Widget _buildCell(String text) {
     return Padding(
@@ -1788,8 +1959,7 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
       required TextEditingController controller,
       required void Function(String) onChanged,
       required List<TextInputFormatter> inputFormatters,
-      required void Function()? onEditingComplete}
-      ) {
+      required void Function()? onEditingComplete}) {
     final bool isEven = index % 2 == 0;
 
     return MyTextField(
@@ -1800,14 +1970,15 @@ class _NewBillingScreenState extends State<NewBillingScreen> {
       borderRadius: 5,
       inputFormatters: inputFormatters,
       textAlign: TextAlign.center,
-      enabledBorderColor:  isEven ? Color(0xffFFFFFF): Color(0xffD9EEFF) ,
-      focusedBorderColor:  isEven ? Color(0xffFFFFFF): Color(0xffD9EEFF) ,
+      enabledBorderColor: isEven ? Color(0xffFFFFFF) : Color(0xffD9EEFF),
+      focusedBorderColor: isEven ? Color(0xffFFFFFF) : Color(0xffD9EEFF),
       onChanged: onChanged,
-      fillColor: isEven ? Color(0xffF5F5F5): Color(0xffC5E5FF) ,
+      fillColor: isEven ? Color(0xffF5F5F5) : Color(0xffC5E5FF),
       onEditingComplete: onEditingComplete,
     );
   }
 }
+
 DataColumn _buildHeader(String text, double width) {
   return DataColumn(
     label: SizedBox(
@@ -1834,7 +2005,6 @@ DataCell _buildCell(String text, double width, Alignment alignment) {
     ),
   );
 }
-
 
 /// Product Dropdown (Deprecated) :
 // MyDropdownMenu<ProductData>(

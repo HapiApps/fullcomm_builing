@@ -261,10 +261,31 @@ class BillingProvider with ChangeNotifier {
   }
 
   // Grand Total of Billing Items :
+  // double calculatedGrandTotal() {
+  //   return billingItems.fold(
+  //       0.0, (total, item) => total + item.calculateSubtotal());
+  // }
   double calculatedGrandTotal() {
-    return billingItems.fold(
-        0.0, (total, item) => total + item.calculateSubtotal());
+    // Step 1: Total from all products
+    double productsTotal = billingItems.fold(
+      0.0,
+          (total, item) => total + item.calculateSubtotal(),
+    );
+
+    // Step 2: Get bill-level charges
+    double cuttingPercent = double.tryParse(cuttingCharge.text) ?? 0.0;
+    double loadingPercent = double.tryParse(loadingCharge.text) ?? 0.0;
+    double freightPercent = double.tryParse(freightCharge.text) ?? 0.0;
+
+    // Step 3: Calculate amounts
+    double cuttingAmount = (productsTotal * cuttingPercent) / 100;
+    double loadingAmount = (productsTotal * loadingPercent) / 100;
+    double freightAmount = (productsTotal * freightPercent) / 100;
+
+    // Step 4: Return final total
+    return productsTotal + cuttingAmount + loadingAmount + freightAmount;
   }
+
 
   String calculatedMrpSubtotal() {
     return TextFormat.formattedAmount(billingItems.fold(
@@ -326,6 +347,22 @@ class BillingProvider with ChangeNotifier {
     }
   }
 
+  TextEditingController loadingCharge   = TextEditingController(text: '0');
+  TextEditingController freightCharge   = TextEditingController(text: '0');
+  TextEditingController cuttingCharge   = TextEditingController(text: '0');
+
+  final FocusNode loadingChargeFocusNode = FocusNode();
+  final FocusNode freightChargeFocusNode = FocusNode();
+  final FocusNode cuttingChargeFocusNode = FocusNode();
+
+  bool _isFooterButtons = false;
+  bool get isFooterButtons => _isFooterButtons;
+  void updateFooterButtons(){
+    _isFooterButtons =! _isFooterButtons;
+    _isFooterButtons =! _isFooterButtons;
+    notifyListeners();
+  }
+
   bool _barcodeMode = false;
   bool get barcodeMode => _barcodeMode;
 
@@ -371,7 +408,6 @@ class BillingProvider with ChangeNotifier {
   Future<void> fetchBill(BuildContext context) async {
     try {
       PreviousBillObj response = await _productsRepo.getBill();
-
       if (response.responseCode == "200") {
         allBill = response.data;
         var i = int.parse(allBill[0].invoiceNo) + 1;

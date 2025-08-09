@@ -83,7 +83,7 @@ class MyTextField extends StatelessWidget {
         focusNode: focusNode,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
-        autofocus: autofocus ?? false,
+        autofocus: false,
         obscureText: obscureText ?? false,
         obscuringCharacter: '•',
         textAlign: textAlign ?? TextAlign.start,
