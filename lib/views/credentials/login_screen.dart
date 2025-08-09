@@ -72,9 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             : screenWidth * 0.35,
                         controller: userProvider.mobileController,
                         keyboardType: TextInputType.number,
-                        autofocus: true,
                         textInputAction: TextInputAction.next,
-                        inputFormatters: InputFormatters.mobileNumberInput,
+                        autofocus: true,
+                        // inputFormatters: InputFormatters.mobileNumberInput,
                       ),
                       8.height,
                       MyTextField(
